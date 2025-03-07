@@ -4,6 +4,7 @@ import { AuthModule } from "@modules/auth/auth.module";
 import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { MinioModule } from "./minio/minio.module";
+import { CamdigkeyService } from "./modules/auth/camdigkey/camdigkey.service";
 
 @Module({
   imports: [
@@ -12,10 +13,11 @@ import { MinioModule } from "./minio/minio.module";
       isGlobal: true,
     }),
     DatabaseModule,
-    AdminModule,
     AuthModule,
+    AdminModule,
     MinioModule,
   ],
+  providers: [CamdigkeyService],
 })
 export class AppModule {
   static port: number;

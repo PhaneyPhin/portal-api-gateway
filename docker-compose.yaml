@@ -1,15 +1,17 @@
 version: '3.7'
 
 services:
-  app:
+  application:
     build: .
-    container_name: nestjs-app
+    container_name: application
     restart: always
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=production
       - TYPEORM_HOST=host.docker.internal
+      - CAMDIGKEY_URL=http://auth-camdigkey:3020
+      - API_PORT=3000
     env_file:
       - .env
     volumes:
@@ -17,8 +19,8 @@ services:
       - /app/node_modules
     command: ["node", "dist/main"]
 
-  boilerplate_db:
-    container_name: boilerplate_db
+  db:
+    container_name: db
     image: postgres:12.3-alpine
     environment:
       - POSTGRES_PASSWORD=${TYPEORM_PASSWORD}
@@ -31,10 +33,20 @@ services:
       - ${TYPEORM_PORT}:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
+  
+  auth-camdigkey:
+    image: docker.dev.digitaleconomy.gov.kh/camdigikey-auth:release-1.0.0
+    container_name: auth-camdigkey
+    ports:
+      - "3001:3020"
+    env_file:
+      - .env.camdigkey
+    volumes:
+      - ./keystore:/usr/src/app/build/src/keystore
       
-  minio:
+  fileStorage:
     image: minio/minio
-    container_name: minio
+    container_name: fileStorage
     ports:
       - "9000:9000" # Change the left side to specify a different host port if needed
       - "9090:9090"

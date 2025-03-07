@@ -1,29 +1,29 @@
-import { UsersRepository } from '@modules/admin/access/users/users.repository';
-import { Injectable, Logger } from '@nestjs/common';
-import { UserStatus } from '@admin/access/users/user-status.enum';
-import { InjectRepository } from '@nestjs/typeorm';
-import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
+import { UserStatus } from "@admin/access/users/user-status.enum";
 import {
-  RefreshTokenExpiredException,
   AccessTokenExpiredException,
   InvalidTokenException,
-} from '@common/http/exceptions';
-import { ValidateTokenResponseDto, JwtPayload, TokenDto } from '../dtos';
-import { TokenError, TokenType } from '../enums';
-import * as NodeCache from 'node-cache';
+  RefreshTokenExpiredException,
+} from "@common/http/exceptions";
+import { UsersRepository } from "@modules/admin/access/users/users.repository";
+import { Injectable, Logger } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { JwtService } from "@nestjs/jwt";
+import { InjectRepository } from "@nestjs/typeorm";
+import * as NodeCache from "node-cache";
+import { JwtPayload, TokenDto, ValidateTokenResponseDto } from "../dtos";
+import { TokenError, TokenType } from "../enums";
 
 @Injectable()
 export class TokenService {
   private readonly cache: NodeCache;
-  
+
   constructor(
     @InjectRepository(UsersRepository)
     private usersRepository: UsersRepository,
     private jwtService: JwtService,
-    private configService: ConfigService,
+    private configService: ConfigService
   ) {
-      this.cache = new NodeCache({ stdTTL: 24 * 3600, checkperiod: 600 }); // 1 hour TTL, clean every 10 minutes
+    this.cache = new NodeCache({ stdTTL: 24 * 3600, checkperiod: 600 }); // 1 hour TTL, clean every 10 minutes
   }
 
   /**
@@ -32,9 +32,13 @@ export class TokenService {
    * @returns TokenDto Returns access and refresh tokens with expiry
    */
   public generateAuthToken(payload: JwtPayload): TokenDto {
-    const accessTokenExpires = this.configService.get('ACCESS_TOKEN_EXPIRES_IN');
-    const refreshTokenExpires = this.configService.get('REFRESH_TOKEN_EXPIRES_IN');
-    const tokenType = this.configService.get('TOKEN_TYPE');
+    const accessTokenExpires = this.configService.get(
+      "ACCESS_TOKEN_EXPIRES_IN"
+    );
+    const refreshTokenExpires = this.configService.get(
+      "REFRESH_TOKEN_EXPIRES_IN"
+    );
+    const tokenType = this.configService.get("TOKEN_TYPE");
     const accessToken = this.generateToken(payload, accessTokenExpires);
     const refreshToken = this.generateToken(payload, refreshTokenExpires);
 
@@ -52,8 +56,11 @@ export class TokenService {
    * @returns  Returns access and refresh tokens with expiry or error
    */
   public generateRefreshToken(refreshToken: string): TokenDto {
-    const { id, username } = this.verifyToken(refreshToken, TokenType.RefreshToken);
-    return this.generateAuthToken({ id, username });
+    const { id, username, nationalId } = this.verifyToken(
+      refreshToken,
+      TokenType.RefreshToken
+    );
+    return this.generateAuthToken({ id, username, nationalId });
   }
 
   /**
@@ -66,10 +73,16 @@ export class TokenService {
     try {
       return this.jwtService.verify(token);
     } catch ({ name }) {
-      if (name == TokenError.TokenExpiredError && type == TokenType.AccessToken) {
+      if (
+        name == TokenError.TokenExpiredError &&
+        type == TokenType.AccessToken
+      ) {
         throw new AccessTokenExpiredException();
       }
-      if (name == TokenError.TokenExpiredError && type == TokenType.RefreshToken) {
+      if (
+        name == TokenError.TokenExpiredError &&
+        type == TokenType.RefreshToken
+      ) {
         throw new RefreshTokenExpiredException();
       }
       throw new InvalidTokenException();
@@ -85,13 +98,17 @@ export class TokenService {
     try {
       const { id } = this.jwtService.verify(token);
       const user = await this.usersRepository.findOne(id);
-      if (!user || user.status == UserStatus.Blocked || user.status == UserStatus.Inactive) {
+      if (
+        !user ||
+        user.status == UserStatus.Blocked ||
+        user.status == UserStatus.Inactive
+      ) {
         return { valid: false };
       }
 
       return { valid: !!id };
     } catch (error) {
-      Logger.error('Validation token error', error);
+      Logger.error("Validation token error", error);
       return { valid: false };
     }
   }

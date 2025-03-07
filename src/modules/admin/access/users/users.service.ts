@@ -40,6 +40,9 @@ export class UsersService extends BaseCrudService {
     super();
   }
 
+  public findUserByNationalId(nationalId: string) {
+    return this.usersRepository.findOneBy({ nationalId });
+  }
   /**
    * Convert a UserEntity to a UserResponseDto with relations.
    */
