@@ -1,0 +1,101 @@
+  // DEBUG: Hello, I'm {{ name }} and I'm a {{ classify name }}!
+
+  import {
+    Controller,
+    Get,
+    Post,
+    Put,
+    Body,
+    Param,
+    ParseIntPipe,
+    ValidationPipe,
+    UseGuards,
+  } from '@nestjs/common';
+  import {
+    ApiBearerAuth,
+    ApiConflictResponse,
+    ApiOperation,
+    ApiTags,
+    ApiQuery,
+  } from '@nestjs/swagger';
+  import { {{ classify name }}Service } from './{{ name }}.service';
+  import {
+    Create{{ classify name }}RequestDto,
+    Update{{ classify name }}RequestDto,
+    {{ classify name }}ResponseDto,
+  } from './dtos';
+  import { Permissions, SuperUserGuard, TOKEN_NAME } from '@auth';
+  import { ApiGlobalResponse } from '@common/decorators';
+  import { PaginationRequest, PaginationResponseDto } from '@libs/pagination';
+
+  @ApiTags('{{ classify name }}')
+  @ApiBearerAuth(TOKEN_NAME)
+  @Controller({
+    path: 'access/{{ dasherize(name) }}',
+    version: '1',
+  })
+  export class {{ classify name }}Controller {
+    constructor(private readonly {{ camelize(name) }}Service: {{ classify name }}Service) {}
+
+    @ApiOperation({ description: 'Get a paginated {{ name }} list' })
+    @ApiQuery({
+      name: 'search',
+      type: 'string',
+      required: false,
+      example: 'admin',
+    })
+    // Example of custom pagination decorator
+    // @ApiPaginatedResponse({{ classify name }}ResponseDto)
+    @Permissions(
+      'admin.access.{{ name }}.read',
+      'admin.access.{{ name }}.create',
+      'admin.access.{{ name }}.update',
+      'admin.access.roles.create',
+      'admin.access.roles.update',
+    )
+    @Get()
+    public get{{ classify name }}(
+      @Body() pagination: PaginationRequest, // or @PaginationParams() 
+    ): Promise<PaginationResponseDto<{{ classify name }}ResponseDto>> {
+      return this.{{ camelize(name) }}Service.get{{ classify(name) }}(pagination);
+    }
+
+    @ApiOperation({ description: 'Get {{ name }} by id' })
+    @ApiGlobalResponse({{ classify name }}ResponseDto)
+    @Permissions(
+      'admin.access.{{ name }}.read',
+      'admin.access.{{ name }}.create',
+      'admin.access.{{ name }}.update',
+      'admin.access.roles.create',
+      'admin.access.roles.update',
+    )
+    @Get('/:id')
+    public get{{ classify name }}ById(@Param('id', ParseIntPipe) id: number): Promise<{{ classify name }}ResponseDto> {
+      return this.{{ camelize(name) }}Service.get{{ classify name }}ById(id);
+    }
+
+    @ApiOperation({ description: 'Create new {{ name }}' })
+    @ApiGlobalResponse({{ classify name }}ResponseDto)
+    @ApiConflictResponse({ description: '{{ classify name }} already exists' })
+    @UseGuards(SuperUserGuard)
+    @Permissions('admin.access.{{ name }}.create')
+    @Post()
+    public create{{ classify name }}(
+      @Body(ValidationPipe) dto: Create{{ classify name }}RequestDto,
+    ): Promise<{{ classify name }}ResponseDto> {
+      return this.{{ camelize(name) }}Service.create{{ classify name }}(dto);
+    }
+
+    @ApiOperation({ description: 'Update {{ name }} by id' })
+    @ApiGlobalResponse({{ classify name }}ResponseDto)
+    @ApiConflictResponse({ description: '{{ classify name }} already exists' })
+    @UseGuards(SuperUserGuard)
+    @Permissions('admin.access.{{ name }}.update')
+    @Put('/:id')
+    public update{{ classify name }}(
+      @Param('id', ParseIntPipe) id: number,
+      @Body(ValidationPipe) dto: Update{{ classify name }}RequestDto,
+    ): Promise<{{ classify name }}ResponseDto> {
+      return this.{{ camelize(name) }}Service.update{{ classify name }}(id, dto);
+    }
+  }
