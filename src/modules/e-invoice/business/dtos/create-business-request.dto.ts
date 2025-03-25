@@ -10,6 +10,7 @@ import {
   IsOptional,
   IsPhoneNumber,
   IsString,
+  ValidateIf,
 } from "class-validator";
 import { BusinessStatus } from "../enums/business-status";
 
@@ -107,4 +108,29 @@ export class CreateBusinessRequestDto {
   @IsOptional()
   @IsBoolean()
   is_kyb_valid?: boolean;
+
+  @ApiProperty({
+    type: String,
+    description: "Path or filename of the certificate of tax registration",
+  })
+  @IsNotEmpty()
+  @IsString()
+  certificate_of_tax_registration?: string;
+
+  @ApiProperty({
+    type: String,
+    description: "Path or filename of the certificate of incorporation",
+  })
+  @IsOptional()
+  @IsString()
+  certificate_of_incorporation?: string;
+
+  @ValidateIf((o) => o.entity_id)
+  @ApiProperty({
+    type: String,
+    description: "Path or filename of the authorized letter",
+  })
+  @IsNotEmpty()
+  @IsString()
+  authorized_letter?: string;
 }

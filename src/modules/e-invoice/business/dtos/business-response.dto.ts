@@ -145,4 +145,58 @@ export class BusinessResponseDto {
     action_type: string;
     created_at: Date;
   }[];
+
+  @ApiProperty({
+    type: String,
+    description: "Path or filename of the certificate of tax registration",
+  })
+  certificate_of_tax_registration?: string;
+
+  @ApiProperty({
+    type: String,
+    description: "Path or filename of the certificate of incorporation",
+  })
+  certificate_of_incorporation?: string;
+
+  @ApiProperty({
+    type: String,
+    description: "Path or filename of the authorized letter",
+  })
+  authorized_letter?: string;
+
+  @ApiProperty({
+    type: String,
+    description: "URL to access the certificate of tax registration",
+  })
+  certificate_of_tax_registration_url?: string;
+
+  @ApiProperty({
+    type: String,
+    description: "URL to access the certificate of incorporation",
+  })
+  certificate_of_incorporation_url?: string;
+
+  @ApiProperty({
+    type: String,
+    description: "URL to access the authorized letter",
+  })
+  authorized_letter_url?: string;
+
+  @ApiProperty({
+    type: Number,
+    description: "Size (in bytes) of the certificate of tax registration file",
+  })
+  certificate_of_tax_registration_size?: number;
+
+  @ApiProperty({
+    type: Number,
+    description: "Size (in bytes) of the certificate of incorporation file",
+  })
+  certificate_of_incorporation_size?: number;
+
+  @ApiProperty({
+    type: Number,
+    description: "Size (in bytes) of the authorized letter file",
+  })
+  authorized_letter_size?: number;
 }

@@ -13,7 +13,7 @@ env:
   REPO_NAME: ${{ github.repository }}
   DOCKER_REGISTRY_USERNAME: gdde
   DOCKER_REGISTRY_PASSWORD: U2RMsS9sxEDlBvLTqO/mX0cJC4rquTS6f8oVgN0xY9f3IDBL4+0D2uTn+Kc=
-  WEBHOOK_URL: "https://sb-merchant.e-invoice.gov.kh/hooks/redeploy-webhook"
+  WEBHOOK_URL: "https://sb-merchant.e-invoice.gov.kh/hooks/redeploy-webhook-v2"
   WEBHOOK_SECRET: "XVZOtUjVd7DEVDEe5LGrWWxswvp7vEIO"
 
 jobs:
