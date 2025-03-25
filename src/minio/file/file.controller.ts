@@ -1,4 +1,5 @@
 import { TOKEN_NAME } from "@modules/auth";
+import { SkipApprove } from "@modules/auth/decorators/skip-approve";
 import {
   Controller,
   Get,
@@ -26,6 +27,7 @@ export class FileController {
     return await this.minioService.getPreviewUrl(path);
   }
 
+  @SkipApprove()
   @Post("image")
   @ApiConsumes("multipart/form-data")
   @ApiBody({
@@ -48,6 +50,7 @@ export class FileController {
     );
   }
 
+  @SkipApprove()
   @Post("document")
   @ApiConsumes("multipart/form-data")
   @ApiBody({

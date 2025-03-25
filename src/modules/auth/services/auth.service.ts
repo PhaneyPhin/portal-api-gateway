@@ -49,11 +49,12 @@ export class AuthService {
     const userCamdigikey = await this.getCamdigkeyUser(authToken);
     let user;
     try {
-      const user = await this.userService.findByNationalId(
+      user = await this.userService.findByNationalId(
         userCamdigikey.personal_code
       );
     } catch (e) {
       user = await this.userService.createFromCamdigikey(userCamdigikey);
+      console.log(user);
     }
 
     const payload: JwtPayload = {

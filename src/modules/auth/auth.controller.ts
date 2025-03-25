@@ -13,6 +13,7 @@ import {
 import { Response } from "express";
 import { ExtractJwt } from "passport-jwt";
 import { CurrentUser, SkipAuth, TOKEN_NAME } from ".";
+import { SkipApprove } from "./decorators/skip-approve";
 import { ValidateTokenRequestDto } from "./dtos";
 import { LoginUrlResponseDto } from "./dtos/login-url.dto";
 import { ServiceAccountTest } from "./dtos/service-test.dto";
@@ -118,6 +119,7 @@ export class AuthController {
   //   return this.tokenService.validateToken(token);
   // }
 
+  @SkipApprove()
   @ApiOperation({ description: "Get me" })
   @ApiOkResponse({ description: "My data retrived" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
@@ -127,6 +129,7 @@ export class AuthController {
     return user;
   }
 
+  @SkipApprove()
   @ApiOperation({ description: "Validate token" })
   @ApiOkResponse({ description: "Validation was successful" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
