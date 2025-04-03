@@ -20,7 +20,7 @@ import { DocumentType } from "../enums/DocumentType";
 import { InvoiceType } from "../enums/InvoiceType";
 
 export class TaxCategoryDto {
-  @ApiProperty()
+  @ApiProperty({ example: "S" })
   @ContainsTooManySpecialChars()
   id: string;
 
@@ -31,7 +31,7 @@ export class TaxCategoryDto {
   @ContainsTooManySpecialChars()
   percent: number;
 
-  @ApiProperty()
+  @ApiProperty({ example: "VAT" })
   @IsNotEmpty()
   @ContainsTooManySpecialChars()
   tax_scheme: string;
@@ -90,6 +90,12 @@ export class AllowanceChargeDto {
 
 export class InvoiceLineDto {
   id: number;
+
+  @ApiPropertyOptional({ example: 1 })
+  @IsOptional()
+  @IsNumber()
+  @ContainsTooManySpecialChars(5)
+  customer_id: number;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -179,11 +185,11 @@ export class AdditionalDocumentReferenceDto {
 
 export class InvoiceDto {
   @IsOptional()
-  @ApiProperty()
+  @ApiProperty({ example: false })
   is_draft: boolean;
 
   @ValidateIf((o) => !o.is_draft)
-  @ApiProperty()
+  @ApiProperty({ example: null })
   document_id: string;
 
   @ValidateIf((o) => !o.is_draft)

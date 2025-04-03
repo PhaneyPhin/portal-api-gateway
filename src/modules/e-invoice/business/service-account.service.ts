@@ -7,9 +7,12 @@ import {
   Transport,
 } from "@nestjs/microservices";
 import { firstValueFrom } from "rxjs";
+import { ServiceProviderResponseDto } from "../service-provider/dtos";
+import { GetAuthTokenRequest } from "../service-provider/dtos/get-auth-token-request.dto";
 import { UserResponseDto } from "../user/dtos";
 import { BusinessResponseDto, CreateBusinessRequestDto } from "./dtos";
 import { NotificationSettingDto } from "./dtos/notification-setting.dto";
+import { RequestChangeRepresentativeDto } from "./dtos/request-change-representative.dto";
 
 @Injectable()
 export class ServiceAccountService implements OnModuleInit {
@@ -115,6 +118,74 @@ export class ServiceAccountService implements OnModuleInit {
   async getNotification(payload: string) {
     return firstValueFrom(
       this.businessClient.send("business.getNotification", payload)
+    );
+  }
+
+  public async listServiceProvider(payload: PaginationRequest) {
+    return firstValueFrom(
+      this.businessClient.send("serviceProvider.list", payload)
+    );
+  }
+
+  public getAllServiceProvider(): Promise<ServiceProviderResponseDto[]> {
+    return firstValueFrom(this.businessClient.send("serviceProvider.all", 1));
+  }
+
+  public async getServiceProviderById(id: number) {
+    return firstValueFrom(
+      this.businessClient.send("serviceProvider.findById", id)
+    );
+  }
+
+  public async getConnectedServiceProvider(
+    endpointId: string
+  ): Promise<ServiceProviderResponseDto> {
+    return firstValueFrom(
+      this.businessClient.send(
+        "serviceProvider.getConnectedServiceProvider",
+        endpointId
+      )
+    );
+  }
+
+  public async getServiceProviderByClientId(
+    clientId: string
+  ): Promise<ServiceProviderResponseDto> {
+    return firstValueFrom(
+      this.businessClient.send("serviceProvider.getByClientId", clientId)
+    );
+  }
+
+  public async getAuthToken(tokenRequest: GetAuthTokenRequest) {
+    return firstValueFrom(
+      this.businessClient.send(
+        "connection.getConnectServiceProviderToken",
+        tokenRequest
+      )
+    );
+  }
+
+  public changeRepresentative(data: RequestChangeRepresentativeDto) {
+    return firstValueFrom(
+      this.businessClient.send(
+        "representative.requestChangeRepresentative",
+        data
+      )
+    );
+  }
+
+  public cancelChangeRepresentative(endpointId: string) {
+    return firstValueFrom(
+      this.businessClient.send(
+        "representative.cancelChangeRepresentative",
+        endpointId
+      )
+    );
+  }
+
+  public getRequestedRepresentative(endpointId: string) {
+    return firstValueFrom(
+      this.businessClient.send("representative.getRepresentative", endpointId)
     );
   }
 

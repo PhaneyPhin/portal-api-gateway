@@ -75,6 +75,7 @@
   "devDependencies": {
     "@angular-devkit/core": "^19.0.6",
     "@angular-devkit/schematics": "^19.0.6",
+    "@compodoc/compodoc": "^1.1.26",
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.2.3",
     "@nestjs/testing": "^10.0.0",

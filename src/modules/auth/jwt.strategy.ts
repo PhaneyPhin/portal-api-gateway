@@ -68,6 +68,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     if (business && business.status == BusinessStatus.APPROVED) {
       allowBusiness = true;
     }
-    return { ...user, allowBusiness };
+    return { ...user, allowBusiness, business };
   }
 }

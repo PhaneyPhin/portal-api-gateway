@@ -1,0 +1,2252 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>nestjs-sample documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
+	   <link rel="stylesheet" href="./styles/style.css">
+        <link rel="stylesheet" href="./styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="./" class="navbar-brand">nestjs-sample documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content coverage">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Documentation coverage</li>
+</ol>
+
+<div>
+    <img src="./images/coverage-badge-documentation.svg">
+</div>
+
+<table class="table table-bordered coverage" id="coverage-table">
+    <thead class="coverage-header">
+        <tr>
+            <th>File</th>
+            <th>Type</th>
+            <th>Identifier</th>
+            <th style="text-align:right" class="statements" data-sort-default>Statements</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./controllers/AuditLogController.html">src/common/audit/audit-log.controller.ts</a>
+            </td>
+            <td>controller</td>
+            <td>AuditLogController</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./entitys/AuditLogEntity.html">src/common/audit/audit-log.entity.ts</a>
+            </td>
+            <td>entity</td>
+            <td>AuditLogEntity</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="medium">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/AuditLogService.html">src/common/audit/audit.service.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>AuditLogService</td>
+            <td align="right" data-sort="40">
+                <span class="coverage-percent">40 %</span>
+                <span class="coverage-count">(6/15)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/functions.html#ApiFields">src/common/decorators/api-fields.decorator.ts</a>
+            </td>
+            <td>function</td>
+            <td>ApiFields</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#ApiGlobalResponse">src/common/decorators/api-global-response.decorators.ts</a>
+            </td>
+            <td>variable</td>
+            <td>ApiGlobalResponse</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#AUDIT_META_KEY">src/common/decorators/audit-log.dto.ts</a>
+            </td>
+            <td>variable</td>
+            <td>AUDIT_META_KEY</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#AuditLog">src/common/decorators/audit-log.dto.ts</a>
+            </td>
+            <td>variable</td>
+            <td>AuditLog</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/ContainsTooManySpecialCharsConstraint.html">src/common/decorators/container-too-many-special-chars.decorator.ts</a>
+            </td>
+            <td>class</td>
+            <td>ContainsTooManySpecialCharsConstraint</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/functions.html#ContainsTooManySpecialChars">src/common/decorators/container-too-many-special-chars.decorator.ts</a>
+            </td>
+            <td>function</td>
+            <td>ContainsTooManySpecialChars</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="medium">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/ResponseDto.html">src/common/dtos/response.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>ResponseDto</td>
+            <td align="right" data-sort="33">
+                <span class="coverage-percent">33 %</span>
+                <span class="coverage-count">(1/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/AccessTokenExpiredException.html">src/common/http/exceptions/access-token-expired.exception.ts</a>
+            </td>
+            <td>class</td>
+            <td>AccessTokenExpiredException</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/DisabledUserException.html">src/common/http/exceptions/disabled-user.exception.ts</a>
+            </td>
+            <td>class</td>
+            <td>DisabledUserException</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/ForeignKeyConflictException.html">src/common/http/exceptions/foreign-key-conflict.exception.ts</a>
+            </td>
+            <td>class</td>
+            <td>ForeignKeyConflictException</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/InvalidCredentialsException.html">src/common/http/exceptions/invalid-credentials.exception.ts</a>
+            </td>
+            <td>class</td>
+            <td>InvalidCredentialsException</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/InvalidCurrentPasswordException.html">src/common/http/exceptions/invalid-current-password.exception.ts</a>
+            </td>
+            <td>class</td>
+            <td>InvalidCurrentPasswordException</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/InvalidTokenException.html">src/common/http/exceptions/invalid-token.exception.ts</a>
+            </td>
+            <td>class</td>
+            <td>InvalidTokenException</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/PermissionExistsException.html">src/common/http/exceptions/permission-exists.exception.ts</a>
+            </td>
+            <td>class</td>
+            <td>PermissionExistsException</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/RefreshTokenExpiredException.html">src/common/http/exceptions/refresh-token-expired.exception.ts</a>
+            </td>
+            <td>class</td>
+            <td>RefreshTokenExpiredException</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/RoleExistsException.html">src/common/http/exceptions/role-exists.exception.ts</a>
+            </td>
+            <td>class</td>
+            <td>RoleExistsException</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/UserExistsException.html">src/common/http/exceptions/user-exists.exception.ts</a>
+            </td>
+            <td>class</td>
+            <td>UserExistsException</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#HttpErrorType">src/common/http/http-error-type.ts</a>
+            </td>
+            <td>variable</td>
+            <td>HttpErrorType</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/HttpExceptionFilter.html">src/common/http/http-exception.filter.ts</a>
+            </td>
+            <td>class</td>
+            <td>HttpExceptionFilter</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="medium">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/HttpResponseInterceptor.html">src/common/http/response.interceptor.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>HttpResponseInterceptor</td>
+            <td align="right" data-sort="50">
+                <span class="coverage-percent">50 %</span>
+                <span class="coverage-count">(1/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/AuditLogInterceptor.html">src/common/intercepter/audit-log.intercepter.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>AuditLogInterceptor</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/BaseCrudService.html">src/common/services/base-crud.service.ts</a>
+            </td>
+            <td>class</td>
+            <td>BaseCrudService</td>
+            <td align="right" data-sort="63">
+                <span class="coverage-percent">63 %</span>
+                <span class="coverage-count">(7/11)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/typealiases.html#Filter">src/common/types/filter.ts</a>
+            </td>
+            <td>type alias</td>
+            <td>Filter</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#description">src/config/swagger.config.ts</a>
+            </td>
+            <td>variable</td>
+            <td>description</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#SwaggerConfig">src/config/swagger.config.ts</a>
+            </td>
+            <td>variable</td>
+            <td>SwaggerConfig</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(1/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#title">src/config/swagger.config.ts</a>
+            </td>
+            <td>variable</td>
+            <td>title</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#AppDataSource">src/database/data-source.ts</a>
+            </td>
+            <td>variable</td>
+            <td>AppDataSource</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#configService">src/database/data-source.ts</a>
+            </td>
+            <td>variable</td>
+            <td>configService</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#databaseProviders">src/database/database.providers.ts</a>
+            </td>
+            <td>variable</td>
+            <td>databaseProviders</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#defaultConnection">src/database/database.providers.ts</a>
+            </td>
+            <td>variable</td>
+            <td>defaultConnection</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/BaseEntity.html">src/database/entities/base.entity.ts</a>
+            </td>
+            <td>class</td>
+            <td>BaseEntity</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/CreateAdminSchema_1602337241496.html">src/database/migrations/admin/1602337241496-create-admin-schema.ts</a>
+            </td>
+            <td>class</td>
+            <td>CreateAdminSchema_1602337241496</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#schemaName">src/database/migrations/admin/1602337241496-create-admin-schema.ts</a>
+            </td>
+            <td>variable</td>
+            <td>schemaName</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/AuditLog1742568476568.html">src/database/migrations/admin/1742568476568-auditlog-migration.ts</a>
+            </td>
+            <td>class</td>
+            <td>AuditLog1742568476568</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/CustomerMigration1742568476568.html">src/database/migrations/admin/1742568476568-customer-migration.ts</a>
+            </td>
+            <td>class</td>
+            <td>CustomerMigration1742568476568</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#tableName">src/database/migrations/admin/1742568476568-customer-migration.ts</a>
+            </td>
+            <td>variable</td>
+            <td>tableName</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/ExchangeRateMigration1742568476569.html">src/database/migrations/admin/1742568476569-exchange-rate-migration.ts</a>
+            </td>
+            <td>class</td>
+            <td>ExchangeRateMigration1742568476569</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/CreateInvoiceTableWithDraftSupport1742568476570.html">src/database/migrations/admin/1742568476570-document-migration.ts</a>
+            </td>
+            <td>class</td>
+            <td>CreateInvoiceTableWithDraftSupport1742568476570</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#commonFields">src/database/migrations/common.fields.ts</a>
+            </td>
+            <td>variable</td>
+            <td>commonFields</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/EnableUuidOssp_1597941181251.html">src/database/migrations/extensions/1602269134635-enable-uuid-ossp.ts</a>
+            </td>
+            <td>class</td>
+            <td>EnableUuidOssp_1597941181251</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#extensionName">src/database/migrations/extensions/1602269134635-enable-uuid-ossp.ts</a>
+            </td>
+            <td>variable</td>
+            <td>extensionName</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/functions.html#detectChangedFields">src/helpers/detectField-change.dto.ts</a>
+            </td>
+            <td>function</td>
+            <td>detectChangedFields</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="medium">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/HashHelper.html">src/helpers/hash.helper.ts</a>
+            </td>
+            <td>class</td>
+            <td>HashHelper</td>
+            <td align="right" data-sort="50">
+                <span class="coverage-percent">50 %</span>
+                <span class="coverage-count">(2/4)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#ApiPaginatedResponse">src/libs/pagination/decorators/api-paginated-response.decorador.ts</a>
+            </td>
+            <td>variable</td>
+            <td>ApiPaginatedResponse</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#PaginationParams">src/libs/pagination/decorators/pagination-params.decorator.ts</a>
+            </td>
+            <td>variable</td>
+            <td>PaginationParams</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(1/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/functions.html#applyFilters">src/libs/pagination/filter.helper.ts</a>
+            </td>
+            <td>function</td>
+            <td>applyFilters</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/DefaultPagination.html">src/libs/pagination/interfaces/default-pagination.interface.ts</a>
+            </td>
+            <td>interface</td>
+            <td>DefaultPagination</td>
+            <td align="right" data-sort="14">
+                <span class="coverage-percent">14 %</span>
+                <span class="coverage-count">(1/7)</span>
+            </td>
+        </tr>
+        <tr class="medium">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/PaginationRequest.html">src/libs/pagination/interfaces/pagination-request.interface.ts</a>
+            </td>
+            <td>interface</td>
+            <td>PaginationRequest</td>
+            <td align="right" data-sort="33">
+                <span class="coverage-percent">33 %</span>
+                <span class="coverage-count">(2/6)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#minioClient">src/libs/pagination/minio.ts</a>
+            </td>
+            <td>variable</td>
+            <td>minioClient</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/PaginationResponseDto.html">src/libs/pagination/pagination-response.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>PaginationResponseDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/8)</span>
+            </td>
+        </tr>
+        <tr class="medium">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/Pagination.html">src/libs/pagination/pagination.helper.ts</a>
+            </td>
+            <td>class</td>
+            <td>Pagination</td>
+            <td align="right" data-sort="50">
+                <span class="coverage-percent">50 %</span>
+                <span class="coverage-count">(1/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#bootstrap">src/main.ts</a>
+            </td>
+            <td>variable</td>
+            <td>bootstrap</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#formatValidationErrors">src/main.ts</a>
+            </td>
+            <td>variable</td>
+            <td>formatValidationErrors</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./controllers/FileController.html">src/minio/file/file.controller.ts</a>
+            </td>
+            <td>controller</td>
+            <td>FileController</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/4)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/MinioProvider.html">src/minio/minio.provider.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>MinioProvider</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/MinioService.html">src/minio/minio.service.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>MinioService</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/10)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./entitys/DocumentEntity.html">src/modules/accouting/invoice/document.entity.ts</a>
+            </td>
+            <td>entity</td>
+            <td>DocumentEntity</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/DocumentService.html">src/modules/accouting/invoice/document.service.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>DocumentService</td>
+            <td align="right" data-sort="17">
+                <span class="coverage-percent">17 %</span>
+                <span class="coverage-count">(3/17)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/AdditionalDocumentReferenceDto.html">src/modules/accouting/invoice/dto/create-invoice.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>AdditionalDocumentReferenceDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/5)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/AllowanceChargeDto.html">src/modules/accouting/invoice/dto/create-invoice.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>AllowanceChargeDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/5)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/BuyerDTO.html">src/modules/accouting/invoice/dto/create-invoice.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>BuyerDTO</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/InvoiceDto.html">src/modules/accouting/invoice/dto/create-invoice.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>InvoiceDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/21)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/InvoiceLineDto.html">src/modules/accouting/invoice/dto/create-invoice.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>InvoiceLineDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/12)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/ItemDto.html">src/modules/accouting/invoice/dto/create-invoice.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>ItemDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/4)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/PrepaidPaymentDto.html">src/modules/accouting/invoice/dto/create-invoice.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>PrepaidPaymentDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/TaxCategoryDto.html">src/modules/accouting/invoice/dto/create-invoice.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>TaxCategoryDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/5)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/CreditNoteDto.html">src/modules/accouting/invoice/dto/credit-note.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>CreditNoteDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/23)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/DebitNoteDto.html">src/modules/accouting/invoice/dto/debit-note.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>DebitNoteDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/23)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/AllowanceCharge.html">src/modules/accouting/invoice/dto/document-response.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>AllowanceCharge</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/5)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/DocumentResponseDto.html">src/modules/accouting/invoice/dto/document-response.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>DocumentResponseDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/18)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/InvoiceItem.html">src/modules/accouting/invoice/dto/document-response.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>InvoiceItem</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/InvoiceLine.html">src/modules/accouting/invoice/dto/document-response.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>InvoiceLine</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/9)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/InvoiceLineTax.html">src/modules/accouting/invoice/dto/document-response.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>InvoiceLineTax</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/LegalMonetaryTotal.html">src/modules/accouting/invoice/dto/document-response.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>LegalMonetaryTotal</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/5)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/Party.html">src/modules/accouting/invoice/dto/document-response.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>Party</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/10)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/PrepaidPayment.html">src/modules/accouting/invoice/dto/document-response.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>PrepaidPayment</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/AllowanceChargeTotal.html">src/modules/accouting/invoice/dto/index.ts</a>
+            </td>
+            <td>interface</td>
+            <td>AllowanceChargeTotal</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/LegalMonetaryTotal.html">src/modules/accouting/invoice/dto/index.ts</a>
+            </td>
+            <td>interface</td>
+            <td>LegalMonetaryTotal</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/8)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/TaxSubtotal.html">src/modules/accouting/invoice/dto/index.ts</a>
+            </td>
+            <td>interface</td>
+            <td>TaxSubtotal</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/4)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/TaxTotal.html">src/modules/accouting/invoice/dto/index.ts</a>
+            </td>
+            <td>interface</td>
+            <td>TaxTotal</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/InvoiceMailDto.html">src/modules/accouting/invoice/dto/invoice-mail.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>InvoiceMailDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/4)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/RejectDocumentRequest.html">src/modules/accouting/invoice/dto/reject-document.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>RejectDocumentRequest</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/RejectRequestDto.html">src/modules/accouting/invoice/dto/reject-request.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>RejectRequestDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/SubmitInvoiceDto.html">src/modules/accouting/invoice/dto/send-invoice.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>SubmitInvoiceDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/UpdateInvoiceDto.html">src/modules/accouting/invoice/dto/update-invoice.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>UpdateInvoiceDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/ValidateCustomerDto.html">src/modules/accouting/invoice/dto/validate-customer.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>ValidateCustomerDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/5)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/HandlebarsService.html">src/modules/accouting/invoice/handle-bar.service.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>HandlebarsService</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/6)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./controllers/InvoiceController.html">src/modules/accouting/invoice/invoice.controller.ts</a>
+            </td>
+            <td>controller</td>
+            <td>InvoiceController</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/12)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./controllers/NoteController.html">src/modules/accouting/invoice/note.controller.ts</a>
+            </td>
+            <td>controller</td>
+            <td>NoteController</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/14)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/UBLHelperService.html">src/modules/accouting/invoice/ubl-helper.service.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>UBLHelperService</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/15)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./controllers/AuthController.html">src/modules/auth/auth.controller.ts</a>
+            </td>
+            <td>controller</td>
+            <td>AuthController</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/6)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#AUTH_OPTIONS">src/modules/auth/constants.ts</a>
+            </td>
+            <td>variable</td>
+            <td>AUTH_OPTIONS</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#SKIP_APPROVE">src/modules/auth/constants.ts</a>
+            </td>
+            <td>variable</td>
+            <td>SKIP_APPROVE</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#SKIP_AUTH">src/modules/auth/constants.ts</a>
+            </td>
+            <td>variable</td>
+            <td>SKIP_AUTH</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#TOKEN_NAME">src/modules/auth/constants.ts</a>
+            </td>
+            <td>variable</td>
+            <td>TOKEN_NAME</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#CurrentUser">src/modules/auth/decorators/current-user.decorator.ts</a>
+            </td>
+            <td>variable</td>
+            <td>CurrentUser</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#Permissions">src/modules/auth/decorators/permissions.decorator.ts</a>
+            </td>
+            <td>variable</td>
+            <td>Permissions</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#SkipApprove">src/modules/auth/decorators/skip-approve.ts</a>
+            </td>
+            <td>variable</td>
+            <td>SkipApprove</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#SkipAuth">src/modules/auth/decorators/skip-auth.decorator.ts</a>
+            </td>
+            <td>variable</td>
+            <td>SkipAuth</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/AuthAccessDto.html">src/modules/auth/dtos/auth-access.dto.ts</a>
+            </td>
+            <td>interface</td>
+            <td>AuthAccessDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/AuthCredentialsRequestDto.html">src/modules/auth/dtos/auth-credentials-request.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>AuthCredentialsRequestDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/JwtPayload.html">src/modules/auth/dtos/jwt-payload.dto.ts</a>
+            </td>
+            <td>interface</td>
+            <td>JwtPayload</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/4)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/LoginResponseDto.html">src/modules/auth/dtos/login-response.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>LoginResponseDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/LoginUrlResponseDto.html">src/modules/auth/dtos/login-url.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>LoginUrlResponseDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/RefreshTokenRequestDto.html">src/modules/auth/dtos/refresh-token-request.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>RefreshTokenRequestDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/ServiceAccountTest.html">src/modules/auth/dtos/service-test.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>ServiceAccountTest</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/TokenDto.html">src/modules/auth/dtos/token.dto.ts</a>
+            </td>
+            <td>interface</td>
+            <td>TokenDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/5)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/ValidateTokenRequestDto.html">src/modules/auth/dtos/validate-token-request.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>ValidateTokenRequestDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./interfaces/ValidateTokenResponseDto.html">src/modules/auth/dtos/validate-token-response.dto.ts</a>
+            </td>
+            <td>interface</td>
+            <td>ValidateTokenResponseDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="medium">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/JwtAuthGuard.html">src/modules/auth/guards/jwt-auth.guard.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>JwtAuthGuard</td>
+            <td align="right" data-sort="50">
+                <span class="coverage-percent">50 %</span>
+                <span class="coverage-count">(2/4)</span>
+            </td>
+        </tr>
+        <tr class="medium">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./guards/PermissionsGuard.html">src/modules/auth/guards/permissions.guard.ts</a>
+            </td>
+            <td>guard</td>
+            <td>PermissionsGuard</td>
+            <td align="right" data-sort="50">
+                <span class="coverage-percent">50 %</span>
+                <span class="coverage-count">(2/4)</span>
+            </td>
+        </tr>
+        <tr class="medium">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./guards/SuperUserGuard.html">src/modules/auth/guards/super-user.guard.ts</a>
+            </td>
+            <td>guard</td>
+            <td>SuperUserGuard</td>
+            <td align="right" data-sort="50">
+                <span class="coverage-percent">50 %</span>
+                <span class="coverage-count">(1/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/JwtStrategy.html">src/modules/auth/jwt.strategy.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>JwtStrategy</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#headerOrCookieExtractor">src/modules/auth/jwt.strategy.ts</a>
+            </td>
+            <td>variable</td>
+            <td>headerOrCookieExtractor</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/AuthService.html">src/modules/auth/services/auth.service.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>AuthService</td>
+            <td align="right" data-sort="12">
+                <span class="coverage-percent">12 %</span>
+                <span class="coverage-count">(1/8)</span>
+            </td>
+        </tr>
+        <tr class="medium">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/TokenService.html">src/modules/auth/services/token.service.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>TokenService</td>
+            <td align="right" data-sort="50">
+                <span class="coverage-percent">50 %</span>
+                <span class="coverage-count">(5/10)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/CustomerExistsException.html">src/modules/customer/customer-exist.exception.ts</a>
+            </td>
+            <td>class</td>
+            <td>CustomerExistsException</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./controllers/CustomerController.html">src/modules/customer/customer.controller.ts</a>
+            </td>
+            <td>controller</td>
+            <td>CustomerController</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/7)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./entitys/CustomerEntity.html">src/modules/customer/customer.entity.ts</a>
+            </td>
+            <td>entity</td>
+            <td>CustomerEntity</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/CustomerMapper.html">src/modules/customer/customer.mapper.ts</a>
+            </td>
+            <td>class</td>
+            <td>CustomerMapper</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/4)</span>
+            </td>
+        </tr>
+        <tr class="good">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/CustomerService.html">src/modules/customer/customer.service.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>CustomerService</td>
+            <td align="right" data-sort="55">
+                <span class="coverage-percent">55 %</span>
+                <span class="coverage-count">(10/18)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#CUSTOMER_FILTER_FIELDS">src/modules/customer/customer.service.ts</a>
+            </td>
+            <td>variable</td>
+            <td>CUSTOMER_FILTER_FIELDS</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/CreateCustomerRequestDto.html">src/modules/customer/dtos/create-customer-request.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>CreateCustomerRequestDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/16)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/CustomerResponseDto.html">src/modules/customer/dtos/customer-response.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>CustomerResponseDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/17)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/UpdateCustomerRequestDto.html">src/modules/customer/dtos/update-customer-request.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>UpdateCustomerRequestDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/17)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/AttestationService.html">src/modules/e-invoice/attestation/attestation.service.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>AttestationService</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/6)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./controllers/BusinessController.html">src/modules/e-invoice/business/business.controller.ts</a>
+            </td>
+            <td>controller</td>
+            <td>BusinessController</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/6)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/BusinessResponseDto.html">src/modules/e-invoice/business/dtos/business-response.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>BusinessResponseDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/31)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/ContactDto.html">src/modules/e-invoice/business/dtos/contact.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>ContactDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/CreateBusinessRequestDto.html">src/modules/e-invoice/business/dtos/create-business-request.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>CreateBusinessRequestDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/21)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/NotificationSettingDto.html">src/modules/e-invoice/business/dtos/notification-setting.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>NotificationSettingDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/4)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/UpdateBusinessRequestDto.html">src/modules/e-invoice/business/dtos/update-business-request.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>UpdateBusinessRequestDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/19)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/ServiceAccountService.html">src/modules/e-invoice/business/service-account.service.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>ServiceAccountService</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/23)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/EKYBService.html">src/modules/e-invoice/ekyb/ekyb.service.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>EKYBService</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/5)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/SubmitDocumentRequestDto.html">src/modules/e-invoice/invoiceprocessor/dto/submit-document-request.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>SubmitDocumentRequestDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/4)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/InvoiceProcessorService.html">src/modules/e-invoice/invoiceprocessor/invoiceprocessor.service.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>InvoiceProcessorService</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/13)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/NotificationService.html">src/modules/e-invoice/notification/notificaiton.service.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>NotificationService</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/5)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/AllServiceProviderResponseDto.html">src/modules/e-invoice/service-provider/dtos/all-service-provider.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>AllServiceProviderResponseDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/AuthTokenResponseDto.html">src/modules/e-invoice/service-provider/dtos/auth-token-response.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>AuthTokenResponseDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/CreateServiceProviderRequestDto.html">src/modules/e-invoice/service-provider/dtos/create-service-provider-request.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>CreateServiceProviderRequestDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/6)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/GetAuthTokenRequest.html">src/modules/e-invoice/service-provider/dtos/get-auth-token-request.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>GetAuthTokenRequest</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/ServiceProviderResponseDto.html">src/modules/e-invoice/service-provider/dtos/service-provider-response.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>ServiceProviderResponseDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/7)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/UpdateServiceProviderRequestDto.html">src/modules/e-invoice/service-provider/dtos/update-service-provider-request.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>UpdateServiceProviderRequestDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/8)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./controllers/ServiceProviderController.html">src/modules/e-invoice/service-provider/service-provider.controller.ts</a>
+            </td>
+            <td>controller</td>
+            <td>ServiceProviderController</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/4)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/ChangePasswordRequestDto.html">src/modules/e-invoice/user/dtos/change-password-request.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>ChangePasswordRequestDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#passwordRegex">src/modules/e-invoice/user/dtos/change-password-request.dto.ts</a>
+            </td>
+            <td>variable</td>
+            <td>passwordRegex</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/CreateUserRequestDto.html">src/modules/e-invoice/user/dtos/create-user-request.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>CreateUserRequestDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/6)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/CreatePermissionRequestDto.html">src/modules/e-invoice/user/dtos/permission/create-permission-request.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>CreatePermissionRequestDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#slugRegex">src/modules/e-invoice/user/dtos/permission/create-permission-request.dto.ts</a>
+            </td>
+            <td>variable</td>
+            <td>slugRegex</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/PermissionResponseDto.html">src/modules/e-invoice/user/dtos/permission/permission-response.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>PermissionResponseDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/5)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/UpdatePermissionRequestDto.html">src/modules/e-invoice/user/dtos/permission/update-permission-request.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>UpdatePermissionRequestDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/4)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/CreateRoleRequestDto.html">src/modules/e-invoice/user/dtos/role/create-role-request.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>CreateRoleRequestDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/3)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/RoleResponseDto.html">src/modules/e-invoice/user/dtos/role/role-response.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>RoleResponseDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/5)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/UpdateRoleRequestDto.html">src/modules/e-invoice/user/dtos/role/update-role-request.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>UpdateRoleRequestDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/4)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/UpdateUserRequestDto.html">src/modules/e-invoice/user/dtos/update-user-request.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>UpdateUserRequestDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/7)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/UserResponseDto.html">src/modules/e-invoice/user/dtos/user-response.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>UserResponseDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/17)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./controllers/UserController.html">src/modules/e-invoice/user/user.controller.ts</a>
+            </td>
+            <td>controller</td>
+            <td>UserController</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/8)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/UserService.html">src/modules/e-invoice/user/user.service.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>UserService</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/18)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./classes/ExchangeRateRequestDto.html">src/modules/exchange-rate/dto/exchange-rate-request.dto.ts</a>
+            </td>
+            <td>class</td>
+            <td>ExchangeRateRequestDto</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#slugRegex">src/modules/exchange-rate/dto/exchange-rate-request.dto.ts</a>
+            </td>
+            <td>variable</td>
+            <td>slugRegex</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./controllers/ExchangeRateController.html">src/modules/exchange-rate/exchange-rate.controller.ts</a>
+            </td>
+            <td>controller</td>
+            <td>ExchangeRateController</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/2)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./entitys/ExchangeRateEntity.html">src/modules/exchange-rate/exchange-rate.entity.ts</a>
+            </td>
+            <td>entity</td>
+            <td>ExchangeRateEntity</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                <a href="./injectables/ExchangeRateService.html">src/modules/exchange-rate/exchange-rate.service.ts</a>
+            </td>
+            <td>injectable</td>
+            <td>ExchangeRateService</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/8)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#moment">src/modules/exchange-rate/exchange-rate.service.ts</a>
+            </td>
+            <td>variable</td>
+            <td>moment</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#toCamelCase">src/utils/case.ts</a>
+            </td>
+            <td>variable</td>
+            <td>toCamelCase</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#toSnakeCase">src/utils/case.ts</a>
+            </td>
+            <td>variable</td>
+            <td>toSnakeCase</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#handleDeleteError">src/utils/handle-error.ts</a>
+            </td>
+            <td>variable</td>
+            <td>handleDeleteError</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#handleError">src/utils/handle-error.ts</a>
+            </td>
+            <td>variable</td>
+            <td>handleError</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script src="js/libs/tablesort.min.js"></script>
+<script src="js/libs/tablesort.number.min.js"></script>
+<script>
+    new Tablesort(document.getElementById('coverage-table'));
+</script>
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 0;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'coverage';
+            var COMPODOC_CURRENT_PAGE_URL = 'coverage.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="./js/libs/custom-elements.min.js"></script>
+       <script src="./js/libs/lit-html.js"></script>
+
+       <script src="./js/menu-wc.js" defer></script>
+       <script nomodule src="./js/menu-wc_es5.js" defer></script>
+
+       <script src="./js/libs/bootstrap-native.js"></script>
+
+       <script src="./js/libs/es6-shim.min.js"></script>
+       <script src="./js/libs/EventDispatcher.js"></script>
+       <script src="./js/libs/promise.min.js"></script>
+
+       <script src="./js/compodoc.js"></script>
+
+       <script src="./js/tabs.js"></script>
+       <script src="./js/menu.js"></script>
+       <script src="./js/libs/clipboard.min.js"></script>
+       <script src="./js/libs/prism.js"></script>
+       <script src="./js/sourceCode.js"></script>
+          <script src="./js/search/search.js"></script>
+          <script src="./js/search/lunr.min.js"></script>
+          <script src="./js/search/search-lunr.js"></script>
+          <script src="./js/search/search_index.js"></script>
+       <script src="./js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

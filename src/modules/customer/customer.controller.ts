@@ -105,6 +105,7 @@ export class CustomerController {
     @Body(ValidationPipe) dto: CreateCustomerRequestDto,
     @CurrentUser() user: UserResponseDto
   ): Promise<CustomerResponseDto> {
+    console.log(user);
     return this.customerService.createCustomer({
       ...dto,
       supplier_id: user.endpoint_id,

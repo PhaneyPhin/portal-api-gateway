@@ -352,3 +352,14 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 
+
+
+V1-->V2 changed
+
+
+1. API global response
+- the status success: 200, 201
+- the response will wrap  { payload: existingReponse, timestamp: string }
+- error will contain { statusCode: }
+
+E-invoice--> update invoice api response to request

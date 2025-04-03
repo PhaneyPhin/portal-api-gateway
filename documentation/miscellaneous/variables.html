@@ -1,0 +1,1612 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>nestjs-sample documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">nestjs-sample documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content miscellaneous-variables">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Miscellaneous</li>
+  <li class="breadcrumb-item">Variables</li>
+</ol>
+
+<section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <ul class="index-list">
+                        <li>
+                            <a href="#ApiGlobalResponse" title="src/common/decorators/api-global-response.decorators.ts" ><b>ApiGlobalResponse</b>&nbsp;&nbsp;&nbsp;(src/.../api-global-response.decorators.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#ApiPaginatedResponse" title="src/libs/pagination/decorators/api-paginated-response.decorador.ts" ><b>ApiPaginatedResponse</b>&nbsp;&nbsp;&nbsp;(src/.../api-paginated-response.decorador.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#AppDataSource" title="src/database/data-source.ts" ><b>AppDataSource</b>&nbsp;&nbsp;&nbsp;(src/.../data-source.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#AUDIT_META_KEY" title="src/common/decorators/audit-log.dto.ts" ><b>AUDIT_META_KEY</b>&nbsp;&nbsp;&nbsp;(src/.../audit-log.dto.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#AuditLog" title="src/common/decorators/audit-log.dto.ts" ><b>AuditLog</b>&nbsp;&nbsp;&nbsp;(src/.../audit-log.dto.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#AUTH_OPTIONS" title="src/modules/auth/constants.ts" ><b>AUTH_OPTIONS</b>&nbsp;&nbsp;&nbsp;(src/.../constants.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#bootstrap" title="src/main.ts" ><b>bootstrap</b>&nbsp;&nbsp;&nbsp;(src/.../main.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#commonFields" title="src/database/migrations/common.fields.ts" ><b>commonFields</b>&nbsp;&nbsp;&nbsp;(src/.../common.fields.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#configService" title="src/database/data-source.ts" ><b>configService</b>&nbsp;&nbsp;&nbsp;(src/.../data-source.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#CurrentUser" title="src/modules/auth/decorators/current-user.decorator.ts" ><b>CurrentUser</b>&nbsp;&nbsp;&nbsp;(src/.../current-user.decorator.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#CUSTOMER_FILTER_FIELDS" title="src/modules/customer/customer.service.ts" ><b>CUSTOMER_FILTER_FIELDS</b>&nbsp;&nbsp;&nbsp;(src/.../customer.service.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#databaseProviders" title="src/database/database.providers.ts" ><b>databaseProviders</b>&nbsp;&nbsp;&nbsp;(src/.../database.providers.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#defaultConnection" title="src/database/database.providers.ts" ><b>defaultConnection</b>&nbsp;&nbsp;&nbsp;(src/.../database.providers.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#description" title="src/config/swagger.config.ts" ><b>description</b>&nbsp;&nbsp;&nbsp;(src/.../swagger.config.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#extensionName" title="src/database/migrations/extensions/1602269134635-enable-uuid-ossp.ts" ><b>extensionName</b>&nbsp;&nbsp;&nbsp;(src/.../1602269134635-enable-uuid-ossp.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#formatValidationErrors" title="src/main.ts" ><b>formatValidationErrors</b>&nbsp;&nbsp;&nbsp;(src/.../main.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#handleDeleteError" title="src/utils/handle-error.ts" ><b>handleDeleteError</b>&nbsp;&nbsp;&nbsp;(src/.../handle-error.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#handleError" title="src/utils/handle-error.ts" ><b>handleError</b>&nbsp;&nbsp;&nbsp;(src/.../handle-error.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#headerOrCookieExtractor" title="src/modules/auth/jwt.strategy.ts" ><b>headerOrCookieExtractor</b>&nbsp;&nbsp;&nbsp;(src/.../jwt.strategy.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#HttpErrorType" title="src/common/http/http-error-type.ts" ><b>HttpErrorType</b>&nbsp;&nbsp;&nbsp;(src/.../http-error-type.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#minioClient" title="src/libs/pagination/minio.ts" ><b>minioClient</b>&nbsp;&nbsp;&nbsp;(src/.../minio.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#moment" title="src/modules/exchange-rate/exchange-rate.service.ts" ><b>moment</b>&nbsp;&nbsp;&nbsp;(src/.../exchange-rate.service.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#PaginationParams" title="src/libs/pagination/decorators/pagination-params.decorator.ts" ><b>PaginationParams</b>&nbsp;&nbsp;&nbsp;(src/.../pagination-params.decorator.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#passwordRegex" title="src/modules/e-invoice/user/dtos/change-password-request.dto.ts" ><b>passwordRegex</b>&nbsp;&nbsp;&nbsp;(src/.../change-password-request.dto.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#Permissions" title="src/modules/auth/decorators/permissions.decorator.ts" ><b>Permissions</b>&nbsp;&nbsp;&nbsp;(src/.../permissions.decorator.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#schemaName" title="src/database/migrations/admin/1602337241496-create-admin-schema.ts" ><b>schemaName</b>&nbsp;&nbsp;&nbsp;(src/.../1602337241496-create-admin-schema.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#SKIP_APPROVE" title="src/modules/auth/constants.ts" ><b>SKIP_APPROVE</b>&nbsp;&nbsp;&nbsp;(src/.../constants.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#SKIP_AUTH" title="src/modules/auth/constants.ts" ><b>SKIP_AUTH</b>&nbsp;&nbsp;&nbsp;(src/.../constants.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#SkipApprove" title="src/modules/auth/decorators/skip-approve.ts" ><b>SkipApprove</b>&nbsp;&nbsp;&nbsp;(src/.../skip-approve.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#SkipAuth" title="src/modules/auth/decorators/skip-auth.decorator.ts" ><b>SkipAuth</b>&nbsp;&nbsp;&nbsp;(src/.../skip-auth.decorator.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#slugRegex" title="src/modules/exchange-rate/dto/exchange-rate-request.dto.ts" ><b>slugRegex</b>&nbsp;&nbsp;&nbsp;(src/.../exchange-rate-request.dto.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#slugRegex" title="src/modules/e-invoice/user/dtos/permission/create-permission-request.dto.ts" ><b>slugRegex</b>&nbsp;&nbsp;&nbsp;(src/.../create-permission-request.dto.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#SwaggerConfig" title="src/config/swagger.config.ts" ><b>SwaggerConfig</b>&nbsp;&nbsp;&nbsp;(src/.../swagger.config.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#tableName" title="src/database/migrations/admin/1742568476568-customer-migration.ts" ><b>tableName</b>&nbsp;&nbsp;&nbsp;(src/.../1742568476568-customer-migration.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#title" title="src/config/swagger.config.ts" ><b>title</b>&nbsp;&nbsp;&nbsp;(src/.../swagger.config.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#toCamelCase" title="src/utils/case.ts" ><b>toCamelCase</b>&nbsp;&nbsp;&nbsp;(src/.../case.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#TOKEN_NAME" title="src/modules/auth/constants.ts" ><b>TOKEN_NAME</b>&nbsp;&nbsp;&nbsp;(src/.../constants.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#toSnakeCase" title="src/utils/case.ts" ><b>toSnakeCase</b>&nbsp;&nbsp;&nbsp;(src/.../case.ts)</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+    <h3>src/common/decorators/api-global-response.decorators.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ApiGlobalResponse"></a>
+                    <span class="name">
+                        <span ><b>ApiGlobalResponse</b></span>
+                        <a href="#ApiGlobalResponse"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&lt;TModel extends Type&lt;any&gt;&gt;(model: TModel) &#x3D;&gt; {
+  return applyDecorators(
+    ApiExtraModels(ResponseDto, model),
+    ApiOkResponse({
+      schema: {
+        allOf: [
+          { $ref: getSchemaPath(ResponseDto) },
+          {
+            properties: {
+              payload: {
+                $ref: getSchemaPath(model),
+              },
+              timestamp: {
+                type: &#x27;number&#x27;,
+              },
+            },
+          },
+        ],
+      },
+    }),
+    ApiUnauthorizedResponse({ description: &#x27;Not authenticated&#x27; }),
+    ApiForbiddenResponse({ description: &#x27;Access denied&#x27; }),
+    ApiNotFoundResponse({ description: &#x27;Not found&#x27; }),
+    ApiInternalServerErrorResponse({ description: &#x27;Server error&#x27; }),
+  );
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/libs/pagination/decorators/api-paginated-response.decorador.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ApiPaginatedResponse"></a>
+                    <span class="name">
+                        <span ><b>ApiPaginatedResponse</b></span>
+                        <a href="#ApiPaginatedResponse"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&lt;TModel extends Type&lt;any&gt;&gt;(model: TModel) &#x3D;&gt; {
+  return applyDecorators(
+    ApiQuery({ name: &#x27;orderBy&#x27;, type: &#x27;String&#x27;, required: false }),
+    ApiQuery({
+      name: &#x27;orderDirection&#x27;,
+      enum: [&#x27;ASC&#x27;, &#x27;DESC&#x27;],
+      required: false,
+    }),
+    ApiQuery({ name: &#x27;page&#x27;, type: &#x27;number&#x27;, required: false, example: &#x27;1&#x27; }),
+    ApiQuery({ name: &#x27;limit&#x27;, type: &#x27;number&#x27;, required: false, example: &#x27;20&#x27; }),
+    ApiExtraModels(PaginationResponseDto, model),
+    ApiOkResponse({
+      schema: {
+        allOf: [
+          { $ref: getSchemaPath(ResponseDto) },
+          {
+            properties: {
+              payload: {
+                allOf: [
+                  { $ref: getSchemaPath(PaginationResponseDto) },
+                  {
+                    properties: {
+                      content: {
+                        type: &#x27;array&#x27;,
+                        items: { $ref: getSchemaPath(model) },
+                      },
+                    },
+                  },
+                ],
+              },
+              timestamp: {
+                type: &#x27;number&#x27;,
+              },
+            },
+          },
+        ],
+      },
+    }),
+    ApiUnauthorizedResponse({ description: &#x27;Not authenticated&#x27; }),
+    ApiForbiddenResponse({ description: &#x27;Access denied&#x27; }),
+    ApiNotFoundResponse({ description: &#x27;Not found&#x27; }),
+    ApiInternalServerErrorResponse({ description: &#x27;Server error&#x27; }),
+  );
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/database/data-source.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="AppDataSource"></a>
+                    <span class="name">
+                        <span ><b>AppDataSource</b></span>
+                        <a href="#AppDataSource"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new DataSource({
+  type: &#x27;postgres&#x27;,
+  host: configService.get&lt;string&gt;(&#x27;TYPEORM_HOST&#x27;, &#x27;localhost&#x27;),
+  port: configService.get&lt;number&gt;(&#x27;TYPEORM_PORT&#x27;, 5432),
+  username: configService.get&lt;string&gt;(&#x27;TYPEORM_USERNAME&#x27;, &#x27;postgres&#x27;),
+  password: configService.get&lt;string&gt;(&#x27;TYPEORM_PASSWORD&#x27;, &#x27;password&#x27;),
+  database: configService.get&lt;string&gt;(&#x27;TYPEORM_DATABASE&#x27;, &#x27;nestjs_sample&#x27;),
+  entities: [join(__dirname, &#x27;/../modules/**/*.entity.{ts,js}&#x27;)],
+  migrations: [join(__dirname, &#x27;/migrations/admin/*.{ts,js}&#x27;)],
+  logging: [&#x27;query&#x27;], // Enable query logging
+  synchronize: false,
+})</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="configService"></a>
+                    <span class="name">
+                        <span ><b>configService</b></span>
+                        <a href="#configService"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new ConfigService()</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/common/decorators/audit-log.dto.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="AUDIT_META_KEY"></a>
+                    <span class="name">
+                        <span ><b>AUDIT_META_KEY</b></span>
+                        <a href="#AUDIT_META_KEY"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&quot;AUDIT_LOG&quot;</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="AuditLog"></a>
+                    <span class="name">
+                        <span ><b>AuditLog</b></span>
+                        <a href="#AuditLog"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>(action: string, resource: string) &#x3D;&gt;
+  SetMetadata(AUDIT_META_KEY, { action, resource })</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/modules/auth/constants.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="AUTH_OPTIONS"></a>
+                    <span class="name">
+                        <span ><b>AUTH_OPTIONS</b></span>
+                        <a href="#AUTH_OPTIONS"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>SecuritySchemeObject</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+  type: &quot;http&quot;,
+  scheme: &quot;bearer&quot;,
+  bearerFormat: &quot;Bearer&quot;,
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="SKIP_APPROVE"></a>
+                    <span class="name">
+                        <span ><b>SKIP_APPROVE</b></span>
+                        <a href="#SKIP_APPROVE"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&quot;skipApprove&quot;</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="SKIP_AUTH"></a>
+                    <span class="name">
+                        <span ><b>SKIP_AUTH</b></span>
+                        <a href="#SKIP_AUTH"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&quot;skipAuth&quot;</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="TOKEN_NAME"></a>
+                    <span class="name">
+                        <span ><b>TOKEN_NAME</b></span>
+                        <a href="#TOKEN_NAME"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&quot;access-token&quot;</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/main.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="bootstrap"></a>
+                    <span class="name">
+                        <span ><b>bootstrap</b></span>
+                        <a href="#bootstrap"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>async () &#x3D;&gt; {
+  const app &#x3D; await NestFactory.create(AppModule);
+  app.use(cookieParser());
+  app.use(helmet());
+  app.use(compression());
+  app.enableCors();
+  app.enableVersioning();
+
+  app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalInterceptors(new HttpResponseInterceptor());
+
+  // Set global ValidationPipe with enhanced error formatting
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true, // Automatically transform payloads to DTOs
+      whitelist: true, // Strip properties that do not have decorators
+      forbidNonWhitelisted: false, // Throw an error if non-whitelisted properties are provided
+      exceptionFactory: (errors: ValidationError[]) &#x3D;&gt; {
+        throw new UnprocessableEntityException(formatValidationErrors(errors));
+      },
+    })
+  );
+
+  app.setGlobalPrefix(AppModule.apiPrefix);
+  SwaggerConfig(app, AppModule.apiVersion);
+  // Serve Swagger JSON at /api/v1/swagger/json
+  app
+    .getHttpAdapter()
+    .get(&#x60;/api/v${AppModule.apiVersion}/swagger/json&#x60;, (req, res) &#x3D;&gt; {
+      const swaggerJsonPath &#x3D; require(&quot;path&quot;).join(
+        __dirname,
+        &#x60;config/swagger-${AppModule.apiVersion}.json&#x60;
+      );
+      if (require(&quot;fs&quot;).existsSync(swaggerJsonPath)) {
+        res.sendFile(swaggerJsonPath);
+      } else {
+        res.status(404).json({ message: &quot;Swagger JSON not found&quot; });
+      }
+    });
+
+  await app.listen(AppModule.port);
+  return AppModule.port;
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="formatValidationErrors"></a>
+                    <span class="name">
+                        <span ><b>formatValidationErrors</b></span>
+                        <a href="#formatValidationErrors"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>(errors: ValidationError[]) &#x3D;&gt; {
+  return errors.map((error) &#x3D;&gt; {
+    const formattedError: any &#x3D; {
+      property: error.property,
+      constraints: error.constraints,
+      message: Object.values(error.constraints || {}).join(&quot;, &quot;),
+    };
+
+    if (error.children &amp;&amp; error.children.length &gt; 0) {
+      formattedError.children &#x3D; formatValidationErrors(error.children); // Recursive handling of nested errors
+    }
+
+    return formattedError;
+  });
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/database/migrations/common.fields.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="commonFields"></a>
+                    <span class="name">
+                        <span ><b>commonFields</b></span>
+                        <a href="#commonFields"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>TableColumnOptions[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[
+  {
+    name: &quot;created_at&quot;,
+    type: &quot;timestamp with time zone&quot;,
+    isNullable: false,
+    default: &quot;now()&quot;,
+  },
+  {
+    name: &quot;updated_at&quot;,
+    type: &quot;timestamp with time zone&quot;,
+    isNullable: false,
+    default: &quot;now()&quot;,
+  },
+  {
+    name: &quot;deleted_at&quot;,
+    type: &quot;timestamp with time zone&quot;,
+    isNullable: true, // Allows null since the record may not be deleted
+    default: null, // Default to null when not deleted
+  },
+]</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/modules/auth/decorators/current-user.decorator.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="CurrentUser"></a>
+                    <span class="name">
+                        <span ><b>CurrentUser</b></span>
+                        <a href="#CurrentUser"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>createParamDecorator&lt;UserResponseDto&gt;(
+  (data: unknown, ctx: ExecutionContext) &#x3D;&gt; {
+    const request &#x3D; ctx.switchToHttp().getRequest();
+    return request.user;
+  }
+)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/modules/customer/customer.service.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="CUSTOMER_FILTER_FIELDS"></a>
+                    <span class="name">
+                        <span ><b>CUSTOMER_FILTER_FIELDS</b></span>
+                        <a href="#CUSTOMER_FILTER_FIELDS"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[
+  &quot;endpoint_id&quot;,
+  &quot;moc_id&quot;,
+  &quot;entity_name_en&quot;,
+  &quot;entity_name_kh&quot;,
+  &quot;supplier_id&quot;,
+  &quot;tin&quot;,
+  &quot;date_of_incorporation&quot;,
+  &quot;business_type&quot;,
+  &quot;city&quot;,
+  &quot;country&quot;,
+  &quot;phone_number&quot;,
+  &quot;email&quot;,
+  &quot;description&quot;,
+  &quot;address&quot;,
+]</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/database/database.providers.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="databaseProviders"></a>
+                    <span class="name">
+                        <span ><b>databaseProviders</b></span>
+                        <a href="#databaseProviders"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[
+  TypeOrmModule.forRootAsync({
+    imports: [ConfigModule],
+    useFactory: defaultConnection,
+    inject: [ConfigService],
+  }),
+]</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="defaultConnection"></a>
+                    <span class="name">
+                        <span ><b>defaultConnection</b></span>
+                        <a href="#defaultConnection"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>(config: ConfigService): TypeOrmModuleOptions &#x3D;&gt; ({
+  type: &quot;postgres&quot;,
+  host: config.get(&quot;TYPEORM_HOST&quot;),
+  port: config.get&lt;number&gt;(&quot;TYPEORM_PORT&quot;),
+  username: config.get(&quot;TYPEORM_USERNAME&quot;),
+  password: config.get(&quot;TYPEORM_PASSWORD&quot;),
+  database: config.get(&quot;TYPEORM_DATABASE&quot;),
+  autoLoadEntities: false, // Disable autoLoadEntities for glob pattern
+  entities: [__dirname + &quot;/../**/*.entity.js&quot;],
+  synchronize: config.get&lt;boolean&gt;(&quot;TYPEORM_SYNCHRONIZE&quot;) &#x3D;&#x3D;&#x3D; true,
+  logging: config.get(&quot;TYPEORM_LOGGING&quot;) &#x3D;&#x3D;&#x3D; &quot;true&quot;,
+})</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/config/swagger.config.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="description"></a>
+                    <span class="name">
+                        <span ><b>description</b></span>
+                        <a href="#description"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&quot;This is a basic Nest boilerplate project built on the more powerful Node.js framework. &quot; +
+  &quot;The main purpose of this project is to dynamically handle roles and permissions assigned to the user.&quot;</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="SwaggerConfig"></a>
+                    <span class="name">
+                        <span ><b>SwaggerConfig</b></span>
+                        <a href="#SwaggerConfig"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>(app: INestApplication, apiVersion: string) &#x3D;&gt; {
+  const options &#x3D; new DocumentBuilder()
+    .setTitle(title)
+    .setDescription(description)
+    .setVersion(apiVersion)
+    .addBearerAuth(AUTH_OPTIONS, TOKEN_NAME)
+    .build();
+
+  const document &#x3D; SwaggerModule.createDocument(app, options);
+
+  // Setup Swagger UI at /api/v1/swagger
+  SwaggerModule.setup(&#x60;api/v${apiVersion}/swagger&#x60;, app, document);
+
+  // Define Swagger JSON file path
+  const swaggerJsonPath &#x3D; path.join(__dirname, &#x60;swagger-${apiVersion}.json&#x60;);
+
+  // Write Swagger JSON to a file
+  fs.writeFileSync(swaggerJsonPath, JSON.stringify(document, null, 2));
+
+  console.log(&#x60;Swagger JSON file saved at: ${swaggerJsonPath}&#x60;);
+}</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Setup Swagger in the application and save the JSON output</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="title"></a>
+                    <span class="name">
+                        <span ><b>title</b></span>
+                        <a href="#title"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&quot;Nestjs Framework&quot;</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/database/migrations/extensions/1602269134635-enable-uuid-ossp.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="extensionName"></a>
+                    <span class="name">
+                        <span ><b>extensionName</b></span>
+                        <a href="#extensionName"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;uuid-ossp&#x27;</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/utils/handle-error.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="handleDeleteError"></a>
+                    <span class="name">
+                        <span ><b>handleDeleteError</b></span>
+                        <a href="#handleDeleteError"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>(id: string | number, error: any) &#x3D;&gt; {
+  if (error.code &#x3D;&#x3D;&#x3D; &quot;23503&quot;) {
+    throw new ConflictException(
+      &#x60;Cannot delete Purchase Order Type with ID ${id} because it is still referenced in the &quot;${error.table}&quot; table. Please remove related records first.&#x60;
+    );
+  }
+  throw new InternalServerErrorException();
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="handleError"></a>
+                    <span class="name">
+                        <span ><b>handleError</b></span>
+                        <a href="#handleError"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>(error, dto) &#x3D;&gt; {
+  // ✅ Extract detailed error message
+  console.log(error);
+  const errorMessage &#x3D; error.detail || error.message;
+
+  // ✅ Extract the conflicting field dynamically
+  let conflictKey: string | null &#x3D; null;
+  if (errorMessage.includes(&quot;Key&quot;)) {
+    const match &#x3D; errorMessage.match(/\((.*?)\)/); // Extracts &#x60;(username)&#x3D;(admin)&#x60;
+    if (match) {
+      conflictKey &#x3D; match[1]; // ✅ Extracted conflict key (e.g., &quot;username&quot;)
+    }
+  }
+
+  if (error.code &#x3D;&#x3D; DBErrorCode.PgUniqueConstraintViolation) {
+    const message &#x3D; &#x60;The ${toCamelCase(conflictKey)} &#x27;${
+      dto[toCamelCase(conflictKey)]
+    }&#x27; is already in use.&#x60;;
+    throw new UnprocessableEntityException({
+      statusCode: 422,
+      message: [
+        {
+          property: toCamelCase(conflictKey || &quot;field&quot;),
+          constraints: {
+            unique: message,
+          },
+          message,
+        },
+      ],
+    });
+  }
+
+  if (
+    error.code &#x3D;&#x3D; DBErrorCode.PgForeignKeyConstraintViolation ||
+    error.code &#x3D;&#x3D; DBErrorCode.PgNotNullConstraintViolation
+  ) {
+    const message &#x3D; &#x60;Foreign key or required field violation. ${errorMessage}&#x60;;
+
+    throw new InternalServerErrorException({
+      statusCode: 500,
+      message: message,
+    });
+  }
+
+  if (error instanceof TimeoutError) {
+    throw new RequestTimeoutException({
+      statusCode: 408,
+      message: &quot;Database request timeout.&quot;,
+    });
+  }
+
+  throw new InternalServerErrorException({
+    statusCode: 500,
+    message: &quot;An unexpected error occurred.&quot;,
+  });
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/modules/auth/jwt.strategy.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="headerOrCookieExtractor"></a>
+                    <span class="name">
+                        <span ><b>headerOrCookieExtractor</b></span>
+                        <a href="#headerOrCookieExtractor"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>(req): string | null &#x3D;&gt; {
+  const tokenFromHeader &#x3D; ExtractJwt.fromAuthHeaderAsBearerToken()(req);
+  if (tokenFromHeader) {
+    return tokenFromHeader;
+  }
+  if (req &amp;&amp; req.cookies) {
+    return req.cookies.access_token || null;
+  }
+  return null;
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/common/http/http-error-type.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="HttpErrorType"></a>
+                    <span class="name">
+                        <span ><b>HttpErrorType</b></span>
+                        <a href="#HttpErrorType"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+  400: &#x27;BAD_REQUEST&#x27;,
+  401: &#x27;UNAUTHORIZED&#x27;,
+  402: &#x27;PAYMENT_REQUIRED&#x27;,
+  403: &#x27;FORBIDDEN&#x27;,
+  404: &#x27;NOT_FOUND&#x27;,
+  405: &#x27;METHOD_NOT_ALLOWED&#x27;,
+  406: &#x27;NOT_ACCEPTABLE&#x27;,
+  407: &#x27;PROXY_AUTHENTICATION_REQUIRED&#x27;,
+  408: &#x27;REQUEST_TIMEOUT&#x27;,
+  409: &#x27;CONFLICT&#x27;,
+  410: &#x27;GONE&#x27;,
+  411: &#x27;LENGTH_REQUIRED&#x27;,
+  412: &#x27;PRECONDITION_FAILED&#x27;,
+  413: &#x27;PAYLOAD_TOO_LARGE&#x27;,
+  414: &#x27;URI_TOO_LONG&#x27;,
+  415: &#x27;UNSUPPORTED_MEDIA_TYPE&#x27;,
+  416: &#x27;REQUESTED_RANGE_NOT_SATISFIABLE&#x27;,
+  417: &#x27;EXPECTATION_FAILED&#x27;,
+  418: &#x27;I_AM_A_TEAPOT&#x27;,
+  421: &#x27;MISDIRECTED&#x27;,
+  422: &#x27;UNPROCESSABLE_ENTITY&#x27;,
+  424: &#x27;FAILED_DEPENDENCY&#x27;,
+  429: &#x27;TOO_MANY_REQUESTS&#x27;,
+  500: &#x27;INTERNAL_SERVER_ERROR&#x27;,
+  501: &#x27;NOT_IMPLEMENTED&#x27;,
+  502: &#x27;BAD_GATEWAY&#x27;,
+  503: &#x27;SERVICE_UNAVAILABLE&#x27;,
+  504: &#x27;GATEWAY_TIMEOUT&#x27;,
+  505: &#x27;HTTP_VERSION_NOT_SUPPORTED&#x27;,
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/libs/pagination/minio.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="minioClient"></a>
+                    <span class="name">
+                        <span ><b>minioClient</b></span>
+                        <a href="#minioClient"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new Minio.Client({
+  endPoint: process.env.MINIO_ENDPOINT,
+  port: parseInt(process.env.MINIO_PORT),
+  useSSL: process.env.MINIO_USE_SSL &#x3D;&#x3D;&#x3D; &quot;true&quot;,
+  accessKey: process.env.MINIO_ACCESS_KEY,
+  secretKey: process.env.MINIO_SECRET_KEY,
+})</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/modules/exchange-rate/exchange-rate.service.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="moment"></a>
+                    <span class="name">
+                        <span ><b>moment</b></span>
+                        <a href="#moment"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>require(&quot;moment&quot;)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/libs/pagination/decorators/pagination-params.decorator.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="PaginationParams"></a>
+                    <span class="name">
+                        <span ><b>PaginationParams</b></span>
+                        <a href="#PaginationParams"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>createParamDecorator(
+  (
+    data: DefaultPagination &#x3D; {
+      defaultSkip: 0,
+      defaultPage: 0,
+      defaultLimit: 10,
+      defaultOrder: {},
+      defaultOrderDirection: &#x27;ASC&#x27;,
+      maxAllowedSize: 20,
+    },
+    ctx: ExecutionContext,
+  ) &#x3D;&gt; {
+    let {
+      query: { skip, page, limit, orderBy, orderDirection, ...params },
+    } &#x3D; ctx.switchToHttp().getRequest();
+
+    const { defaultSkip, defaultPage, defaultLimit, defaultOrder, defaultOrderDirection, maxAllowedSize } &#x3D; data;
+
+    const order &#x3D; orderBy ? { [orderBy]: orderDirection ? orderDirection : defaultOrderDirection } : defaultOrder;
+
+    limit &#x3D; limit &amp;&amp; limit &gt; 0 ? +limit : defaultLimit;
+
+    if (!skip) {
+      if (page) {
+        skip &#x3D; (+page - 1) * +limit;
+        skip &#x3D; skip &gt;&#x3D; 0 ? skip : 0;
+      } else {
+        page &#x3D; defaultPage;
+        skip &#x3D; defaultSkip;
+      }
+    } else {
+      page &#x3D; Math.floor(+skip / limit);
+    }
+
+    return Object.assign(data ? data : {}, {
+      skip,
+      page,
+      limit,
+      order,
+      params,
+    });
+  },
+)</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Decorator intended for building a PaginationRequest object based on the query string parameters</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/modules/e-invoice/user/dtos/change-password-request.dto.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="passwordRegex"></a>
+                    <span class="name">
+                        <span ><b>passwordRegex</b></span>
+                        <a href="#passwordRegex"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>/((?&#x3D;.*\d)|(?&#x3D;.*\W+))(?![.\n])(?&#x3D;.*[A-Z])(?&#x3D;.*[a-z]).*$/</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/modules/auth/decorators/permissions.decorator.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="Permissions"></a>
+                    <span class="name">
+                        <span ><b>Permissions</b></span>
+                        <a href="#Permissions"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>(...permissions: string[]) &#x3D;&gt; SetMetadata(&#x27;permissions&#x27;, permissions)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/database/migrations/admin/1602337241496-create-admin-schema.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="schemaName"></a>
+                    <span class="name">
+                        <span ><b>schemaName</b></span>
+                        <a href="#schemaName"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;admin&#x27;</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/modules/auth/decorators/skip-approve.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="SkipApprove"></a>
+                    <span class="name">
+                        <span ><b>SkipApprove</b></span>
+                        <a href="#SkipApprove"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>() &#x3D;&gt; SetMetadata(SKIP_APPROVE, true)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/modules/auth/decorators/skip-auth.decorator.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="SkipAuth"></a>
+                    <span class="name">
+                        <span ><b>SkipAuth</b></span>
+                        <a href="#SkipAuth"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>() &#x3D;&gt; SetMetadata(SKIP_AUTH, true)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/modules/exchange-rate/dto/exchange-rate-request.dto.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="slugRegex"></a>
+                    <span class="name">
+                        <span ><b>slugRegex</b></span>
+                        <a href="#slugRegex"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>/^[a-z0-9]+(\-[a-z0-9]+)*(\.[a-z0-9]+(\-[a-z0-9]+)*)*$/</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/modules/e-invoice/user/dtos/permission/create-permission-request.dto.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="slugRegex"></a>
+                    <span class="name">
+                        <span ><b>slugRegex</b></span>
+                        <a href="#slugRegex"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>/^[a-z0-9]+(\-[a-z0-9]+)*(\.[a-z0-9]+(\-[a-z0-9]+)*)*$/</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/database/migrations/admin/1742568476568-customer-migration.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="tableName"></a>
+                    <span class="name">
+                        <span ><b>tableName</b></span>
+                        <a href="#tableName"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&quot;customer&quot;</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/utils/case.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="toCamelCase"></a>
+                    <span class="name">
+                        <span ><b>toCamelCase</b></span>
+                        <a href="#toCamelCase"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>(str: string): string &#x3D;&gt; {
+  if (!str) return str;
+  return str.replace(/([-_][a-z])/gi, ($1) &#x3D;&gt;
+    $1.toUpperCase().replace(&quot;-&quot;, &quot;&quot;).replace(&quot;_&quot;, &quot;&quot;)
+  );
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="toSnakeCase"></a>
+                    <span class="name">
+                        <span ><b>toSnakeCase</b></span>
+                        <a href="#toSnakeCase"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>(str: string): string &#x3D;&gt; {
+  return str.replace(/([a-z])([A-Z])/g, &quot;$1_$2&quot;).toLowerCase();
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'miscellaneous-variables';
+            var COMPODOC_CURRENT_PAGE_URL = 'variables.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

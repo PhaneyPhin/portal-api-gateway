@@ -1,0 +1,692 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>nestjs-sample documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">nestjs-sample documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content class">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Classes</li>
+  <li class="breadcrumb-item" >ItemDto</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/modules/accouting/invoice/dto/create-invoice.dto.ts</code>
+        </p>
+
+
+
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                <a href="#description" >description</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                <a href="#name" >name</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                <a href="#tax_categories" >tax_categories</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+
+            <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="description"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                        <span ><b>description</b></span>
+                        <a href="#description"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ApiPropertyOptional()<br />@IsOptional()<br />@IsString()<br />@ContainsTooManySpecialChars(5)<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="51" class="link-to-prism">src/modules/accouting/invoice/dto/create-invoice.dto.ts:51</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="name"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                        <span ><b>name</b></span>
+                        <a href="#name"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ApiProperty()<br />@IsNotEmpty()<br />@IsString()<br />@ContainsTooManySpecialChars()<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="57" class="link-to-prism">src/modules/accouting/invoice/dto/create-invoice.dto.ts:57</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="tax_categories"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                        <span ><b>tax_categories</b></span>
+                        <a href="#tax_categories"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../classes/TaxCategoryDto.html" target="_self" >TaxCategoryDto[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ApiPropertyOptional({type: undefined})<br />@IsOptional()<br />@IsArray()<br />@ValidateNested({each: true})<br />@Type(undefined)<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="64" class="link-to-prism">src/modules/accouting/invoice/dto/create-invoice.dto.ts:64</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+
+
+
+
+
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { ContainsTooManySpecialChars } from &quot;@common/decorators/container-too-many-special-chars.decorator&quot;;
+import { ApiProperty, ApiPropertyOptional } from &quot;@nestjs/swagger&quot;;
+import { Type } from &quot;class-transformer&quot;;
+import {
+  ArrayMinSize,
+  IsArray,
+  IsDateString,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Max,
+  MaxLength,
+  Min,
+  ValidateIf,
+  ValidateNested,
+} from &quot;class-validator&quot;;
+import { TaxTotal } from &quot;.&quot;;
+import { DocumentType } from &quot;../enums/DocumentType&quot;;
+import { InvoiceType } from &quot;../enums/InvoiceType&quot;;
+
+export class TaxCategoryDto {
+  @ApiProperty()
+  @ContainsTooManySpecialChars()
+  id: string;
+
+  @ApiProperty()
+  @IsNumber()
+  @Min(0)
+  @Max(100)
+  @ContainsTooManySpecialChars()
+  percent: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @ContainsTooManySpecialChars()
+  tax_scheme: string;
+
+  @ApiProperty()
+  @IsNumber()
+  @Min(0)
+  @ContainsTooManySpecialChars()
+  tax_amount: number;
+}
+
+export class ItemDto {
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  @ContainsTooManySpecialChars(5)
+  description: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  @ContainsTooManySpecialChars()
+  name: string;
+
+  @ApiPropertyOptional({ type: [TaxCategoryDto] })
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() &#x3D;&gt; TaxCategoryDto)
+  tax_categories: TaxCategoryDto[];
+}
+
+export class AllowanceChargeDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  charge_indicator: boolean;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  @ContainsTooManySpecialChars(5)
+  reason: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  amount: number;
+
+  @ApiPropertyOptional({ type: [TaxCategoryDto] })
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() &#x3D;&gt; TaxCategoryDto)
+  tax_categories: TaxCategoryDto[];
+}
+
+export class InvoiceLineDto {
+  id: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  @ContainsTooManySpecialChars(5)
+  customer_id: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  @ContainsTooManySpecialChars(5)
+  quantity_unit_code: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  quantity: number;
+
+  @ApiPropertyOptional({ type: [AllowanceChargeDto] })
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() &#x3D;&gt; AllowanceChargeDto)
+  allowance_charges: AllowanceChargeDto[];
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  line_extension_amount: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  price: number;
+
+  @ApiProperty({ type: ItemDto })
+  @IsNotEmpty()
+  @ValidateNested()
+  @Type(() &#x3D;&gt; ItemDto)
+  item: ItemDto;
+
+  tax_total: TaxTotal;
+
+  vat_exclusive_amount: number;
+  tax_inclusive_amount: number;
+}
+
+export class PrepaidPaymentDto {
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsNumber()
+  paid_amount: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  @ContainsTooManySpecialChars(5)
+  receive_date: string;
+}
+
+export class BuyerDTO {
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  @ContainsTooManySpecialChars()
+  customer_id: number;
+}
+
+export class AdditionalDocumentReferenceDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  @ContainsTooManySpecialChars()
+  id: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  @ContainsTooManySpecialChars()
+  mime_code: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  @ContainsTooManySpecialChars(3)
+  filename: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  embedded_document_binary_object: string;
+}
+
+export class InvoiceDto {
+  @IsOptional()
+  @ApiProperty()
+  is_draft: boolean;
+
+  @ValidateIf((o) &#x3D;&gt; !o.is_draft)
+  @ApiProperty()
+  document_id: string;
+
+  @ValidateIf((o) &#x3D;&gt; !o.is_draft)
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  @ContainsTooManySpecialChars(5)
+  document_number: string;
+
+  supplier_id: string;
+
+  @ApiProperty()
+  @IsOptional()
+  document_type: DocumentType;
+
+  @ValidateIf((o) &#x3D;&gt; !o.is_draft)
+  @ApiProperty({ enum: InvoiceType })
+  invoice_type: InvoiceType;
+
+  @ValidateIf((o) &#x3D;&gt; !o.is_draft)
+  @ApiPropertyOptional()
+  @IsOptional()
+  due_date: Date;
+
+  status: &quot;draft&quot; | &quot;posted&quot;;
+
+  @ValidateIf((o) &#x3D;&gt; !o.is_draft)
+  @ApiPropertyOptional({ type: [AllowanceChargeDto] })
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() &#x3D;&gt; AllowanceChargeDto)
+  allowance_charges: AllowanceChargeDto[];
+
+  @ValidateIf((o) &#x3D;&gt; !o.is_draft)
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsNumber()
+  exchange_rate: number;
+
+  @ValidateIf((o) &#x3D;&gt; !o.is_draft)
+  @ApiProperty()
+  @IsNotEmpty()
+  currency: string;
+
+  @ValidateIf((o) &#x3D;&gt; !o.is_draft)
+  @ApiProperty({ type: [InvoiceLineDto] })
+  @IsNotEmpty()
+  @IsArray()
+  @ArrayMinSize(1)
+  @ValidateNested({ each: true })
+  @Type(() &#x3D;&gt; InvoiceLineDto)
+  invoice_lines: InvoiceLineDto[];
+
+  @ValidateIf((o) &#x3D;&gt; !o.is_draft)
+  @ApiPropertyOptional({ type: PrepaidPaymentDto })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() &#x3D;&gt; PrepaidPaymentDto)
+  prepaid_payment: PrepaidPaymentDto;
+
+  @ValidateIf((o) &#x3D;&gt; !o.is_draft)
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  sub_total: number;
+
+  @ValidateIf((o) &#x3D;&gt; !o.is_draft)
+  @ApiProperty()
+  @IsNotEmpty()
+  customer_id: number;
+
+  @ValidateIf((o) &#x3D;&gt; !o.is_draft)
+  @ApiPropertyOptional({ type: [AdditionalDocumentReferenceDto] })
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() &#x3D;&gt; AdditionalDocumentReferenceDto)
+  additional_document_references: AdditionalDocumentReferenceDto[];
+
+  @ValidateIf((o) &#x3D;&gt; !o.is_draft)
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  note: string;
+
+  @ValidateIf((o) &#x3D;&gt; !o.is_draft)
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  payment_term: string;
+
+  @ValidateIf((o) &#x3D;&gt; !o.is_draft)
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsDateString()
+  issue_date: Date;
+
+  @ValidateIf((o) &#x3D;&gt; !o.is_draft)
+  @ApiPropertyOptional()
+  @IsOptional()
+  paymentNote: string;
+}
+</code></pre>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'class';
+            var COMPODOC_CURRENT_PAGE_URL = 'ItemDto.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

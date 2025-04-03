@@ -1,5 +1,6 @@
 import { RejectRequestDto } from "@modules/accouting/invoice/dto/reject-request.dto";
 import { Injectable, OnModuleInit } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import {
   ClientProxy,
   ClientProxyFactory,
@@ -8,7 +9,6 @@ import {
 import { UUID } from "crypto";
 import { firstValueFrom, lastValueFrom } from "rxjs";
 import { SubmitDocumentRequestDto } from "./dto/submit-document-request.dto";
-import { ConfigService } from "@nestjs/config";
 @Injectable()
 export class InvoiceProcessorService implements OnModuleInit {
   private client: ClientProxy;
@@ -17,7 +17,7 @@ export class InvoiceProcessorService implements OnModuleInit {
     this.client = ClientProxyFactory.create({
       transport: Transport.TCP,
       options: {
-        host: "invoice-proccessor",
+        host: this.configService.get("INVOICE_PROCESSOR_HOST", "localhost"),
         port: 3006,
       },
     });

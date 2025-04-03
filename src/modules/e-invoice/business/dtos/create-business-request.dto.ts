@@ -119,6 +119,14 @@ export class CreateBusinessRequestDto {
 
   @ApiProperty({
     type: String,
+    description: "Phnom Penh Tmei, Sen Sokh",
+  })
+  @IsOptional()
+  @IsString()
+  address?: string;
+
+  @ApiProperty({
+    type: String,
     description: "Path or filename of the certificate of incorporation",
   })
   @IsOptional()

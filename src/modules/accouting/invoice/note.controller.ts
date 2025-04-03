@@ -64,7 +64,7 @@ export class NoteController {
   //   "admin.access.customer.update"
   // )
   @Get()
-  public getInvoices(
+  public getNotes(
     @PaginationParams() pagination: PaginationRequest,
     @CurrentUser() user: UserResponseDto
   ): Promise<PaginationResponseDto<UserResponseDto>> {
@@ -81,27 +81,58 @@ export class NoteController {
     });
   }
 
-  @ApiOperation({ description: "Get credit/debit note by id" })
-  @ApiGlobalResponse(UserResponseDto)
+  @ApiOperation({ description: "Get a paginated received notes list" })
+  @ApiPaginatedResponse(DocumentEntity)
+  @ApiQuery({ name: "search", type: "string", required: false, example: "" })
+  @ApiFields([])
   // @Permissions(
   //   "admin.access.customer.read",
   //   "admin.access.customer.create",
   //   "admin.access.customer.update"
   // )
-  @Get("/:id")
-  public async GetById(
-    @Param("id") id: UUID,
-    @CurrentUser() user: UserResponseDto & { business: BusinessResponseDto }
-  ): Promise<DocumentEntity & { supplier: BusinessResponseDto }> {
-    const document = await this.documentService.findById(id);
+  @Get("/received")
+  public getReceivedNotes(
+    @PaginationParams() pagination: PaginationRequest,
+    @CurrentUser() user: UserResponseDto
+  ): Promise<PaginationResponseDto<UserResponseDto>> {
+    return this.documentService.list({
+      ...pagination,
+      params: {
+        ...pagination.params,
+        supplier_id: user.endpoint_id,
+        document_type: pagination.params?.document_type
+          ? [pagination.params.document_type]
+          : [DocumentType.CREDIT_NOTE, DocumentType.DEBIT_NOTE],
+      },
+      order: pagination.order || { created_at: "DESC" },
+    });
+  }
 
-    if (!document || user.endpoint_id !== document.supplier_id) {
-      throw new NotFoundException();
-    }
-
-    const business = await this.serviceAccountService.getBusinessProfile(user);
-
-    return { ...document, supplier: business };
+  @ApiOperation({ description: "Get a paginated invoices list" })
+  @ApiPaginatedResponse(DocumentEntity)
+  @ApiQuery({ name: "search", type: "string", required: false, example: "" })
+  @ApiFields([])
+  // @Permissions(
+  //   "admin.access.customer.read",
+  //   "admin.access.customer.create",
+  //   "admin.access.customer.update"
+  // )
+  @Get("/e-invoice")
+  public getEInvoiceInvoices(
+    @PaginationParams() pagination: PaginationRequest,
+    @CurrentUser() user: UserResponseDto
+  ): Promise<PaginationResponseDto<UserResponseDto>> {
+    return this.invoiceProcessorService.list({
+      ...pagination,
+      params: {
+        ...pagination.params,
+        customer_id: user.endpoint_id,
+        document_type: pagination.params?.document_type
+          ? [pagination.params.document_type]
+          : [DocumentType.CREDIT_NOTE, DocumentType.DEBIT_NOTE],
+      },
+      order: pagination.order || { created_at: "DESC" },
+    });
   }
 
   @ApiOperation({ description: "Create new credit note" })
@@ -114,6 +145,7 @@ export class NoteController {
     @Body(ValidationPipe) dto: CreditNoteDto,
     @CurrentUser() user: UserResponseDto
   ): Promise<DocumentEntity> {
+    console.log(dto);
     const creditNote = await this.documentService.create({
       ...dto,
       document_type: DocumentType.CREDIT_NOTE,
@@ -343,6 +375,29 @@ export class NoteController {
     return await this.invoiceProcessorService.send(id);
   }
 
+  @ApiOperation({ description: "Get received einvoice by id" })
+  @ApiGlobalResponse(DocumentResponseDto)
+  // @UseGuards(SuperUserGuard)
+  // @Permissions("admin.access.customer.create")
+  @Get("/e-invoice/:id/received")
+  public async getReceivedEInvoiceById(
+    @Param("id") id: UUID,
+    @CurrentUser() user: UserResponseDto
+  ): Promise<DocumentResponseDto> {
+    const document = await this.invoiceProcessorService.findById(id);
+
+    if (
+      !document ||
+      (user.endpoint_id !== document.supplier.endpoint_id &&
+        user.endpoint_id !== document.customer.endpoint_id)
+    ) {
+      throw new NotFoundException();
+    }
+    // await this.documentService.remove(id);
+
+    return document;
+  }
+
   @ApiOperation({ description: "Get einvoice by id" })
   @ApiGlobalResponse(DocumentResponseDto)
   // @UseGuards(SuperUserGuard)
@@ -384,5 +439,28 @@ export class NoteController {
       document_id: id,
       reason: reject.reason,
     });
+  }
+
+  @ApiOperation({ description: "Get credit/debit note by id" })
+  @ApiGlobalResponse(UserResponseDto)
+  // @Permissions(
+  //   "admin.access.customer.read",
+  //   "admin.access.customer.create",
+  //   "admin.access.customer.update"
+  // )
+  @Get("/:id")
+  public async GetById(
+    @Param("id") id: UUID,
+    @CurrentUser() user: UserResponseDto & { business: BusinessResponseDto }
+  ): Promise<DocumentEntity & { supplier: BusinessResponseDto }> {
+    const document = await this.documentService.findById(id);
+
+    if (!document || user.endpoint_id !== document.supplier_id) {
+      throw new NotFoundException();
+    }
+
+    const business = await this.serviceAccountService.getBusinessProfile(user);
+
+    return { ...document, supplier: business };
   }
 }

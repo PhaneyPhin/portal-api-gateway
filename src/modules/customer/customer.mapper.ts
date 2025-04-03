@@ -13,8 +13,8 @@ export class CustomerMapper {
     dto.id = entity.id;
     dto.active = (entity as any).active; // or your default fields
     dto.endpoint_id = entity.endpoint_id;
-    dto.supplier_id = entity.supplier_id;
     dto.moc_id = entity.moc_id;
+    dto.supplier_id = entity.supplier_id;
     dto.entity_name_en = entity.entity_name_en;
     dto.entity_name_kh = entity.entity_name_kh;
     dto.tin = entity.tin;
@@ -26,6 +26,7 @@ export class CustomerMapper {
     dto.email = entity.email;
     dto.description = entity.description;
     dto.address = entity.address;
+    console.log(dto);
 
     return dto;
   }
@@ -48,7 +49,7 @@ export class CustomerMapper {
     entity.email = dto.email;
     entity.description = dto.description;
     entity.address = dto.address;
-
+    console.log(entity);
     return entity;
   }
 

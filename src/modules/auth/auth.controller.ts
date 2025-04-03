@@ -1,5 +1,6 @@
 import { ApiGlobalResponse } from "@common/decorators";
 import { ServiceAccountService } from "@modules/e-invoice/business/service-account.service";
+import { EKYBService } from "@modules/e-invoice/ekyb/ekyb.service";
 import { UserResponseDto } from "@modules/e-invoice/user/dtos";
 import { Body, Controller, Get, Post, Req, Res } from "@nestjs/common";
 import {
@@ -27,7 +28,8 @@ export class AuthController {
   constructor(
     private authService: AuthService,
     private tokenService: TokenService,
-    private serviceAccountService: ServiceAccountService
+    private serviceAccountService: ServiceAccountService,
+    private ekybService: EKYBService
   ) {}
 
   @SkipAuth()

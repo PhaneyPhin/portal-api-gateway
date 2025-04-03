@@ -33,11 +33,13 @@
       <cbc:RegistrationName>{{supplier.entity_name_en}}</cbc:RegistrationName>
       <cbc:CompanyID>{{supplier.entity_id}}</cbc:CompanyID>
     </cac:PartyLegalEntity>
-    {{#if supplier.contact}}
     <cac:Contact>
+      {{#if supplier.phone_number}}
       <cbc:Telephone>{{supplier.phone_number}}</cbc:Telephone>
+      {{/if}}
+      {{#if supplier.email}}
       <cbc:ElectronicMail>{{supplier.email}}</cbc:ElectronicMail>
+      {{/if}}
     </cac:Contact>
-    {{/if}}
   </cac:Party>
-</cac:AccountingSupplierParty>
+</cac:AccountingSupplierParty>  

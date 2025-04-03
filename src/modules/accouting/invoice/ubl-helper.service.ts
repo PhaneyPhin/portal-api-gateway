@@ -67,29 +67,29 @@ export class UBLHelperService {
     }
   }
 
-  public fillInvoiceInformation(invoice: Partial<DocumentEntity>) {
+  public fillInvoiceInformation(document: Partial<DocumentEntity>) {
     try {
       let taxCategorySubTotal: Record<string, TaxSubtotal> = {};
       let allowanceChargeTotal = { charges: 0, allowances: 0 };
-      invoice.invoice_type_code =
-        UBLHelperService.InvoiceTypeCode[invoice.invoice_type_code as any] ||
+      document.invoice_type_code =
+        UBLHelperService.InvoiceTypeCode[document.invoice_type_code as any] ||
         UBLHelperService.InvoiceTypeCode[InvoiceType.TAX_INVOICE];
 
       const { totalExtensionAmount, totalVatExclusiveAmount } =
-        this.processInvoiceLines(invoice, taxCategorySubTotal);
+        this.processInvoiceLines(document, taxCategorySubTotal);
 
-      if (invoice.allowance_charges) {
+      if (document.allowance_charges) {
         this.calculateAllowanceCharges(
           allowanceChargeTotal,
           taxCategorySubTotal,
-          invoice.allowance_charges
+          document.allowance_charges
         );
       }
 
       const { taxAmount, taxSubtotals } =
         this.processInvoiceTaxSummary(taxCategorySubTotal);
 
-      this.processInvoiceTotals(invoice, {
+      this.processInvoiceTotals(document, {
         totalExtensionAmount,
         totalVatExclusiveAmount,
         allowanceChargeTotal,

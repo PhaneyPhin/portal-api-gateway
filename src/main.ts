@@ -7,7 +7,7 @@ import {
   UnprocessableEntityException,
   ValidationPipe,
 } from "@nestjs/common";
-import { NestFactory } from "@nestjs/core";
+import { NestFactory, Reflector } from "@nestjs/core";
 import { ValidationError } from "class-validator";
 import * as compression from "compression";
 import * as cookieParser from "cookie-parser";
@@ -39,7 +39,8 @@ const bootstrap = async () => {
   app.enableVersioning();
 
   app.useGlobalFilters(new HttpExceptionFilter());
-  app.useGlobalInterceptors(new HttpResponseInterceptor());
+  const reflector = app.get(Reflector);
+  app.useGlobalInterceptors(new HttpResponseInterceptor(reflector));
 
   // Set global ValidationPipe with enhanced error formatting
   app.useGlobalPipes(

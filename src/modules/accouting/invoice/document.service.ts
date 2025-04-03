@@ -87,11 +87,14 @@ export class DocumentService extends BaseCrudService {
     return await this.documentRepository.save(documentEntity);
   }
 
-  findById(id: UUID) {
-    return this.documentRepository.findOne({
+  async findById(id: UUID) {
+    const document = await this.documentRepository.findOne({
       where: { document_id: id },
       relations: ["customer"],
     });
+
+    await this.ublHelperService.fillInvoiceInformation(document);
+    return document;
   }
 
   public async submitDocument(

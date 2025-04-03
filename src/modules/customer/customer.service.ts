@@ -131,7 +131,7 @@ export class CustomerService extends BaseCrudService {
   ): Promise<CustomerResponseDto> {
     const entity = await this.customerRepository.findOne({
       where: {
-        endpoint_id: endpointId,
+        supplier_id: endpointId,
         id: id,
       },
     });

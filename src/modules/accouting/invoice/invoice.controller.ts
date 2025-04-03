@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Put,
+  Res,
   ValidationPipe,
 } from "@nestjs/common";
 import {
@@ -17,11 +18,13 @@ import {
   ApiQuery,
   ApiTags,
 } from "@nestjs/swagger";
+import { Response } from "express";
 
 import { CurrentUser, TOKEN_NAME } from "@auth";
 import { AuditLogService } from "@common/audit/audit.service";
 import { ApiGlobalResponse } from "@common/decorators";
 import { ApiFields } from "@common/decorators/api-fields.decorator";
+import { SkipHttpResponse } from "@common/decorators/skip-http-response.decorator";
 import {
   ApiPaginatedResponse,
   PaginationParams,
@@ -30,6 +33,7 @@ import {
 } from "@libs/pagination";
 import { BusinessResponseDto } from "@modules/e-invoice/business/dtos";
 import { ServiceAccountService } from "@modules/e-invoice/business/service-account.service";
+import { ConverterService } from "@modules/e-invoice/format-converter/converter.service";
 import { InvoiceProcessorService } from "@modules/e-invoice/invoiceprocessor/invoiceprocessor.service";
 import { UserResponseDto } from "@modules/e-invoice/user/dtos";
 import { UUID } from "crypto";
@@ -53,7 +57,8 @@ export class InvoiceController {
     private readonly documentService: DocumentService,
     private readonly auditLogService: AuditLogService,
     private readonly serviceAccountService: ServiceAccountService,
-    private readonly invoiceProcessorService: InvoiceProcessorService
+    private readonly invoiceProcessorService: InvoiceProcessorService,
+    private readonly converterService: ConverterService
   ) {}
 
   @ApiOperation({ description: "Get a paginated invoices list" })
@@ -211,6 +216,31 @@ export class InvoiceController {
     });
   }
 
+  @ApiOperation({ description: "Get a paginated invoices list" })
+  @ApiPaginatedResponse(DocumentEntity)
+  @ApiQuery({ name: "search", type: "string", required: false, example: "" })
+  @ApiFields([])
+  // @Permissions(
+  //   "admin.access.customer.read",
+  //   "admin.access.customer.create",
+  //   "admin.access.customer.update"
+  // )
+  @Get("/e-invoice/received")
+  public getReceivedEInvocie(
+    @PaginationParams() pagination: PaginationRequest,
+    @CurrentUser() user: UserResponseDto
+  ): Promise<PaginationResponseDto<UserResponseDto>> {
+    return this.invoiceProcessorService.list({
+      ...pagination,
+      params: {
+        ...pagination.params,
+        customer_id: user.endpoint_id,
+        document_type: this.documentType,
+      },
+      order: pagination.order || { created_at: "DESC" },
+    });
+  }
+
   @ApiOperation({ description: "Accept document" })
   @ApiGlobalResponse(DocumentEntity)
   // @Permissions(
@@ -274,6 +304,66 @@ export class InvoiceController {
     });
   }
 
+  @SkipHttpResponse()
+  @ApiOperation({ description: "Get invoice xml by id" })
+  @ApiGlobalResponse(UserResponseDto)
+  // @Permissions(
+  //   "admin.access.customer.read",
+  //   "admin.access.customer.create",
+  //   "admin.access.customer.update"
+  // )
+  @Get("/e-invoice/:id/xml")
+  public async getXml(
+    @Param("id") id: UUID,
+    @CurrentUser() user: UserResponseDto & { business: BusinessResponseDto }
+  ): Promise<DocumentEntity & { supplier: BusinessResponseDto }> {
+    const document = await this.invoiceProcessorService.findById(id);
+    if (!document || user.endpoint_id !== document.supplier.endpoint_id) {
+      throw new NotFoundException();
+    }
+
+    const xml = await this.invoiceProcessorService.getXml(id);
+
+    return xml;
+  }
+
+  @SkipHttpResponse()
+  @ApiOperation({ description: "Get invoice xml by id" })
+  @ApiGlobalResponse(UserResponseDto)
+  // @Permissions(
+  //   "admin.access.customer.read",
+  //   "admin.access.customer.create",
+  //   "admin.access.customer.update"
+  // )
+  @Get("/e-invoice/:id/pdf")
+  public async getPdf(
+    @Param("id") id: UUID,
+    @CurrentUser() user: UserResponseDto & { business: BusinessResponseDto },
+    @Res() res: Response
+  ) {
+    const document = await this.invoiceProcessorService.findById(id);
+    if (!document || user.endpoint_id !== document.supplier.endpoint_id) {
+      throw new NotFoundException();
+    }
+
+    const xml = await this.invoiceProcessorService.getXml(id);
+
+    const pdfBuffer = await this.converterService.getPdf({
+      document: xml,
+      document_id: document.document_id,
+      document_type: document.document_type,
+      logoUrl:
+        "https://res.cloudinary.com/vistaprint/images/c_scale,w_448,h_448,dpr_2/f_auto,q_auto/v1705580343/ideas-and-advice-prod/en-us/adidas/adidas.png?_i=AA",
+    });
+
+    res.set({
+      "Content-Type": "application/pdf",
+      "Content-Disposition": `attachment; filename="${document.document_id}.pdf"`,
+    });
+
+    res.send(pdfBuffer);
+  }
+
   @ApiOperation({ description: "Get einvoice by id" })
   @ApiGlobalResponse(DocumentResponseDto)
   // @UseGuards(SuperUserGuard)
@@ -286,6 +376,24 @@ export class InvoiceController {
     const document = await this.invoiceProcessorService.findById(id);
     console.log(document);
     if (!document || user.endpoint_id !== document.supplier.endpoint_id) {
+      throw new NotFoundException();
+    }
+    // await this.documentService.remove(id);
+
+    return document;
+  }
+
+  @ApiOperation({ description: "Get einvoice by id" })
+  @ApiGlobalResponse(DocumentResponseDto)
+  // @UseGuards(SuperUserGuard)
+  // @Permissions("admin.access.customer.create")
+  @Get("/e-invoice/:id/received")
+  public async getReceivedInvoices(
+    @Param("id") id: UUID,
+    @CurrentUser() user: UserResponseDto
+  ): Promise<DocumentResponseDto> {
+    const document = await this.invoiceProcessorService.findById(id);
+    if (!document || user.endpoint_id !== document.customer.endpoint_id) {
       throw new NotFoundException();
     }
     // await this.documentService.remove(id);
