@@ -30,6 +30,8 @@ export class HttpResponseInterceptor<T> implements NestInterceptor<T> {
       context.getClass(),
     ]);
 
+    return next.handle();
+
     if (skip) {
       return next.handle(); // Do not transform the response
     }
