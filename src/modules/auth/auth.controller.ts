@@ -62,7 +62,7 @@ export class AuthController {
     @Body() body: ValidateTokenRequestDto,
     @Res({ passthrough: true }) res: Response
   ): Promise<any> {
-    const auth = await this.authService.loginWithCamdigkey(body.token);
+    const auth = await this.authService.loginWithCamdigkey(body.authToken);
     res.cookie("access_token", auth.token.accessToken, {
       httpOnly: true, // this makes it HTTP-only
       secure: process.env.NODE_ENV === "production", // set to true in production with HTTPS
