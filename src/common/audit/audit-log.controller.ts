@@ -55,9 +55,9 @@ export class AuditLogController {
       params: { ...pagination.params, supplier_id: user.endpoint_id },
     });
 
-    const userIds = paginationData.content.map((content) => content.actor_id);
+    const userIds = paginationData.data.map((content) => content.actor_id);
     const users = await this.userService.findByIds(userIds);
-    paginationData.content = paginationData.content.map((content) => {
+    paginationData.data = paginationData.data.map((content) => {
       content.by = users.find((user) => user.id === content.actor_id);
       return content;
     });

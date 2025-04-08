@@ -8,26 +8,13 @@ import {
   ApiUnauthorizedResponse,
   getSchemaPath,
 } from "@nestjs/swagger";
-import { ResponseDto } from "../dtos";
 
 export const ApiGlobalResponse = <TModel extends Type<any>>(model: TModel) => {
   return applyDecorators(
-    ApiExtraModels(ResponseDto, model),
+    ApiExtraModels(model),
     ApiOkResponse({
       schema: {
-        allOf: [
-          { $ref: getSchemaPath(ResponseDto) },
-          {
-            properties: {
-              payload: {
-                $ref: getSchemaPath(model),
-              },
-              timestamp: {
-                type: "number",
-              },
-            },
-          },
-        ],
+        $ref: getSchemaPath(model), // only model in swagger
       },
     }),
     ApiUnauthorizedResponse({ description: "Not authenticated" }),
