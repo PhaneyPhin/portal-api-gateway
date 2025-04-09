@@ -3,6 +3,7 @@ import { ServiceAccountService } from "@modules/e-invoice/business/service-accou
 import { EKYBService } from "@modules/e-invoice/ekyb/ekyb.service";
 import { UserResponseDto } from "@modules/e-invoice/user/dtos";
 import { Body, Controller, Get, Post, Req, Res } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import {
   ApiBearerAuth,
   ApiInternalServerErrorResponse,
@@ -19,6 +20,15 @@ import { ValidateTokenRequestDto } from "./dtos";
 import { LoginUrlResponseDto } from "./dtos/login-url.dto";
 import { ServiceAccountTest } from "./dtos/service-test.dto";
 import { AuthService, TokenService } from "./services";
+
+let HTTP_ONLY_DEFAULT_CONFIG: {
+  secure: boolean;
+  sameSite: "strict" | "none" | "lax";
+} = {
+  secure: true, // Ensure cookies are only sent over HTTPS
+  sameSite: "strict", // Prevent CSRF
+};
+
 @ApiTags("Auth")
 @Controller({
   path: "auth/camdigikey",
@@ -29,8 +39,19 @@ export class AuthController {
     private authService: AuthService,
     private tokenService: TokenService,
     private serviceAccountService: ServiceAccountService,
-    private ekybService: EKYBService
-  ) {}
+    private ekybService: EKYBService,
+    configService: ConfigService
+  ) {
+    if (
+      configService.get("ENV") === "development" ||
+      configService.get("ENV") === "sandbox"
+    ) {
+      HTTP_ONLY_DEFAULT_CONFIG = {
+        secure: true,
+        sameSite: "none",
+      };
+    }
+  }
 
   @SkipAuth()
   @ApiOperation({ description: "User authentication" })
@@ -64,16 +85,17 @@ export class AuthController {
   ): Promise<any> {
     const auth = await this.authService.loginWithCamdigkey(body.authToken);
     res.cookie("access_token", auth.token.accessToken, {
+      ...HTTP_ONLY_DEFAULT_CONFIG,
+      sameSite: "none",
+      secure: false,
       httpOnly: true, // this makes it HTTP-only
-      secure: process.env.NODE_ENV === "production", // set to true in production with HTTPS
-      sameSite: "lax", // or 'strict' or 'none' based on your requirements
       maxAge: 1000 * 60 * 60 * 24, // expires in 1 day
     });
 
     res.cookie("refresh_token", auth.token.refreshToken, {
       httpOnly: true, // this makes it HTTP-only
       secure: process.env.NODE_ENV === "production", // set to true in production with HTTPS
-      sameSite: "lax", // or 'strict' or 'none' based on your requirements
+      sameSite: "none", // or 'strict' or 'none' based on your requirements
       maxAge: 1000 * 60 * 60 * 24, // expires in 1 day
     });
 
@@ -131,11 +153,11 @@ export class AuthController {
     return user;
   }
 
-  @SkipApprove()
+  @SkipAuth()
   @ApiOperation({ description: "Validate token" })
   @ApiOkResponse({ description: "Validation was successful" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
-  @ApiBearerAuth(TOKEN_NAME)
+  // @ApiBearerAuth(TOKEN_NAME)
   @Post("/token/logout")
   async logout(@Req() request: Request): Promise<any> {
     const token = ExtractJwt.fromAuthHeaderAsBearerToken()(request);

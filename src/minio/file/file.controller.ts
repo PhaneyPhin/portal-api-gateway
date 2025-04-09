@@ -1,3 +1,4 @@
+import { getPresignUrl } from "@libs/pagination/minio";
 import { TOKEN_NAME } from "@modules/auth";
 import { SkipApprove } from "@modules/auth/decorators/skip-approve";
 import {
@@ -44,10 +45,17 @@ export class FileController {
   })
   @UseInterceptors(FileInterceptor("file"))
   async uploadFile(@UploadedFile() file: Multer.File) {
-    return await this.minioService.uploadImage(
+    const path = await this.minioService.uploadImage(
       new Date().getTime() + "-" + file.originalname,
       file.buffer
     );
+
+    const url = await getPresignUrl("images", path);
+
+    return {
+      path,
+      url,
+    };
   }
 
   @SkipApprove()
@@ -67,10 +75,17 @@ export class FileController {
   })
   @UseInterceptors(FileInterceptor("file"))
   async uploadDocument(@UploadedFile() file: Multer.File) {
-    return await this.minioService.uploadFile(
+    const path = await this.minioService.uploadFile(
       "documents",
       new Date().getTime() + "-" + file.originalname,
       file.buffer
     );
+
+    const url = await getPresignUrl("documents", path);
+
+    return {
+      path,
+      url,
+    };
   }
 }

@@ -101,11 +101,9 @@ export class AuthService {
     };
   }
   async logout(token: string) {
-    if (!token) {
-      throw new UnauthorizedException();
+    if (token) {
+      await this.tokenService.invalidateToken(token, 3600);
     }
-
-    await this.tokenService.invalidateToken(token, 3600);
 
     return { message: "Logout successfully" };
   }

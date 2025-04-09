@@ -7,7 +7,7 @@ export class RequestChangeRepresentativeDto {
     example: "N044634355434",
   })
   @IsString()
-  requestedToPersonalCode: string;
+  requested_to_personal_code: string;
 
   @ApiProperty({
     description: "Reason for the representative request",

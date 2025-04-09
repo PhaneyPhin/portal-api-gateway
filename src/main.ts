@@ -7,6 +7,7 @@ import {
   UnprocessableEntityException,
   ValidationPipe,
 } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { NestFactory, Reflector } from "@nestjs/core";
 import { ValidationError } from "class-validator";
 import * as compression from "compression";
@@ -35,7 +36,22 @@ const bootstrap = async () => {
   app.use(cookieParser());
   app.use(helmet());
   app.use(compression());
-  app.enableCors();
+  const configService = app.get(ConfigService);
+
+  const allowedOrigins = (configService.get<string>("ALLOWED_ORIGINS") || "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter((origin) => origin.length > 0);
+
+  app.enableCors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error("Not allowed by CORS"));
+    },
+    credentials: true,
+  });
   app.enableVersioning();
 
   app.useGlobalFilters(new HttpExceptionFilter());
