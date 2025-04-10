@@ -142,6 +142,16 @@ export class CreateInvoiceTableWithDraftSupport1742568476570
             type: "timestamp",
             default: "NOW()",
           },
+          {
+            name: "tax_total",
+            type: "jsonb",
+            isNullable: true,
+          },
+          {
+            name: "legal_monetary_total",
+            type: "jsonb",
+            isNullable: true,
+          },
         ],
       })
     );

@@ -16,7 +16,7 @@ import { Response } from "express";
 import { ExtractJwt } from "passport-jwt";
 import { CurrentUser, SkipAuth, TOKEN_NAME } from ".";
 import { SkipApprove } from "./decorators/skip-approve";
-import { ValidateTokenRequestDto } from "./dtos";
+import { AuthCredentialsRequestDto, ValidateTokenRequestDto } from "./dtos";
 import { LoginUrlResponseDto } from "./dtos/login-url.dto";
 import { ServiceAccountTest } from "./dtos/service-test.dto";
 import { AuthService, TokenService } from "./services";
@@ -40,7 +40,7 @@ export class AuthController {
     private tokenService: TokenService,
     private serviceAccountService: ServiceAccountService,
     private ekybService: EKYBService,
-    configService: ConfigService
+    private readonly configService: ConfigService
   ) {
     if (
       configService.get("ENV") === "development" ||
@@ -83,19 +83,64 @@ export class AuthController {
     @Body() body: ValidateTokenRequestDto,
     @Res({ passthrough: true }) res: Response
   ): Promise<any> {
+    if (
+      body.username &&
+      body.password &&
+      this.configService.get("ENV") !== "production"
+    ) {
+      return this.loginUsernamePassword(body, res);
+    }
+
     const auth = await this.authService.loginWithCamdigkey(body.authToken);
+
     res.cookie("access_token", auth.token.accessToken, {
       ...HTTP_ONLY_DEFAULT_CONFIG,
       sameSite: "none",
-      secure: false,
+      secure: true,
       httpOnly: true, // this makes it HTTP-only
       maxAge: 1000 * 60 * 60 * 24, // expires in 1 day
     });
 
     res.cookie("refresh_token", auth.token.refreshToken, {
       httpOnly: true, // this makes it HTTP-only
-      secure: process.env.NODE_ENV === "production", // set to true in production with HTTPS
+      secure: true, // set to true in production with HTTPS
       sameSite: "none", // or 'strict' or 'none' based on your requirements
+      maxAge: 1000 * 60 * 60 * 24, // expires in 1 day
+    });
+
+    const business = await this.serviceAccountService.getBusinessProfile(
+      auth.user
+    );
+
+    return {
+      business: business,
+      ...auth,
+    };
+  }
+
+  @SkipAuth()
+  @ApiOperation({ description: "User authentication" })
+  @ApiOkResponse({ description: "Successfully authenticated user" })
+  @ApiUnauthorizedResponse({ description: "Invalid credentials" })
+  @ApiInternalServerErrorResponse({ description: "Server error" })
+  @Post("/sandbox/login")
+  async loginUsernamePassword(
+    @Body() authRequest: AuthCredentialsRequestDto,
+    @Res({ passthrough: true }) res: Response
+  ): Promise<any> {
+    const auth = await this.authService.loginUserNamePassword(authRequest);
+    res.cookie("access_token", auth.token.accessToken, {
+      ...HTTP_ONLY_DEFAULT_CONFIG,
+      sameSite: "none",
+      secure: true,
+      httpOnly: true, // this makes it HTTP-only
+      maxAge: 1000 * 60 * 60 * 24, // expires in 1 day
+    });
+
+    res.cookie("refresh_token", auth.token.refreshToken, {
+      httpOnly: true, // this makes it HTTP-only
+      sameSite: "none", // or 'strict' or 'none' based on your requirements
+      secure: true,
       maxAge: 1000 * 60 * 60 * 24, // expires in 1 day
     });
 

@@ -33,7 +33,11 @@
     </cac:PartyTaxScheme>
     <cac:PartyLegalEntity>
       <cbc:RegistrationName languageID="en">{{customer.entity_name_en}}</cbc:RegistrationName>
-      <cbc:CompanyID>{{customer.moc_id}}</cbc:CompanyID>
+      {{#if supplier.entity_id }}
+      <cbc:CompanyID>{{supplier.entity_id}}</cbc:CompanyID>
+      {{else}}
+      <cbc:CompanyID>0000</cbc:CompanyID>
+      {{/if}}
     </cac:PartyLegalEntity>
     {{#if customer.contact}}
     <cac:Contact>

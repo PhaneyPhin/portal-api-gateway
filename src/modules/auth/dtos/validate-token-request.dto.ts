@@ -1,9 +1,16 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsOptional } from "class-validator";
 
 export class ValidateTokenRequestDto {
   @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   readonly authToken: string;
+
+  @ApiProperty({ example: "caminv01" })
+  @IsOptional()
+  readonly username: string;
+
+  @ApiProperty({ example: "abc12345" })
+  @IsOptional()
+  readonly password: string;
 }

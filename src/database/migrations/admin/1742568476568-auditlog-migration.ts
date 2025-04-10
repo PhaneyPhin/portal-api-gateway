@@ -18,18 +18,22 @@ export class AuditLog1742568476568 implements MigrationInterface {
           {
             name: "resource_id",
             type: "varchar",
+            isNullable: true,
           },
           {
             name: "resource_type",
             type: "varchar",
+            isNullable: true,
           },
           {
             name: "fields",
             type: "varchar",
+            isNullable: true,
           },
           {
             name: "actor_id",
             type: "varchar",
+            isNullable: true,
           },
           {
             name: "old_data",

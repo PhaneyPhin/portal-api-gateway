@@ -36,13 +36,13 @@ export class UBLHelperService {
     DEBIT_NOTE: "../../../../views/debit-note-ubl.hbs",
   };
   public toUBL(document: DocumentEntity): string {
-    this.fillInvoiceInformation(document);
+    // this.fillInvoiceInformation(document);
     const templatePath = join(
       __dirname,
       UBLHelperService.ublTemplate[document.document_type]
     );
     const xmlDocument = this.handlebarsService.compile(templatePath, document);
-
+    console.log(xmlDocument);
     return xmlDocument;
   }
 

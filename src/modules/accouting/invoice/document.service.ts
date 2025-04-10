@@ -40,7 +40,9 @@ export class DocumentService extends BaseCrudService {
   }
 
   protected getListQuery() {
-    return this.documentRepository.createQueryBuilder("document");
+    return this.documentRepository
+      .createQueryBuilder("document")
+      .leftJoinAndSelect("document.customer", "customer");
   }
 
   protected queryName: string = "";
@@ -51,6 +53,8 @@ export class DocumentService extends BaseCrudService {
       document.status = "draft";
     } else {
       document.status = "posted";
+
+      this.ublHelperService.fillInvoiceInformation(document);
     }
 
     if (document.document_id) {
@@ -93,7 +97,6 @@ export class DocumentService extends BaseCrudService {
       relations: ["customer"],
     });
 
-    await this.ublHelperService.fillInvoiceInformation(document);
     return document;
   }
 

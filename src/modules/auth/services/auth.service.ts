@@ -72,6 +72,25 @@ export class AuthService {
       token,
     };
   }
+  public async loginUserNamePassword(authRequest: AuthCredentialsRequestDto) {
+    const user = await this.userService.call("user.login", authRequest);
+
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
+    const payload: JwtPayload = {
+      id: user.id,
+      username: user.username,
+      nationalId: user.personal_code,
+    };
+
+    const token = await this.tokenService.generateAuthToken(payload);
+    return {
+      user,
+      token,
+    };
+  }
 
   /**
    * User authentication

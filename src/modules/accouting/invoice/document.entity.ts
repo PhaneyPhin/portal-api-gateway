@@ -108,9 +108,12 @@ export class DocumentEntity {
 
   supplier: BusinessResponseDto;
 
+  @Column({ type: "jsonb", nullable: true })
   tax_total: TaxTotal;
 
+  @Column({ type: "jsonb", nullable: true })
   legal_monetary_total: LegalMonetaryTotal;
 
-  invoice_type_code: number;
+  @Column({ type: "varchar", nullable: true })
+  invoice_type_code: string;
 }

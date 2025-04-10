@@ -31,7 +31,12 @@
     </cac:PartyTaxScheme>
     <cac:PartyLegalEntity>
       <cbc:RegistrationName>{{supplier.entity_name_en}}</cbc:RegistrationName>
+      {{#if supplier.entity_id }}
       <cbc:CompanyID>{{supplier.entity_id}}</cbc:CompanyID>
+      {{else}}
+      <cbc:CompanyID>0000</cbc:CompanyID>
+      {{/if}}
+
     </cac:PartyLegalEntity>
     <cac:Contact>
       {{#if supplier.phone_number}}
@@ -42,4 +47,4 @@
       {{/if}}
     </cac:Contact>
   </cac:Party>
-</cac:AccountingSupplierParty>  
+</cac:AccountingSupplierParty>

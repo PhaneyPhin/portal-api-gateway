@@ -71,7 +71,7 @@ export class UserService implements OnModuleInit {
   }
 
   deleteUser(id: string): Promise<boolean> {
-    return this.client.send("user.delete", id).toPromise();
+    return this.client.send("user.entity.delete", id).toPromise();
   }
 
   login(auth: AuthCredentialsRequestDto): Promise<UserResponseDto> {

@@ -1,4 +1,5 @@
 import { HttpExceptionFilter, HttpResponseInterceptor } from "@common/http";
+import { RpcExceptionFilter } from "@common/http/rpc-exception.filter";
 import { SwaggerConfig } from "@config";
 import "@grpc/grpc-js"; // <- preload it before Nest initializes gRPC
 import "@grpc/proto-loader";
@@ -54,6 +55,7 @@ const bootstrap = async () => {
   });
   app.enableVersioning();
 
+  app.useGlobalFilters(new RpcExceptionFilter());
   app.useGlobalFilters(new HttpExceptionFilter());
   const reflector = app.get(Reflector);
   app.useGlobalInterceptors(new HttpResponseInterceptor(reflector));

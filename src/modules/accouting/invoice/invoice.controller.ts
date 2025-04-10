@@ -86,7 +86,7 @@ export class InvoiceController {
     });
   }
 
-  @ApiOperation({ description: "Issue new Invoice" })
+  @ApiOperation({ description: "Issue new Invoice [post and draft status]" })
   @ApiGlobalResponse(DocumentEntity)
   @ApiConflictResponse({ description: "Invoice already exist" })
   // @UseGuards(SuperUserGuard)
@@ -194,6 +194,15 @@ export class InvoiceController {
   @ApiOperation({ description: "Get a paginated invoices list" })
   @ApiPaginatedResponse(DocumentEntity)
   @ApiQuery({ name: "search", type: "string", required: false, example: "" })
+  @ApiFields([
+    "document_id",
+    "supplier_id",
+    "customer_id",
+    "currency",
+    "document_number",
+    "document_type",
+    "status",
+  ])
   @ApiFields([])
   // @Permissions(
   //   "admin.access.customer.read",
@@ -219,7 +228,15 @@ export class InvoiceController {
   @ApiOperation({ description: "Get a paginated invoices list" })
   @ApiPaginatedResponse(DocumentEntity)
   @ApiQuery({ name: "search", type: "string", required: false, example: "" })
-  @ApiFields([])
+  @ApiFields([
+    "document_id",
+    "supplier_id",
+    "customer_id",
+    "currency",
+    "document_number",
+    "document_type",
+    "status",
+  ])
   // @Permissions(
   //   "admin.access.customer.read",
   //   "admin.access.customer.create",

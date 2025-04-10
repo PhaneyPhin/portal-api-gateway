@@ -267,7 +267,7 @@ export class NoteController {
 
   @ApiOperation({ description: "submit credit/debit note" })
   @ApiGlobalResponse(DocumentResponseDto)
-  @ApiConflictResponse({ description: "Customer already exists" })
+  @ApiConflictResponse({ description: "credit note already exists" })
   // @UseGuards(SuperUserGuard)
   // @Permissions("admin.access.customer.create")
   @Post("/:id")
