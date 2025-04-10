@@ -1,14 +1,28 @@
 import { ApiGlobalResponse } from "@common/decorators";
 import { CurrentUser, TOKEN_NAME } from "@modules/auth";
 import { SkipApprove } from "@modules/auth/decorators/skip-approve";
-import { Body, Controller, Delete, Get, Patch, Post } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Patch,
+  Post,
+  Put,
+  UploadedFile,
+  UseInterceptors,
+} from "@nestjs/common";
+import { FileInterceptor } from "@nestjs/platform-express";
 import {
   ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
   ApiInternalServerErrorResponse,
   ApiOperation,
   ApiTags,
   ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
+import { Multer } from "multer";
 import { MinioService } from "src/minio/minio.service";
 import { EKYBService } from "../ekyb/ekyb.service";
 import { UserResponseDto } from "../user/dtos";
@@ -94,6 +108,40 @@ export class BusinessController {
     return this.serviceAccountService.cancelChangeRepresentative(
       user.endpoint_id
     );
+  }
+
+  @ApiOperation({ description: "Get business profile" })
+  @ApiConsumes("multipart/form-data")
+  @ApiBody({
+    description: "image file",
+    schema: {
+      type: "object",
+      properties: {
+        file: {
+          type: "string",
+          format: "binary",
+        },
+      },
+    },
+  })
+  @UseInterceptors(FileInterceptor("file"))
+  @ApiGlobalResponse(BusinessResponseDto)
+  @Put("/logo")
+  async uploadFile(
+    @UploadedFile() file: Multer.File,
+    @CurrentUser() user: UserResponseDto
+  ) {
+    const path = await this.minioService.uploadImage(
+      new Date().getTime() + "-" + file.originalname,
+      file.buffer
+    );
+
+    await this.serviceAccountService.call("business.updateLogo", {
+      endpoint_id: user.endpoint_id,
+      logo: path,
+    });
+
+    return await this.serviceAccountService.getBusinessProfile(user);
   }
 
   @ApiOperation({ description: "Get business profile" })
