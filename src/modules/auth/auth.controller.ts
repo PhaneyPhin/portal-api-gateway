@@ -47,7 +47,7 @@ export class AuthController {
       configService.get("ENV") === "sandbox"
     ) {
       HTTP_ONLY_DEFAULT_CONFIG = {
-        secure: true,
+        secure: false,
         sameSite: "none",
       };
     }

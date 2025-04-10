@@ -109,7 +109,7 @@ export class UserController {
       throw new NotFoundException();
     }
 
-    return user;
+    return foundUser;
   }
 
   @ApiOperation({ description: "Create new customer" })
@@ -159,15 +159,15 @@ export class UserController {
 
     const updatedUser = await this.userService.patch({ id }, dto);
 
-    await this.auditLogService.logAction({
-      actorId: currentUser.id,
-      action: "UPDATE_USER",
-      resourceId: updatedUser.id,
-      resourceType: "User",
-      fields: detectChangedFields(existingUser, updatedUser),
-      oldData: existingUser,
-      newData: updatedUser,
-    });
+    // await this.auditLogService.logAction({
+    //   actorId: currentUser.id,
+    //   action: "UPDATE_USER",
+    //   resourceId: updatedUser.id,
+    //   resourceType: "User",
+    //   fields: detectChangedFields(existingUser, updatedUser),
+    //   oldData: existingUser,
+    //   newData: updatedUser,
+    // });
 
     return updatedUser;
   }
