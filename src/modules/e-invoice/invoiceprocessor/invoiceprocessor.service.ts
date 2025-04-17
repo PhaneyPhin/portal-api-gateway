@@ -68,4 +68,8 @@ export class InvoiceProcessorService implements OnModuleInit {
 
     return value;
   }
+
+  async emit(pattern: string, payload: any) {
+    await firstValueFrom(this.client.emit(pattern, payload));
+  }
 }

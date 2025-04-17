@@ -38,6 +38,7 @@ import { DocumentService } from "./document.service";
 import { CreditNoteDto } from "./dto/credit-note.dto";
 import { DocumentResponseDto } from "./dto/document-response.dto";
 import { RejectDocumentRequest } from "./dto/reject-document.dto";
+import { SendDocumentMailDto } from "./dto/send-document-mail.dto";
 import { DocumentType } from "./enums/DocumentType";
 
 @ApiTags("Note")
@@ -373,6 +374,38 @@ export class NoteController {
     }
 
     return await this.invoiceProcessorService.send(id);
+  }
+
+  @ApiOperation({ description: "send document" })
+  @ApiGlobalResponse(DocumentEntity)
+  // @Permissions(
+  //   "admin.access.customer.read",
+  //   "admin.access.customer.create",
+  //   "admin.access.customer.update"
+  // )
+  @Patch("/e-invoice/:id/send-email")
+  public async sendEmail(
+    @Param("id") id: UUID,
+    @Body() data: SendDocumentMailDto,
+    @CurrentUser() user: UserResponseDto
+  ): Promise<{ success: boolean; message: string }> {
+    const document = await this.invoiceProcessorService.findById(id);
+
+    console.log(document, id);
+    if (!document || user.endpoint_id !== document.supplier.endpoint_id) {
+      throw new NotFoundException();
+    }
+
+    this.invoiceProcessorService.emit("invoice-processor.sendEmail", {
+      document_id: id,
+      note: data.note,
+      email: data.email,
+    });
+
+    return {
+      success: true,
+      message: "Document was being sent",
+    };
   }
 
   @ApiOperation({ description: "Get received einvoice by id" })

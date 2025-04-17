@@ -28,9 +28,10 @@ export class ConverterService {
 
       return result?.data;
     } catch (e) {
+      console.log("122");
       throw new UnprocessableEntityException({
         code: 422,
-        data: e.response.data,
+        data: e.response?.data,
       });
     }
   }
