@@ -204,7 +204,22 @@ export class InvoiceController {
     "document_type",
     "status",
   ])
-  @ApiFields([])
+  @ApiQuery({
+    name: "issue_date",
+    type: "string",
+    required: false,
+    description:
+      "Date range in format: YYYY-MM-DD,YYYY-MM-DD (e.g., 2024-01-01,2024-12-31)",
+    example: "2024-01-01,2024-12-31",
+  })
+  @ApiQuery({
+    name: "due_date",
+    type: "string",
+    required: false,
+    description:
+      "Date range in format: YYYY-MM-DD,YYYY-MM-DD (e.g., 2024-06-01,2024-12-01)",
+    example: "2024-06-01,2024-12-01",
+  })
   // @Permissions(
   //   "admin.access.customer.read",
   //   "admin.access.customer.create",
