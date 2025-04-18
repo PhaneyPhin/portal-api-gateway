@@ -155,10 +155,10 @@ export class NoteController {
 
     await this.auditLogService.logAction({
       actorId: user.id,
-      action: dto.document_id ? "UPDATE_CREDIT_NOTE" : "CREATE_CREDIT_NOTE",
-      resourceId: user.id,
-      resourceType: "User",
-      fields: Object.keys(dto),
+      action: "CREATE",
+      resourceId: creditNote.document_id.toString(),
+      resourceType: "DOCUMENT",
+      fields: ["note"],
       oldData: null,
       newData: creditNote,
     });
@@ -184,10 +184,10 @@ export class NoteController {
 
     await this.auditLogService.logAction({
       actorId: user.id,
-      action: dto.document_id ? "UPDATE_CREDIT_NOTE" : "CREATE_CREDIT_NOTE",
-      resourceId: user.id,
-      resourceType: "User",
-      fields: Object.keys(dto),
+      action: "CREATE",
+      resourceId: creditNote.document_id.toString(),
+      resourceType: "DOCUMENT",
+      fields: ["note"],
       oldData: null,
       newData: creditNote,
     });
@@ -218,10 +218,10 @@ export class NoteController {
 
     await this.auditLogService.logAction({
       actorId: user.id,
-      action: "UPDATE_INVOICE",
-      resourceId: user.id,
-      resourceType: "User",
-      fields: Object.keys(dto),
+      action: "UPDATE",
+      resourceId: creditNote.document_id.toString(),
+      resourceType: "DOCUMENT",
+      fields: ["note"],
       oldData: null,
       newData: creditNote,
     });
@@ -252,10 +252,10 @@ export class NoteController {
 
     await this.auditLogService.logAction({
       actorId: user.id,
-      action: "UPDATE_INVOICE",
-      resourceId: user.id,
-      resourceType: "User",
-      fields: Object.keys(dto),
+      action: "UPDATE",
+      resourceId: creditNote.document_id.toString(),
+      resourceType: "DOCUMENT",
+      fields: ["note"],
       oldData: null,
       newData: creditNote,
     });
@@ -292,10 +292,10 @@ export class NoteController {
 
     await this.auditLogService.logAction({
       actorId: user.id,
-      action: "SUBMIT_" + document.document_type,
-      resourceId: user.id,
-      resourceType: "User",
-      fields: ["*"],
+      action: "SUBMIT",
+      resourceId: document.document_id.toString(),
+      resourceType: "DOCUMENT",
+      fields: ["note"],
       oldData: document,
       newData: { document_id: "einvoice id" },
     });
@@ -324,10 +324,10 @@ export class NoteController {
 
     await this.auditLogService.logAction({
       actorId: currentUser.id,
-      action: "DELETE_INVOICE",
-      resourceId: document.document_id,
-      resourceType: "Invoice",
-      fields: ["*"],
+      action: "DELETE",
+      resourceId: document.document_id.toString(),
+      resourceType: "DOCUMENT",
+      fields: ["note"],
       oldData: document,
       newData: null,
     });

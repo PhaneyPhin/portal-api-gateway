@@ -8,6 +8,9 @@ export class AuditLogEntity {
   @Column()
   action: string;
 
+  @Column({ nullable: true })
+  description: string;
+
   @Column()
   resource_id: string;
 

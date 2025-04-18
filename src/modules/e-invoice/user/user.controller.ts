@@ -1,22 +1,22 @@
 import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    NotFoundException,
-    Param,
-    Post,
-    Put,
-    ValidationPipe,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  Post,
+  Put,
+  ValidationPipe,
 } from "@nestjs/common";
 import {
-    ApiBearerAuth,
-    ApiConflictResponse,
-    ApiInternalServerErrorResponse,
-    ApiOperation,
-    ApiQuery,
-    ApiTags,
-    ApiUnauthorizedResponse,
+  ApiBearerAuth,
+  ApiConflictResponse,
+  ApiInternalServerErrorResponse,
+  ApiOperation,
+  ApiQuery,
+  ApiTags,
+  ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
 
 import { CurrentUser, SkipAuth, TOKEN_NAME } from "@auth";
@@ -24,10 +24,10 @@ import { AuditLogService } from "@common/audit/audit.service";
 import { ApiGlobalResponse } from "@common/decorators";
 import { ApiFields } from "@common/decorators/api-fields.decorator";
 import {
-    ApiPaginatedResponse,
-    PaginationParams,
-    PaginationRequest,
-    PaginationResponseDto,
+  ApiPaginatedResponse,
+  PaginationParams,
+  PaginationRequest,
+  PaginationResponseDto,
 } from "@libs/pagination";
 import { LoginUrlResponseDto } from "@modules/auth/dtos/login-url.dto";
 import { ServiceAccountTest } from "@modules/auth/dtos/service-test.dto";
@@ -45,7 +45,7 @@ import { UserService } from "./user.service";
 export class UserController {
   constructor(
     private readonly userService: UserService,
-    private readonly auditLogService: AuditLogService,
+    private readonly auditService: AuditLogService,
     private readonly notificaitonService: NotificationService
   ) {}
 
@@ -105,11 +105,9 @@ export class UserController {
     @CurrentUser() user: UserResponseDto
   ): Promise<UserResponseDto> {
     const foundUser = await this.userService.findById(id);
-    console.log(user, foundUser);
     if (user.endpoint_id !== foundUser.endpoint_id) {
       throw new NotFoundException();
     }
-
     return foundUser;
   }
 
@@ -128,14 +126,17 @@ export class UserController {
       endpoint_id: user.endpoint_id,
     });
 
-    await this.auditLogService.logAction({
+    // Log audit action asynchronously
+    this.auditService.logAction({
       actorId: user.id,
-      action: "CREATE_USER",
-      resourceId: createdUser.id,
-      resourceType: "User",
-      fields: Object.keys(dto),
+      action: "CREATE",
+      resourceId: createdUser.id.toString(),
+      resourceType: "USER",
+      fields: ["identity_number", "email", "role"],
       oldData: null,
       newData: createdUser,
+    }).catch(error => {
+      console.error('Failed to log audit:', error);
     });
 
     return createdUser;
@@ -160,15 +161,18 @@ export class UserController {
 
     const updatedUser = await this.userService.patch({ id }, dto);
 
-    // await this.auditLogService.logAction({
-    //   actorId: currentUser.id,
-    //   action: "UPDATE_USER",
-    //   resourceId: updatedUser.id,
-    //   resourceType: "User",
-    //   fields: detectChangedFields(existingUser, updatedUser),
-    //   oldData: existingUser,
-    //   newData: updatedUser,
-    // });
+    // Log audit action asynchronously
+    this.auditService.logAction({
+      actorId: currentUser.id,
+      action: "UPDATE",
+      resourceId: updatedUser.id.toString(),
+      resourceType: "USER",
+      fields: ["identity_number", "email", "role"],
+      oldData: existingUser,
+      newData: updatedUser,
+    }).catch(error => {
+      console.error('Failed to log audit:', error);
+    });
 
     return updatedUser;
   }
@@ -188,16 +192,19 @@ export class UserController {
       throw new NotFoundException();
     }
 
-    const deletedUser = await this.userService.deleteUser(id);
+    await this.userService.deleteUser(id);
 
-    await this.auditLogService.logAction({
+    // Log audit action asynchronously
+    this.auditService.logAction({
       actorId: currentUser.id,
-      action: "UPDATE_USER",
-      resourceId: null,
-      resourceType: "User",
-      fields: ["*"],
+      action: "DELETE",
+      resourceId: existingUser.id.toString(),
+      resourceType: "USER",
+      fields: ["identity_number", "email", "role"],
       oldData: existingUser,
       newData: null,
+    }).catch(error => {
+      console.error('Failed to log audit:', error);
     });
 
     return existingUser;
