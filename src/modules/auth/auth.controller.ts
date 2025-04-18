@@ -4,27 +4,27 @@ import { EKYBService } from "@modules/e-invoice/ekyb/ekyb.service";
 import { UserResponseDto } from "@modules/e-invoice/user/dtos";
 import { UserService } from "@modules/e-invoice/user/user.service";
 import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  Put,
-  Req,
-  Res,
-  UploadedFile,
-  UseInterceptors,
+    Body,
+    Controller,
+    Get,
+    Post,
+    Put,
+    Req,
+    Res,
+    UploadedFile,
+    UseInterceptors,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { FileInterceptor } from "@nestjs/platform-express";
 import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiConsumes,
-  ApiInternalServerErrorResponse,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-  ApiUnauthorizedResponse,
+    ApiBearerAuth,
+    ApiBody,
+    ApiConsumes,
+    ApiInternalServerErrorResponse,
+    ApiOkResponse,
+    ApiOperation,
+    ApiTags,
+    ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
 import { Response } from "express";
 import * as mime from "mime-types";
@@ -73,7 +73,7 @@ export class AuthController {
   }
 
   @SkipAuth()
-  @ApiOperation({ description: "User authentication" })
+  @ApiOperation({ description: "Test service account communication" })
   @ApiGlobalResponse(LoginUrlResponseDto)
   @ApiUnauthorizedResponse({ description: "Invalid credentials" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
@@ -83,7 +83,7 @@ export class AuthController {
   }
 
   @SkipAuth()
-  @ApiOperation({ description: "User authentication" })
+  @ApiOperation({ description: "Get CamDigiKey login URL" })
   @ApiGlobalResponse(LoginUrlResponseDto)
   @ApiUnauthorizedResponse({ description: "Invalid credentials" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
@@ -93,7 +93,7 @@ export class AuthController {
   }
 
   @SkipAuth()
-  @ApiOperation({ description: "User authentication" })
+  @ApiOperation({ description: "Login with CamDigiKey access token" })
   @ApiOkResponse({ description: "Successfully authenticated user" })
   @ApiUnauthorizedResponse({ description: "Invalid credentials" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
@@ -138,7 +138,7 @@ export class AuthController {
   }
 
   @SkipAuth()
-  @ApiOperation({ description: "User authentication" })
+  @ApiOperation({ description: "Login with username and password (Sandbox only)" })
   @ApiOkResponse({ description: "Successfully authenticated user" })
   @ApiUnauthorizedResponse({ description: "Invalid credentials" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
@@ -208,8 +208,8 @@ export class AuthController {
   // }
 
   @SkipApprove()
-  @ApiOperation({ description: "Get me" })
-  @ApiOkResponse({ description: "My data retrived" })
+  @ApiOperation({ description: "Get current user profile" })
+  @ApiOkResponse({ description: "User profile retrieved successfully" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
   @ApiBearerAuth(TOKEN_NAME)
   @Get("/me")
@@ -218,8 +218,8 @@ export class AuthController {
   }
 
   @SkipApprove()
-  @ApiOperation({ description: "Get me" })
-  @ApiOkResponse({ description: "My data retrived" })
+  @ApiOperation({ description: "Update current user profile" })
+  @ApiOkResponse({ description: "User profile updated successfully" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
   @ApiBearerAuth(TOKEN_NAME)
   @Put("/me")
@@ -231,10 +231,10 @@ export class AuthController {
   }
 
   @SkipApprove()
-  @ApiOperation({ description: "Get business profile" })
+  @ApiOperation({ description: "Upload or update user profile logo" })
   @ApiConsumes("multipart/form-data")
   @ApiBody({
-    description: "image file",
+    description: "Profile image file",
     schema: {
       type: "object",
       properties: {
@@ -265,10 +265,9 @@ export class AuthController {
   }
 
   @SkipAuth()
-  @ApiOperation({ description: "Validate token" })
-  @ApiOkResponse({ description: "Validation was successful" })
+  @ApiOperation({ description: "Logout user and invalidate token" })
+  @ApiOkResponse({ description: "Successfully logged out" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
-  // @ApiBearerAuth(TOKEN_NAME)
   @Post("/token/logout")
   async logout(@Req() request: Request): Promise<any> {
     const token = ExtractJwt.fromAuthHeaderAsBearerToken()(request);

@@ -6,6 +6,7 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
   Patch,
   Post,
   Put,
@@ -19,6 +20,7 @@ import {
   ApiConsumes,
   ApiInternalServerErrorResponse,
   ApiOperation,
+  ApiParam,
   ApiTags,
   ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
@@ -27,6 +29,7 @@ import { MinioService } from "src/minio/minio.service";
 import { EKYBService } from "../ekyb/ekyb.service";
 import { UserResponseDto } from "../user/dtos";
 import { BusinessResponseDto, CreateBusinessRequestDto } from "./dtos";
+import { BusinessEndpointResponseDto } from "./dtos/business-endpoint-response.dto";
 import { ContactDto } from "./dtos/contact.dto";
 import { EKYBReponseDto } from "./dtos/ekyb-response.dto";
 import { GDTKYBRequest, MOCKYBRequest } from "./dtos/kyb-request.dto";
@@ -49,7 +52,7 @@ export class BusinessController {
   ) {}
 
   @SkipApprove()
-  @ApiOperation({ description: "Get business profile" })
+  @ApiOperation({ description: "Get the current user's business profile" })
   @ApiGlobalResponse(BusinessResponseDto)
   @ApiUnauthorizedResponse({ description: "Invalid credentials" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
@@ -67,7 +70,7 @@ export class BusinessController {
   }
 
   @SkipApprove()
-  @ApiOperation({ description: "Get business profile" })
+  @ApiOperation({ description: "Register a new business" })
   @ApiGlobalResponse(BusinessResponseDto)
   @ApiUnauthorizedResponse({ description: "Invalid credentials" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
@@ -85,7 +88,7 @@ export class BusinessController {
     return this.serviceAccountService.getActorLogs(business);
   }
 
-  @ApiOperation({ description: "Change representative" })
+  @ApiOperation({ description: "Request to change the business representative" })
   @ApiGlobalResponse(RepresentativeResponseDto)
   @ApiUnauthorizedResponse({ description: "Invalid credentials" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
@@ -100,7 +103,7 @@ export class BusinessController {
     });
   }
 
-  @ApiOperation({ description: "Get business profile" })
+  @ApiOperation({ description: "Cancel the representative change request" })
   @ApiGlobalResponse(Boolean)
   @ApiUnauthorizedResponse({ description: "Invalid credentials" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
@@ -113,10 +116,10 @@ export class BusinessController {
     );
   }
 
-  @ApiOperation({ description: "Get business profile" })
+  @ApiOperation({ description: "Upload or update business logo" })
   @ApiConsumes("multipart/form-data")
   @ApiBody({
-    description: "image file",
+    description: "Logo image file",
     schema: {
       type: "object",
       properties: {
@@ -147,7 +150,7 @@ export class BusinessController {
     return await this.serviceAccountService.getBusinessProfile(user);
   }
 
-  @ApiOperation({ description: "Get business profile" })
+  @ApiOperation({ description: "Check if there is a pending representative change request" })
   @ApiGlobalResponse(Boolean)
   @ApiUnauthorizedResponse({ description: "Invalid credentials" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
@@ -160,7 +163,7 @@ export class BusinessController {
     );
   }
 
-  @ApiOperation({ description: "Get business profile" })
+  @ApiOperation({ description: "Update business contact information" })
   @ApiGlobalResponse(BusinessResponseDto)
   @ApiUnauthorizedResponse({ description: "Invalid credentials" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
@@ -177,10 +180,11 @@ export class BusinessController {
       ...business,
       ...contact,
       national_id: user.personal_code,
+      by: user.id,
     });
   }
 
-  @ApiOperation({ description: "Get business profile" })
+  @ApiOperation({ description: "Get business notification settings" })
   @ApiGlobalResponse(BusinessResponseDto)
   @ApiUnauthorizedResponse({ description: "Invalid credentials" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
@@ -188,7 +192,6 @@ export class BusinessController {
   async getNotificationSetting(
     @CurrentUser() user: UserResponseDto
   ): Promise<BusinessResponseDto> {
-    console.log(user);
     const business = await this.serviceAccountService.getBusinessByEndpoint(
       user.endpoint_id
     );
@@ -196,7 +199,7 @@ export class BusinessController {
     return this.serviceAccountService.getNotification(business.id);
   }
 
-  @ApiOperation({ description: "Get business profile" })
+  @ApiOperation({ description: "Validate business information with GDT (General Department of Taxation)" })
   @ApiGlobalResponse(EKYBReponseDto)
   @ApiUnauthorizedResponse({ description: "Invalid credentials" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
@@ -207,7 +210,7 @@ export class BusinessController {
     return this.ekybService.validateGDT(ekybRequestDto);
   }
 
-  @ApiOperation({ description: "Get business profile" })
+  @ApiOperation({ description: "Validate business information with MOC (Ministry of Commerce)" })
   @ApiGlobalResponse(EKYBReponseDto)
   @ApiUnauthorizedResponse({ description: "Invalid credentials" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
@@ -218,7 +221,7 @@ export class BusinessController {
     return this.ekybService.validateMOC(ekybRequestDto);
   }
 
-  @ApiOperation({ description: "set notification" })
+  @ApiOperation({ description: "Update business notification settings" })
   @ApiGlobalResponse(BusinessResponseDto)
   @ApiUnauthorizedResponse({ description: "Invalid credentials" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
@@ -235,5 +238,26 @@ export class BusinessController {
       ...notification,
       business_id: business.id,
     });
+  }
+
+  @Get('endpoint/:endpointId')
+  @ApiOperation({ summary: 'Get business basic information by endpoint ID' })
+  @ApiParam({ name: 'endpointId', description: 'The endpoint ID of the business' })
+  @ApiGlobalResponse(BusinessEndpointResponseDto)
+  @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
+  @ApiInternalServerErrorResponse({ description: 'Server error' })
+  async getBusinessByEndpointId(
+    @Param('endpointId') endpointId: string
+  ): Promise<BusinessEndpointResponseDto> {
+    const business = await this.serviceAccountService.getBusinessByEndpoint(endpointId);
+    console.log(business)
+    
+    return {
+      endpoint_id: business.endpoint_id,
+      tin: business.tin,
+      entity_id: business.entity_id,
+      entity_name_en: business.entity_name_en,
+      entity_name_kh: business.entity_name_kh,
+    };
   }
 }

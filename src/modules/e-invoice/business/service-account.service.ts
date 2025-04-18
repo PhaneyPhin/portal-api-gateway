@@ -85,13 +85,13 @@ export class ServiceAccountService implements OnModuleInit {
   }
 
   // 4. Get Business By Endpoint
-  async getBusinessByEndpoint(endpointId: string) {
+  async getBusinessByEndpoint(endpointId: string) : Promise<BusinessResponseDto> {
     try {
       return firstValueFrom(
         this.businessClient.send("business.getByEndpointId", endpointId)
       );
     } catch (e) {
-      return { step: 1 };
+      return { step: 1 } as BusinessResponseDto;
     }
   }
 
@@ -134,7 +134,7 @@ export class ServiceAccountService implements OnModuleInit {
   }
 
   // 10. Get Notification
-  async getNotification(payload: string) {
+  async getNotification(payload: number) {
     return firstValueFrom(
       this.businessClient.send("business.getNotification", payload)
     );

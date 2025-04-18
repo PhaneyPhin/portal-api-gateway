@@ -1,22 +1,22 @@
 import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  NotFoundException,
-  Param,
-  Post,
-  Put,
-  ValidationPipe,
+    Body,
+    Controller,
+    Delete,
+    Get,
+    NotFoundException,
+    Param,
+    Post,
+    Put,
+    ValidationPipe,
 } from "@nestjs/common";
 import {
-  ApiBearerAuth,
-  ApiConflictResponse,
-  ApiInternalServerErrorResponse,
-  ApiOperation,
-  ApiQuery,
-  ApiTags,
-  ApiUnauthorizedResponse,
+    ApiBearerAuth,
+    ApiConflictResponse,
+    ApiInternalServerErrorResponse,
+    ApiOperation,
+    ApiQuery,
+    ApiTags,
+    ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
 
 import { CurrentUser, SkipAuth, TOKEN_NAME } from "@auth";
@@ -24,10 +24,10 @@ import { AuditLogService } from "@common/audit/audit.service";
 import { ApiGlobalResponse } from "@common/decorators";
 import { ApiFields } from "@common/decorators/api-fields.decorator";
 import {
-  ApiPaginatedResponse,
-  PaginationParams,
-  PaginationRequest,
-  PaginationResponseDto,
+    ApiPaginatedResponse,
+    PaginationParams,
+    PaginationRequest,
+    PaginationResponseDto,
 } from "@libs/pagination";
 import { LoginUrlResponseDto } from "@modules/auth/dtos/login-url.dto";
 import { ServiceAccountTest } from "@modules/auth/dtos/service-test.dto";
@@ -50,7 +50,7 @@ export class UserController {
   ) {}
 
   @SkipAuth()
-  @ApiOperation({ description: "User authentication" })
+  @ApiOperation({ description: "Test notification service communication" })
   @ApiGlobalResponse(LoginUrlResponseDto)
   @ApiUnauthorizedResponse({ description: "Invalid credentials" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
@@ -58,7 +58,8 @@ export class UserController {
   test(@Body() data: ServiceAccountTest): Promise<any> {
     return this.notificaitonService.call(data.pattern, data.payload);
   }
-  @ApiOperation({ description: "Get a paginated customer list" })
+
+  @ApiOperation({ description: "Get paginated list of users" })
   @ApiPaginatedResponse(UserResponseDto)
   @ApiQuery({ name: "search", type: "string", required: false, example: "" })
   @ApiFields(["first_name_en", "first_name_kh", "endpoint_id", "role"])
@@ -78,7 +79,7 @@ export class UserController {
     });
   }
 
-  @ApiOperation({ description: "Get all customer list form select form" })
+  @ApiOperation({ description: "Get list of users for select dropdown" })
   // @Permissions(
   //   "admin.access.customer.read",
   //   "admin.access.customer.create",
@@ -91,7 +92,7 @@ export class UserController {
     return this.userService.getAllUsers(user.endpoint_id);
   }
 
-  @ApiOperation({ description: "Get customer by id" })
+  @ApiOperation({ description: "Get user details by ID" })
   @ApiGlobalResponse(UserResponseDto)
   // @Permissions(
   //   "admin.access.customer.read",
@@ -112,9 +113,9 @@ export class UserController {
     return foundUser;
   }
 
-  @ApiOperation({ description: "Create new customer" })
+  @ApiOperation({ description: "Create new user" })
   @ApiGlobalResponse(UserResponseDto)
-  @ApiConflictResponse({ description: "Customer already exists" })
+  @ApiConflictResponse({ description: "User already exists" })
   // @UseGuards(SuperUserGuard)
   // @Permissions("admin.access.customer.create")
   @Post()
@@ -140,9 +141,9 @@ export class UserController {
     return createdUser;
   }
 
-  @ApiOperation({ description: "Update customer by id" })
+  @ApiOperation({ description: "Update user by ID" })
   @ApiGlobalResponse(UserResponseDto)
-  @ApiConflictResponse({ description: "Customer already exists" })
+  @ApiConflictResponse({ description: "User already exists" })
   // @UseGuards(SuperUserGuard)
   // @Permissions("admin.access.customer.update")
   @Put("/:id")
@@ -172,7 +173,7 @@ export class UserController {
     return updatedUser;
   }
 
-  @ApiOperation({ description: "Update customer by id" })
+  @ApiOperation({ description: "Delete user by ID" })
   @ApiGlobalResponse(UserResponseDto)
   // @UseGuards(SuperUserGuard)
   // @Permissions("admin.access.customer.delete")

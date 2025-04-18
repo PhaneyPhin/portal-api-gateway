@@ -1,22 +1,22 @@
 import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  NotFoundException,
-  Param,
-  Patch,
-  Post,
-  Put,
-  Res,
-  ValidationPipe,
+    Body,
+    Controller,
+    Delete,
+    Get,
+    NotFoundException,
+    Param,
+    Patch,
+    Post,
+    Put,
+    Res,
+    ValidationPipe,
 } from "@nestjs/common";
 import {
-  ApiBearerAuth,
-  ApiConflictResponse,
-  ApiOperation,
-  ApiQuery,
-  ApiTags,
+    ApiBearerAuth,
+    ApiConflictResponse,
+    ApiOperation,
+    ApiQuery,
+    ApiTags,
 } from "@nestjs/swagger";
 import { Response } from "express";
 
@@ -26,10 +26,10 @@ import { ApiGlobalResponse } from "@common/decorators";
 import { ApiFields } from "@common/decorators/api-fields.decorator";
 import { SkipHttpResponse } from "@common/decorators/skip-http-response.decorator";
 import {
-  ApiPaginatedResponse,
-  PaginationParams,
-  PaginationRequest,
-  PaginationResponseDto,
+    ApiPaginatedResponse,
+    PaginationParams,
+    PaginationRequest,
+    PaginationResponseDto,
 } from "@libs/pagination";
 import { BusinessResponseDto } from "@modules/e-invoice/business/dtos";
 import { ServiceAccountService } from "@modules/e-invoice/business/service-account.service";
@@ -62,7 +62,7 @@ export class InvoiceController {
     private readonly converterService: ConverterService
   ) {}
 
-  @ApiOperation({ description: "Get a paginated invoices list" })
+  @ApiOperation({ description: "Get paginated list of invoices" })
   @ApiPaginatedResponse(DocumentEntity)
   @ApiQuery({ name: "search", type: "string", required: false, example: "" })
   @ApiFields([])
@@ -87,9 +87,9 @@ export class InvoiceController {
     });
   }
 
-  @ApiOperation({ description: "Issue new Invoice [post and draft status]" })
+  @ApiOperation({ description: "Create new invoice" })
   @ApiGlobalResponse(DocumentEntity)
-  @ApiConflictResponse({ description: "Invoice already exist" })
+  @ApiConflictResponse({ description: "Invoice already exists" })
   // @UseGuards(SuperUserGuard)
   // @Permissions("admin.access.customer.create")
   @Post()
@@ -120,9 +120,9 @@ export class InvoiceController {
     return invoice;
   }
 
-  @ApiOperation({ description: "Update Invoice" })
+  @ApiOperation({ description: "Update invoice by ID" })
   @ApiGlobalResponse(DocumentEntity)
-  @ApiConflictResponse({ description: "Invoice already exist" })
+  @ApiConflictResponse({ description: "Invoice already exists" })
   // @UseGuards(SuperUserGuard)
   // @Permissions("admin.access.customer.create")
   @Put("/:id")
@@ -154,9 +154,9 @@ export class InvoiceController {
     return invoice;
   }
 
-  @ApiOperation({ description: "Submit e-invoice" })
+  @ApiOperation({ description: "Submit invoice for e-invoice processing" })
   @ApiGlobalResponse(DocumentResponseDto)
-  @ApiConflictResponse({ description: "e-invoice existing" })
+  @ApiConflictResponse({ description: "E-invoice already exists" })
   // @UseGuards(SuperUserGuard)
   // @Permissions("admin.access.customer.create")
   @Post("/:id")
@@ -192,7 +192,7 @@ export class InvoiceController {
     return einvoice;
   }
 
-  @ApiOperation({ description: "Get a paginated invoices list" })
+  @ApiOperation({ description: "Get paginated list of e-invoices" })
   @ApiPaginatedResponse(DocumentEntity)
   @ApiQuery({ name: "search", type: "string", required: false, example: "" })
   @ApiFields([
@@ -241,7 +241,7 @@ export class InvoiceController {
     });
   }
 
-  @ApiOperation({ description: "Get a paginated invoices list" })
+  @ApiOperation({ description: "Get paginated list of received e-invoices" })
   @ApiPaginatedResponse(DocumentEntity)
   @ApiQuery({ name: "search", type: "string", required: false, example: "" })
   @ApiFields([
@@ -274,7 +274,7 @@ export class InvoiceController {
     });
   }
 
-  @ApiOperation({ description: "Accept document" })
+  @ApiOperation({ description: "Accept e-invoice" })
   @ApiGlobalResponse(DocumentEntity)
   // @Permissions(
   //   "admin.access.customer.read",
@@ -295,7 +295,7 @@ export class InvoiceController {
     return await this.invoiceProcessorService.accept(id);
   }
 
-  @ApiOperation({ description: "send document" })
+  @ApiOperation({ description: "Send e-invoice" })
   @ApiGlobalResponse(DocumentEntity)
   // @Permissions(
   //   "admin.access.customer.read",
@@ -317,7 +317,7 @@ export class InvoiceController {
     return await this.invoiceProcessorService.send(id);
   }
 
-  @ApiOperation({ description: "send document" })
+  @ApiOperation({ description: "Send e-invoice via email" })
   @ApiGlobalResponse(DocumentEntity)
   // @Permissions(
   //   "admin.access.customer.read",
@@ -349,7 +349,7 @@ export class InvoiceController {
     };
   }
 
-  @ApiOperation({ description: "Reject document" })
+  @ApiOperation({ description: "Reject e-invoice" })
   @ApiGlobalResponse(DocumentEntity)
   @Patch("/e-invoice/:id/reject")
   public async reject(
@@ -370,7 +370,7 @@ export class InvoiceController {
   }
 
   @SkipHttpResponse()
-  @ApiOperation({ description: "Get invoice xml by id" })
+  @ApiOperation({ description: "Get e-invoice XML by ID" })
   @ApiGlobalResponse(UserResponseDto)
   // @Permissions(
   //   "admin.access.customer.read",
@@ -393,7 +393,7 @@ export class InvoiceController {
   }
 
   @SkipHttpResponse()
-  @ApiOperation({ description: "Get invoice xml by id" })
+  @ApiOperation({ description: "Get e-invoice PDF by ID" })
   @ApiGlobalResponse(UserResponseDto)
   // @Permissions(
   //   "admin.access.customer.read",
@@ -429,7 +429,7 @@ export class InvoiceController {
     res.send(pdfBuffer);
   }
 
-  @ApiOperation({ description: "Get einvoice by id" })
+  @ApiOperation({ description: "Get e-invoice by ID" })
   @ApiGlobalResponse(DocumentResponseDto)
   // @UseGuards(SuperUserGuard)
   // @Permissions("admin.access.customer.create")
@@ -448,7 +448,7 @@ export class InvoiceController {
     return document;
   }
 
-  @ApiOperation({ description: "Get einvoice by id" })
+  @ApiOperation({ description: "Get received e-invoice by ID" })
   @ApiGlobalResponse(DocumentResponseDto)
   // @UseGuards(SuperUserGuard)
   // @Permissions("admin.access.customer.create")
@@ -466,7 +466,7 @@ export class InvoiceController {
     return document;
   }
 
-  @ApiOperation({ description: "Update delete invoice" })
+  @ApiOperation({ description: "Delete invoice by ID" })
   @ApiGlobalResponse(UserResponseDto)
   // @UseGuards(SuperUserGuard)
   // @Permissions("admin.access.customer.delete")
@@ -496,7 +496,7 @@ export class InvoiceController {
     return document;
   }
 
-  @ApiOperation({ description: "Get customer by id" })
+  @ApiOperation({ description: "Get invoice by ID" })
   @ApiGlobalResponse(UserResponseDto)
   // @Permissions(
   //   "admin.access.customer.read",

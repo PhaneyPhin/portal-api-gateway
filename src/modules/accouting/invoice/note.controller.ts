@@ -1,21 +1,21 @@
 import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  NotFoundException,
-  Param,
-  Patch,
-  Post,
-  Put,
-  ValidationPipe,
+    Body,
+    Controller,
+    Delete,
+    Get,
+    NotFoundException,
+    Param,
+    Patch,
+    Post,
+    Put,
+    ValidationPipe,
 } from "@nestjs/common";
 import {
-  ApiBearerAuth,
-  ApiConflictResponse,
-  ApiOperation,
-  ApiQuery,
-  ApiTags,
+    ApiBearerAuth,
+    ApiConflictResponse,
+    ApiOperation,
+    ApiQuery,
+    ApiTags,
 } from "@nestjs/swagger";
 
 import { CurrentUser, TOKEN_NAME } from "@auth";
@@ -23,10 +23,10 @@ import { AuditLogService } from "@common/audit/audit.service";
 import { ApiGlobalResponse } from "@common/decorators";
 import { ApiFields } from "@common/decorators/api-fields.decorator";
 import {
-  ApiPaginatedResponse,
-  PaginationParams,
-  PaginationRequest,
-  PaginationResponseDto,
+    ApiPaginatedResponse,
+    PaginationParams,
+    PaginationRequest,
+    PaginationResponseDto,
 } from "@libs/pagination";
 import { BusinessResponseDto } from "@modules/e-invoice/business/dtos";
 import { ServiceAccountService } from "@modules/e-invoice/business/service-account.service";
@@ -55,7 +55,7 @@ export class NoteController {
     private readonly invoiceProcessorService: InvoiceProcessorService
   ) {}
 
-  @ApiOperation({ description: "Get a paginated notes list" })
+  @ApiOperation({ description: "Get paginated list of credit/debit notes" })
   @ApiPaginatedResponse(DocumentEntity)
   @ApiQuery({ name: "search", type: "string", required: false, example: "" })
   @ApiFields([])
@@ -82,7 +82,7 @@ export class NoteController {
     });
   }
 
-  @ApiOperation({ description: "Get a paginated received notes list" })
+  @ApiOperation({ description: "Get paginated list of received credit/debit notes" })
   @ApiPaginatedResponse(DocumentEntity)
   @ApiQuery({ name: "search", type: "string", required: false, example: "" })
   @ApiFields([])
@@ -109,7 +109,7 @@ export class NoteController {
     });
   }
 
-  @ApiOperation({ description: "Get a paginated invoices list" })
+  @ApiOperation({ description: "Get paginated list of e-invoice notes" })
   @ApiPaginatedResponse(DocumentEntity)
   @ApiQuery({ name: "search", type: "string", required: false, example: "" })
   @ApiFields([])
@@ -138,7 +138,7 @@ export class NoteController {
 
   @ApiOperation({ description: "Create new credit note" })
   @ApiGlobalResponse(DocumentEntity)
-  @ApiConflictResponse({ description: "Customer already exists" })
+  @ApiConflictResponse({ description: "Credit note already exists" })
   // @UseGuards(SuperUserGuard)
   // @Permissions("admin.access.customer.create")
   @Post("/credit-note")
@@ -170,6 +170,7 @@ export class NoteController {
     return creditNote;
   }
 
+  @ApiOperation({ description: "Create new debit note" })
   @Post("/debit-note")
   public async creditDebitNote(
     @Body(ValidationPipe) dto: CreditNoteDto,
@@ -198,9 +199,9 @@ export class NoteController {
     return creditNote;
   }
 
-  @ApiOperation({ description: "Update credit note" })
+  @ApiOperation({ description: "Update credit note by ID" })
   @ApiGlobalResponse(DocumentEntity)
-  @ApiConflictResponse({ description: "credit note" })
+  @ApiConflictResponse({ description: "Credit note already exists" })
   // @UseGuards(SuperUserGuard)
   // @Permissions("admin.access.customer.create")
   @Put("/credit-note/:id")
@@ -232,9 +233,9 @@ export class NoteController {
     return creditNote;
   }
 
-  @ApiOperation({ description: "Update debit note" })
+  @ApiOperation({ description: "Update debit note by ID" })
   @ApiGlobalResponse(DocumentEntity)
-  @ApiConflictResponse({ description: "debit ntoe already exist" })
+  @ApiConflictResponse({ description: "Debit note already exists" })
   // @UseGuards(SuperUserGuard)
   // @Permissions("admin.access.customer.create")
   @Put("/debit-note/:id")
@@ -266,9 +267,9 @@ export class NoteController {
     return creditNote;
   }
 
-  @ApiOperation({ description: "submit credit/debit note" })
+  @ApiOperation({ description: "Submit credit/debit note for e-invoice processing" })
   @ApiGlobalResponse(DocumentResponseDto)
-  @ApiConflictResponse({ description: "credit note already exists" })
+  @ApiConflictResponse({ description: "E-invoice already exists" })
   // @UseGuards(SuperUserGuard)
   // @Permissions("admin.access.customer.create")
   @Post("/:id")
@@ -304,7 +305,7 @@ export class NoteController {
     return einvoice;
   }
 
-  @ApiOperation({ description: "Update delete invoice" })
+  @ApiOperation({ description: "Delete credit/debit note by ID" })
   @ApiGlobalResponse(UserResponseDto)
   // @UseGuards(SuperUserGuard)
   // @Permissions("admin.access.customer.delete")
@@ -334,7 +335,7 @@ export class NoteController {
     return document;
   }
 
-  @ApiOperation({ description: "Accept document" })
+  @ApiOperation({ description: "Accept e-invoice note" })
   @ApiGlobalResponse(DocumentResponseDto)
   // @Permissions(
   //   "admin.access.customer.read",
@@ -355,7 +356,7 @@ export class NoteController {
     return await this.invoiceProcessorService.accept(id);
   }
 
-  @ApiOperation({ description: "Accept document" })
+  @ApiOperation({ description: "Send e-invoice note" })
   @ApiGlobalResponse(DocumentResponseDto)
   // @Permissions(
   //   "admin.access.customer.read",
@@ -376,7 +377,7 @@ export class NoteController {
     return await this.invoiceProcessorService.send(id);
   }
 
-  @ApiOperation({ description: "send document" })
+  @ApiOperation({ description: "Send e-invoice note via email" })
   @ApiGlobalResponse(DocumentEntity)
   // @Permissions(
   //   "admin.access.customer.read",
@@ -408,7 +409,7 @@ export class NoteController {
     };
   }
 
-  @ApiOperation({ description: "Get received einvoice by id" })
+  @ApiOperation({ description: "Get received e-invoice note by ID" })
   @ApiGlobalResponse(DocumentResponseDto)
   // @UseGuards(SuperUserGuard)
   // @Permissions("admin.access.customer.create")
@@ -431,7 +432,7 @@ export class NoteController {
     return document;
   }
 
-  @ApiOperation({ description: "Get einvoice by id" })
+  @ApiOperation({ description: "Get e-invoice note by ID" })
   @ApiGlobalResponse(DocumentResponseDto)
   // @UseGuards(SuperUserGuard)
   // @Permissions("admin.access.customer.create")
@@ -454,7 +455,7 @@ export class NoteController {
     return document;
   }
 
-  @ApiOperation({ description: "Reject document" })
+  @ApiOperation({ description: "Reject e-invoice note" })
   @ApiGlobalResponse(DocumentEntity)
   @Patch("/e-invoice/:id/reject")
   public async reject(
@@ -474,7 +475,7 @@ export class NoteController {
     });
   }
 
-  @ApiOperation({ description: "Get credit/debit note by id" })
+  @ApiOperation({ description: "Get credit/debit note by ID" })
   @ApiGlobalResponse(UserResponseDto)
   // @Permissions(
   //   "admin.access.customer.read",
