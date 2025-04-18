@@ -65,9 +65,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
 
     const business = await this.serviceAccountService.getBusinessProfile(user);
+    console.log(business);
     if (business && business.status == BusinessStatus.APPROVED) {
       allowBusiness = true;
     }
+    console.log(allowBusiness);
     return { ...user, allowBusiness, business };
   }
 }

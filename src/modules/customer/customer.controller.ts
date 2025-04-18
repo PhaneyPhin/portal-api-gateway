@@ -9,8 +9,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
-  UseGuards,
-  ValidationPipe,
+  ValidationPipe
 } from "@nestjs/common";
 import {
   ApiBearerAuth,
@@ -27,7 +26,7 @@ import {
   UpdateCustomerRequestDto,
 } from "./dtos";
 
-import { CurrentUser, SuperUserGuard, TOKEN_NAME } from "@auth";
+import { CurrentUser, TOKEN_NAME } from "@auth";
 import { AuditLogService } from "@common/audit/audit.service";
 import { ApiGlobalResponse } from "@common/decorators";
 import { ApiFields } from "@common/decorators/api-fields.decorator";
@@ -46,7 +45,6 @@ import { CustomerEntity } from "./customer.entity";
   path: "/customer",
   version: "1",
 })
-@UseGuards(SuperUserGuard)
 export class CustomerController {
   constructor(
     private readonly customerService: CustomerService,
@@ -57,11 +55,12 @@ export class CustomerController {
   @ApiPaginatedResponse(CustomerResponseDto)
   @ApiQuery({ name: "search", type: "string", required: false, example: "" })
   @ApiFields(CUSTOMER_FILTER_FIELDS)
-  @Get()
+  @Get('/')
   public getCustomers(
     @PaginationParams() pagination: PaginationRequest,
     @CurrentUser() user: UserResponseDto
   ): Promise<PaginationResponseDto<CustomerResponseDto>> {
+    console.log('getCustomers', user);
     return this.customerService.list<CustomerEntity, CustomerResponseDto>({
       ...pagination,
       params: { ...pagination.params, supplier_id: user.endpoint_id },
@@ -171,7 +170,6 @@ export class CustomerController {
 
   @ApiOperation({ description: "Update customer by id" })
   @ApiGlobalResponse(CustomerResponseDto)
-  @UseGuards(SuperUserGuard)
   @Delete("/:id")
   public async deleteCustomer(
     @Param("id", ParseIntPipe) id: number,
