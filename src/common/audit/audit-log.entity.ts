@@ -31,4 +31,7 @@ export class AuditLogEntity {
 
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   created_at: Date;
+
+  actor_name_en?: string;
+  actor_name_kh?: string;
 }

@@ -50,7 +50,14 @@ export class AuditLogService extends BaseCrudService {
   protected queryName: string = "audit";
 
   protected getListQuery() {
-    return this.auditRepo.createQueryBuilder(this.queryName);
+    return this.auditRepo
+      .createQueryBuilder(this.queryName)
+      .select([
+        `${this.queryName}.action`,
+        `${this.queryName}.description`,
+        `${this.queryName}.created_at`,
+        `${this.queryName}.actor_id`
+      ]);
   }
 
   protected getMapperResponseEntityFields() {
