@@ -18,7 +18,7 @@ export class CreateCustomerRequestDto {
   @ApiProperty()
   @IsOptional()
   @MaxLength(160)
-  moc_id: string;
+  entity_id: string;
 
   @ApiProperty()
   @IsNotEmpty()

@@ -72,14 +72,17 @@ export class BusinessController {
   @ApiUnauthorizedResponse({ description: "Invalid credentials" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
   @Post("/register")
-  register(
+  async register(
     @Body() registration: CreateBusinessRequestDto,
     @CurrentUser() user: UserResponseDto
   ): Promise<BusinessResponseDto> {
-    return this.serviceAccountService.registerBusiness({
+    const business = await this.serviceAccountService.registerBusiness({
       ...registration,
       national_id: user.personal_code,
+      by: user.id,
     });
+
+    return this.serviceAccountService.getActorLogs(business);
   }
 
   @ApiOperation({ description: "Change representative" })

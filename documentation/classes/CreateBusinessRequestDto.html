@@ -596,7 +596,7 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @ApiPropertyOptional({example: &#x27;example@company.com&#x27;})<br />@IsOptional()<br />@IsEmail()<br />
+                            @ApiPropertyOptional({example: &#x27;example@company.com&#x27;})<br />@IsOptional()<br />@IsEmail({ ignore_max_length: true })<br />
                         </code>
                     </td>
                 </tr>
@@ -1154,7 +1154,7 @@ export class CreateBusinessRequestDto {
 
   @ApiPropertyOptional({ example: &quot;example@company.com&quot; })
   @IsOptional()
-  @IsEmail()
+  @IsEmail({ ignore_max_length: true })
   email?: string;
 
   @ApiPropertyOptional({ example: &quot;A123456789&quot; })

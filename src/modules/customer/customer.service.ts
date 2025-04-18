@@ -18,7 +18,7 @@ import {
 
 export const CUSTOMER_FILTER_FIELDS = [
   "endpoint_id",
-  "moc_id",
+  "entity_id",
   "entity_name_en",
   "entity_name_kh",
   "supplier_id",
@@ -37,7 +37,7 @@ export class CustomerService extends BaseCrudService {
   protected queryName: string = "customer";
   protected SEARCH_FIELDS = [
     "endpoint_id",
-    "moc_id",
+    "entity_id",
     "entity_name_en",
     "entity_name_kh",
     "tin",
@@ -106,16 +106,16 @@ export class CustomerService extends BaseCrudService {
 
       try {
         entity = await this.serviceAccountService.getBusinessByEndpoint(
-          "KHUID" + customerDto.moc_id
+          "KHUID" + customerDto.entity_id
         );
       } catch (e) {}
 
       if (entity && entity.endpoint_id !== customerDto.supplier_id) {
         throw new UnprocessableEntityException([
           {
-            path: "moc_id",
+            path: "entity_id",
             message: `This customer is member of E-invoice please search with ${
-              "KHUID" + customerDto.moc_id
+              "KHUID" + customerDto.entity_id
             }`,
           },
         ]);

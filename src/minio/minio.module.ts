@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { Global, Module } from "@nestjs/common";
 import { FileController } from "./file/file.controller";
 import { MinioProvider } from "./minio.provider";
 import { MinioService } from "./minio.service";
@@ -9,4 +9,5 @@ import { MinioService } from "./minio.service";
   exports: [MinioService],
   controllers: [FileController],
 })
+@Global()
 export class MinioModule {}

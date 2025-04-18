@@ -11,7 +11,7 @@ export class CustomerResponseDto {
   supplier_id: string;
 
   @ApiProperty()
-  moc_id: string;
+  entity_id: string;
 
   @ApiProperty()
   entity_name_en: string;

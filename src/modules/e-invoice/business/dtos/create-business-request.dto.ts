@@ -68,7 +68,7 @@ export class CreateBusinessRequestDto {
 
   @ApiPropertyOptional({ example: "example@company.com" })
   @IsOptional()
-  @IsEmail()
+  @IsEmail({ ignore_max_length: true })
   email?: string;
 
   @ApiPropertyOptional({ example: "A123456789" })
@@ -141,4 +141,6 @@ export class CreateBusinessRequestDto {
   @IsNotEmpty()
   @IsString()
   authorized_letter?: string;
+
+  by: string;
 }

@@ -239,7 +239,7 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @Expose()<br />@IsNotEmpty()<br />@IsEmail()<br />
+                            @Expose()<br />@IsNotEmpty()<br />@IsEmail({ ignore_max_length: true })<br />
                         </code>
                     </td>
                 </tr>
@@ -308,7 +308,7 @@ import { IsEmail, IsNotEmpty, IsOptional, IsString } from &quot;class-validator&
 export class InvoiceMailDto {
   @Expose()
   @IsNotEmpty()
-  @IsEmail()
+  @IsEmail({ ignore_max_length: true })
   email: string;
 
   @Expose()

@@ -417,7 +417,7 @@ export class CustomerMapper {
     dto.id &#x3D; entity.id;
     dto.active &#x3D; (entity as any).active; // or your default fields
     dto.endpoint_id &#x3D; entity.endpoint_id;
-    dto.moc_id &#x3D; entity.moc_id;
+    dto.entity_id &#x3D; entity.entity_id;
     dto.supplier_id &#x3D; entity.supplier_id;
     dto.entity_name_en &#x3D; entity.entity_name_en;
     dto.entity_name_kh &#x3D; entity.entity_name_kh;
@@ -440,7 +440,7 @@ export class CustomerMapper {
     entity.active &#x3D; true;
     entity.endpoint_id &#x3D; dto.endpoint_id;
     entity.supplier_id &#x3D; dto.supplier_id;
-    entity.moc_id &#x3D; dto.moc_id;
+    entity.entity_id &#x3D; dto.entity_id;
     entity.entity_name_en &#x3D; dto.entity_name_en;
     entity.entity_name_kh &#x3D; dto.entity_name_kh;
     entity.tin &#x3D; dto.tin;
@@ -462,7 +462,7 @@ export class CustomerMapper {
   ): CustomerEntity {
     entity.endpoint_id &#x3D; dto.endpoint_id;
     entity.supplier_id &#x3D; dto.supplier_id;
-    entity.moc_id &#x3D; dto.moc_id;
+    entity.entity_id &#x3D; dto.entity_id;
     entity.entity_name_en &#x3D; dto.entity_name_en;
     entity.entity_name_kh &#x3D; dto.entity_name_kh;
     entity.tin &#x3D; dto.tin;

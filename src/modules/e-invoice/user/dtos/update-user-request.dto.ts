@@ -30,7 +30,7 @@ export class UpdateUserRequestDto {
 
   @IsNotEmpty()
   @MaxLength(100)
-  @IsEmail()
+  @IsEmail({ ignore_max_length: true })
   @ApiProperty({
     example: "admin@gmail.com",
   })

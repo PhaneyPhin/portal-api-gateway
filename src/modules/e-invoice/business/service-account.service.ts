@@ -10,6 +10,7 @@ import { firstValueFrom } from "rxjs";
 import { ServiceProviderResponseDto } from "../service-provider/dtos";
 import { GetAuthTokenRequest } from "../service-provider/dtos/get-auth-token-request.dto";
 import { UserResponseDto } from "../user/dtos";
+import { UserService } from "../user/user.service";
 import { BusinessResponseDto, CreateBusinessRequestDto } from "./dtos";
 import { NotificationSettingDto } from "./dtos/notification-setting.dto";
 import { RequestChangeRepresentativeDto } from "./dtos/request-change-representative.dto";
@@ -18,7 +19,10 @@ import { RequestChangeRepresentativeDto } from "./dtos/request-change-representa
 export class ServiceAccountService implements OnModuleInit {
   private businessClient: ClientProxy;
 
-  constructor(private readonly configService: ConfigService) {}
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly userService: UserService
+  ) {}
 
   onModuleInit() {
     this.businessClient = ClientProxyFactory.create({
@@ -49,6 +53,21 @@ export class ServiceAccountService implements OnModuleInit {
         return null;
       }
     }
+  }
+
+  async getActorLogs(business: BusinessResponseDto) {
+    const actIds = business.actions.map((item) => item.by);
+    const namesActor = await this.userService.call("user.getNameByIds", actIds);
+    business.actions = business.actions.map((action) => {
+      const name = namesActor.find((actor) => actor.id === action.by) || {};
+
+      return {
+        ...name,
+        ...action,
+      };
+    });
+
+    return business;
   }
 
   // 2. Update Business

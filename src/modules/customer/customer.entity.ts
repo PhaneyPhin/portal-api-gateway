@@ -21,11 +21,11 @@ export class CustomerEntity extends BaseEntity {
   supplier_id: string;
 
   @Column({
-    name: "moc_id",
+    name: "entity_id",
     type: "varchar",
     nullable: true,
   })
-  moc_id: string;
+  entity_id: string;
 
   @Column({
     name: "entity_name_en",

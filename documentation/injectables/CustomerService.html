@@ -1307,7 +1307,7 @@
                     <td class="col-md-4">
                         <i>Default value : </i><code>[
     &quot;endpoint_id&quot;,
-    &quot;moc_id&quot;,
+    &quot;entity_id&quot;,
     &quot;entity_name_en&quot;,
     &quot;entity_name_kh&quot;,
     &quot;tin&quot;,
@@ -1364,7 +1364,7 @@ import {
 
 export const CUSTOMER_FILTER_FIELDS &#x3D; [
   &quot;endpoint_id&quot;,
-  &quot;moc_id&quot;,
+  &quot;entity_id&quot;,
   &quot;entity_name_en&quot;,
   &quot;entity_name_kh&quot;,
   &quot;supplier_id&quot;,
@@ -1383,7 +1383,7 @@ export class CustomerService extends BaseCrudService {
   protected queryName: string &#x3D; &quot;customer&quot;;
   protected SEARCH_FIELDS &#x3D; [
     &quot;endpoint_id&quot;,
-    &quot;moc_id&quot;,
+    &quot;entity_id&quot;,
     &quot;entity_name_en&quot;,
     &quot;entity_name_kh&quot;,
     &quot;tin&quot;,
@@ -1452,16 +1452,16 @@ export class CustomerService extends BaseCrudService {
 
       try {
         entity &#x3D; await this.serviceAccountService.getBusinessByEndpoint(
-          &quot;KHUID&quot; + customerDto.moc_id
+          &quot;KHUID&quot; + customerDto.entity_id
         );
       } catch (e) {}
 
       if (entity &amp;&amp; entity.endpoint_id !&#x3D;&#x3D; customerDto.supplier_id) {
         throw new UnprocessableEntityException([
           {
-            path: &quot;moc_id&quot;,
+            path: &quot;entity_id&quot;,
             message: &#x60;This customer is member of E-invoice please search with ${
-              &quot;KHUID&quot; + customerDto.moc_id
+              &quot;KHUID&quot; + customerDto.entity_id
             }&#x60;,
           },
         ]);

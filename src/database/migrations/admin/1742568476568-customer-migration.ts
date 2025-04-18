@@ -30,7 +30,7 @@ export class CustomerMigration1742568476568 implements MigrationInterface {
           },
 
           {
-            name: "moc_id",
+            name: "entity_id",
             type: "varchar",
             length: "160",
             isNullable: true,

@@ -2,10 +2,24 @@ import { ApiGlobalResponse } from "@common/decorators";
 import { ServiceAccountService } from "@modules/e-invoice/business/service-account.service";
 import { EKYBService } from "@modules/e-invoice/ekyb/ekyb.service";
 import { UserResponseDto } from "@modules/e-invoice/user/dtos";
-import { Body, Controller, Get, Post, Req, Res } from "@nestjs/common";
+import { UserService } from "@modules/e-invoice/user/user.service";
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Put,
+  Req,
+  Res,
+  UploadedFile,
+  UseInterceptors,
+} from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import { FileInterceptor } from "@nestjs/platform-express";
 import {
   ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
   ApiInternalServerErrorResponse,
   ApiOkResponse,
   ApiOperation,
@@ -13,13 +27,17 @@ import {
   ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
 import { Response } from "express";
+import * as mime from "mime-types";
+import { Multer } from "multer";
 import { ExtractJwt } from "passport-jwt";
+import { MinioService } from "src/minio/minio.service";
 import { CurrentUser, SkipAuth, TOKEN_NAME } from ".";
 import { SkipApprove } from "./decorators/skip-approve";
 import { AuthCredentialsRequestDto, ValidateTokenRequestDto } from "./dtos";
 import { LoginUrlResponseDto } from "./dtos/login-url.dto";
 import { ServiceAccountTest } from "./dtos/service-test.dto";
-import { AuthService, TokenService } from "./services";
+import { UpdateMeDto } from "./dtos/update-me.dto";
+import { AuthService } from "./services";
 
 let HTTP_ONLY_DEFAULT_CONFIG: {
   secure: boolean;
@@ -37,7 +55,8 @@ let HTTP_ONLY_DEFAULT_CONFIG: {
 export class AuthController {
   constructor(
     private authService: AuthService,
-    private tokenService: TokenService,
+    private userService: UserService,
+    private readonly minioService: MinioService,
     private serviceAccountService: ServiceAccountService,
     private ekybService: EKYBService,
     private readonly configService: ConfigService
@@ -196,6 +215,53 @@ export class AuthController {
   @Get("/me")
   async me(@CurrentUser() user: UserResponseDto): Promise<any> {
     return user;
+  }
+
+  @SkipApprove()
+  @ApiOperation({ description: "Get me" })
+  @ApiOkResponse({ description: "My data retrived" })
+  @ApiInternalServerErrorResponse({ description: "Server error" })
+  @ApiBearerAuth(TOKEN_NAME)
+  @Put("/me")
+  async updateMe(
+    @Body() updatedMeDto: UpdateMeDto,
+    @CurrentUser() user: UserResponseDto
+  ): Promise<any> {
+    return this.userService.patch({ id: user.id }, updatedMeDto);
+  }
+
+  @SkipApprove()
+  @ApiOperation({ description: "Get business profile" })
+  @ApiConsumes("multipart/form-data")
+  @ApiBody({
+    description: "image file",
+    schema: {
+      type: "object",
+      properties: {
+        file: {
+          type: "string",
+          format: "binary",
+        },
+      },
+    },
+  })
+  @UseInterceptors(FileInterceptor("file"))
+  @ApiGlobalResponse(UserResponseDto)
+  @Put("/me/logo")
+  async uploadMyLogo(
+    @UploadedFile() file: Multer.File,
+    @CurrentUser() user: UserResponseDto
+  ): Promise<any> {
+    let ext = mime.extension(file.mimetype);
+    console.log("images", user.id + "." + ext, file);
+    const uploadedFile = await this.minioService.uploadImage(
+      user.id + "." + ext,
+      file.buffer
+    );
+    return this.userService.patch(
+      { id: user.id },
+      { logo_file_name: uploadedFile }
+    );
   }
 
   @SkipAuth()

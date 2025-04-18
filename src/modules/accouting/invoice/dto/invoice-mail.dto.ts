@@ -4,7 +4,7 @@ import { IsEmail, IsNotEmpty, IsOptional, IsString } from "class-validator";
 export class InvoiceMailDto {
   @Expose()
   @IsNotEmpty()
-  @IsEmail()
+  @IsEmail({ ignore_max_length: true })
   email: string;
 
   @Expose()

@@ -222,7 +222,7 @@
                         <b>Decorators : </b>
                         <br />
                         <code>
-                            @IsNotEmpty()<br />@MaxLength(100)<br />@IsEmail()<br />@ApiProperty({example: &#x27;admin@gmail.com&#x27;})<br />
+                            @IsNotEmpty()<br />@MaxLength(100)<br />@IsEmail({ ignore_max_length: true })<br />@ApiProperty({example: &#x27;admin@gmail.com&#x27;})<br />
                         </code>
                     </td>
                 </tr>
@@ -470,7 +470,7 @@ export class UpdateUserRequestDto {
 
   @IsNotEmpty()
   @MaxLength(100)
-  @IsEmail()
+  @IsEmail({ ignore_max_length: true })
   @ApiProperty({
     example: &quot;admin@gmail.com&quot;,
   })

@@ -58,7 +58,6 @@ export class UserService implements OnModuleInit {
   }
 
   patch(where, patch: Partial<any>) {
-    console.log("patching", "user.patch", { where, patch });
     return this.client.send("user.patch", { where, patch }).toPromise();
   }
 
