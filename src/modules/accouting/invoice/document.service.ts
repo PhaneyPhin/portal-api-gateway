@@ -1,7 +1,7 @@
 import { BaseCrudService } from "@common/services/base-crud.service";
 import { BusinessResponseDto } from "@modules/e-invoice/business/dtos";
 import { InvoiceProcessorService } from "@modules/e-invoice/invoiceprocessor/invoiceprocessor.service";
-import { ForbiddenException, Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UUID } from "crypto";
 import { Repository } from "typeorm";
@@ -50,9 +50,9 @@ export class DocumentService extends BaseCrudService {
   async create(document: InvoiceDto | CreditNoteDto | DebitNoteDto) {
     let documentEntity;
     if (document.is_draft) {
-      document.status = "draft";
+      document.status = "DRAFT";
     } else {
-      document.status = "posted";
+      document.status = "POSTED";
 
       this.ublHelperService.fillInvoiceInformation(document);
     }
@@ -77,9 +77,9 @@ export class DocumentService extends BaseCrudService {
     let documentEntity;
 
     if (document.is_draft) {
-      document.status = "draft";
+      document.status = "DRAFT";
     } else {
-      document.status = "posted";
+      document.status = "POSTED";
     }
 
     documentEntity = await this.documentRepository.findOneBy({
@@ -104,10 +104,8 @@ export class DocumentService extends BaseCrudService {
     document: DocumentEntity,
     supplier: BusinessResponseDto
   ): Promise<DocumentResponseDto> {
-    if (document.status !== "posted") {
-      throw new ForbiddenException(
-        "Document not yet posted can't submit to e-invoice"
-      );
+    if (document.status !== "POSTED") {
+      throw new BadRequestException("Document must be posted before submission");
     }
     const xml = this.ublHelperService.toUBL({
       ...document,

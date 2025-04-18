@@ -214,7 +214,7 @@ export class InvoiceDto {
   @IsOptional()
   due_date: Date;
 
-  status: "draft" | "posted";
+  status: "DRAFT" | "POSTED";
 
   @ValidateIf((o) => !o.is_draft)
   @ApiPropertyOptional({ type: [AllowanceChargeDto] })

@@ -2,18 +2,18 @@ import { CustomerEntity } from "@modules/customer/customer.entity";
 import { BusinessResponseDto } from "@modules/e-invoice/business/dtos";
 import { ApiProperty } from "@nestjs/swagger";
 import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
+    Column,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    PrimaryGeneratedColumn,
 } from "typeorm";
 import { LegalMonetaryTotal, TaxTotal } from "./dto";
 import {
-  AdditionalDocumentReferenceDto,
-  AllowanceChargeDto,
-  InvoiceLineDto,
-  PrepaidPaymentDto,
+    AdditionalDocumentReferenceDto,
+    AllowanceChargeDto,
+    InvoiceLineDto,
+    PrepaidPaymentDto,
 } from "./dto/create-invoice.dto";
 import { DocumentType } from "./enums/DocumentType";
 
@@ -89,7 +89,7 @@ export class DocumentEntity {
   reference_document_number?: string;
 
   @Column()
-  status: "draft" | "posted";
+  status: "DRAFT" | "POSTED";
 
   @Column()
   customer_id: number;
