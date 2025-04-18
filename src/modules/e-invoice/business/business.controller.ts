@@ -1,3 +1,4 @@
+import { AuditAction, AuditLogService, AuditResourceType } from "@common/audit/audit.service";
 import { ApiGlobalResponse } from "@common/decorators";
 import { CurrentUser, TOKEN_NAME } from "@modules/auth";
 import { SkipApprove } from "@modules/auth/decorators/skip-approve";
@@ -20,9 +21,8 @@ import {
   ApiConsumes,
   ApiInternalServerErrorResponse,
   ApiOperation,
-  ApiParam,
   ApiTags,
-  ApiUnauthorizedResponse,
+  ApiUnauthorizedResponse
 } from "@nestjs/swagger";
 import { Multer } from "multer";
 import { MinioService } from "src/minio/minio.service";
@@ -48,7 +48,8 @@ export class BusinessController {
   constructor(
     private readonly serviceAccountService: ServiceAccountService,
     private readonly minioService: MinioService,
-    private readonly ekybService: EKYBService
+    private readonly ekybService: EKYBService,
+    private readonly auditLogService: AuditLogService
   ) {}
 
   @SkipApprove()
@@ -85,41 +86,77 @@ export class BusinessController {
       by: user.id,
     });
 
+    await this.auditLogService.logAction({
+      actorId: user.id,
+      action: "CREATE" as AuditAction,
+      resourceId: business.id.toString(),
+      resourceType: "BUSINESS" as AuditResourceType,
+      fields: Object.keys(registration),
+      oldData: null,
+      newData: business,
+    });
+
     return this.serviceAccountService.getActorLogs(business);
   }
 
+  @SkipApprove()
   @ApiOperation({ description: "Request to change the business representative" })
   @ApiGlobalResponse(RepresentativeResponseDto)
   @ApiUnauthorizedResponse({ description: "Invalid credentials" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
   @Patch("/representative")
-  changeRepresentativeRequest(
-    @Body() data: RequestChangeRepresentativeDto,
+  async requestChangeRepresentative(
+    @Body() request: RequestChangeRepresentativeDto,
     @CurrentUser() user: UserResponseDto
   ): Promise<RepresentativeResponseDto> {
-    return this.serviceAccountService.changeRepresentative({
-      ...data,
+    const result = await this.serviceAccountService.changeRepresentative({
+      ...request,
       endpoint_id: user.endpoint_id,
     });
+
+    await this.auditLogService.logAction({
+      actorId: user.id,
+      action: "UPDATE" as AuditAction,
+      resourceId: result.id.toString(),
+      resourceType: "BUSINESS" as AuditResourceType,
+      fields: Object.keys(request),
+      oldData: null,
+      newData: result,
+    });
+
+    return result;
   }
 
+  @SkipApprove()
   @ApiOperation({ description: "Cancel the representative change request" })
-  @ApiGlobalResponse(Boolean)
+  @ApiGlobalResponse(RepresentativeResponseDto)
   @ApiUnauthorizedResponse({ description: "Invalid credentials" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
   @Delete("/representative")
-  cancelChangeRepresentativeRequest(
+  async cancelChangeRepresentative(
     @CurrentUser() user: UserResponseDto
-  ): Promise<Boolean> {
-    return this.serviceAccountService.cancelChangeRepresentative(
+  ): Promise<RepresentativeResponseDto> {
+    const result = await this.serviceAccountService.cancelChangeRepresentative(
       user.endpoint_id
     );
+
+    await this.auditLogService.logAction({
+      actorId: user.id,
+      action: "CANCEL" as AuditAction,
+      resourceId: result.id.toString(),
+      resourceType: "BUSINESS" as AuditResourceType,
+      fields: [],
+      oldData: null,
+      newData: result,
+    });
+
+    return result;
   }
 
+  @SkipApprove()
   @ApiOperation({ description: "Upload or update business logo" })
   @ApiConsumes("multipart/form-data")
   @ApiBody({
-    description: "Logo image file",
     schema: {
       type: "object",
       properties: {
@@ -130,39 +167,56 @@ export class BusinessController {
       },
     },
   })
-  @UseInterceptors(FileInterceptor("file"))
   @ApiGlobalResponse(BusinessResponseDto)
+  @ApiUnauthorizedResponse({ description: "Invalid credentials" })
+  @ApiInternalServerErrorResponse({ description: "Server error" })
   @Put("/logo")
-  async uploadFile(
+  @UseInterceptors(FileInterceptor("file"))
+  async uploadLogo(
     @UploadedFile() file: Multer.File,
     @CurrentUser() user: UserResponseDto
-  ) {
+  ): Promise<BusinessResponseDto> {
+    const business = await this.serviceAccountService.getBusinessByEndpoint(
+      user.endpoint_id
+    );
+
     const path = await this.minioService.uploadImage(
       new Date().getTime() + "-" + file.originalname,
       file.buffer
     );
 
-    await this.serviceAccountService.call("business.updateLogo", {
-      endpoint_id: user.endpoint_id,
-      logo: path,
+    const result = await this.serviceAccountService.updateBusiness(Number(business.id), {
+      ...business,
+      logo_file_name: file.originalname,
+      by: user.id,
     });
 
-    return await this.serviceAccountService.getBusinessProfile(user);
+    await this.auditLogService.logAction({
+      actorId: user.id,
+      action: "UPLOAD" as AuditAction,
+      resourceId: business.id.toString(),
+      resourceType: "BUSINESS" as AuditResourceType,
+      fields: ["logo_file_name"],
+      oldData: { logo_file_name: business.logo_file_name },
+      newData: { logo_file_name: result.logo_file_name },
+    });
+
+    return result;
   }
 
+  @SkipApprove()
   @ApiOperation({ description: "Check if there is a pending representative change request" })
-  @ApiGlobalResponse(Boolean)
+  @ApiGlobalResponse(RepresentativeResponseDto)
   @ApiUnauthorizedResponse({ description: "Invalid credentials" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
   @Get("/representative")
-  getRequestedRepresentative(
+  async getRepresentative(
     @CurrentUser() user: UserResponseDto
-  ): Promise<Boolean> {
-    return this.serviceAccountService.getRequestedRepresentative(
-      user.endpoint_id
-    );
+  ): Promise<RepresentativeResponseDto> {
+    return this.serviceAccountService.getRequestedRepresentative(user.endpoint_id);
   }
 
+  @SkipApprove()
   @ApiOperation({ description: "Update business contact information" })
   @ApiGlobalResponse(BusinessResponseDto)
   @ApiUnauthorizedResponse({ description: "Invalid credentials" })
@@ -176,82 +230,148 @@ export class BusinessController {
       user.endpoint_id
     );
 
-    return this.serviceAccountService.updateBusiness(business.id, {
+    const result = await this.serviceAccountService.updateBusiness(business.id, {
       ...business,
       ...contact,
       national_id: user.personal_code,
       by: user.id,
     });
+
+    await this.auditLogService.logAction({
+      actorId: user.id,
+      action: "UPDATE" as AuditAction,
+      resourceId: business.id.toString(),
+      resourceType: "BUSINESS" as AuditResourceType,
+      fields: Object.keys(contact),
+      oldData: business,
+      newData: result,
+    });
+
+    return result;
   }
 
+  @SkipApprove()
   @ApiOperation({ description: "Get business notification settings" })
-  @ApiGlobalResponse(BusinessResponseDto)
+  @ApiGlobalResponse(NotificationSettingDto)
   @ApiUnauthorizedResponse({ description: "Invalid credentials" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
   @Get("/notification-setting")
   async getNotificationSetting(
     @CurrentUser() user: UserResponseDto
-  ): Promise<BusinessResponseDto> {
+  ): Promise<NotificationSettingDto> {
     const business = await this.serviceAccountService.getBusinessByEndpoint(
       user.endpoint_id
     );
 
-    return this.serviceAccountService.getNotification(business.id);
+    const result = await this.serviceAccountService.getNotification(business.id);
+
+    await this.auditLogService.logAction({
+      actorId: user.id,
+      action: "GET" as AuditAction,
+      resourceId: business.id.toString(),
+      resourceType: "NOTIFICATION" as AuditResourceType,
+      fields: ["notification_setting"],
+      oldData: null,
+      newData: result
+    });
+
+    return result;
   }
 
+  @SkipApprove()
   @ApiOperation({ description: "Validate business information with GDT (General Department of Taxation)" })
   @ApiGlobalResponse(EKYBReponseDto)
   @ApiUnauthorizedResponse({ description: "Invalid credentials" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
   @Post("/validate")
-  validate(
-    @Body() ekybRequestDto: GDTKYBRequest
+  async validate(
+    @Body() ekybRequestDto: GDTKYBRequest,
+    @CurrentUser() user: UserResponseDto
   ): Promise<EKYBReponseDto | {}> {
-    return this.ekybService.validateGDT(ekybRequestDto);
+    const result = await this.ekybService.validateGDT(ekybRequestDto);
+
+    await this.auditLogService.logAction({
+      actorId: user.id,
+      action: "VALIDATE_BUSINESS_GDT" as AuditAction,
+      resourceId: user.endpoint_id,
+      resourceType: "Business" as AuditResourceType,
+      fields: Object.keys(ekybRequestDto),
+      oldData: null,
+      newData: result,
+    });
+
+    return result;
   }
 
+  @SkipApprove()
   @ApiOperation({ description: "Validate business information with MOC (Ministry of Commerce)" })
   @ApiGlobalResponse(EKYBReponseDto)
   @ApiUnauthorizedResponse({ description: "Invalid credentials" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
   @Post("/validate/moc")
-  validateMoc(
-    @Body() ekybRequestDto: MOCKYBRequest
+  async validateMoc(
+    @Body() ekybRequestDto: MOCKYBRequest,
+    @CurrentUser() user: UserResponseDto
   ): Promise<EKYBReponseDto | {}> {
-    return this.ekybService.validateMOC(ekybRequestDto);
+    const result = await this.ekybService.validateMOC(ekybRequestDto);
+
+    await this.auditLogService.logAction({
+      actorId: user.id,
+      action: "VALIDATE_BUSINESS_MOC" as AuditAction,
+      resourceId: user.endpoint_id,
+      resourceType: "Business" as AuditResourceType,
+      fields: Object.keys(ekybRequestDto),
+      oldData: null,
+      newData: result,
+    });
+
+    return result;
   }
 
+  @SkipApprove()
   @ApiOperation({ description: "Update business notification settings" })
-  @ApiGlobalResponse(BusinessResponseDto)
+  @ApiGlobalResponse(NotificationSettingDto)
   @ApiUnauthorizedResponse({ description: "Invalid credentials" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
   @Post("/notification-setting")
-  async setNotification(
-    @Body() notification: NotificationSettingDto,
+  async updateNotificationSetting(
+    @Body() setting: NotificationSettingDto,
     @CurrentUser() user: UserResponseDto
-  ): Promise<BusinessResponseDto> {
+  ): Promise<NotificationSettingDto> {
     const business = await this.serviceAccountService.getBusinessByEndpoint(
       user.endpoint_id
     );
-
-    return this.serviceAccountService.setNotification({
-      ...notification,
-      business_id: business.id,
+    const result = await this.serviceAccountService.setNotification({
+      ...setting,
+      business_id: Number(business.id),
     });
+
+    await this.auditLogService.logAction({
+      actorId: user.id,
+      action: "UPDATE_NOTIFICATION_SETTING" as AuditAction,
+      resourceId: business.id.toString(),
+      resourceType: "Business" as AuditResourceType,
+      fields: Object.keys(setting),
+      oldData: null,
+      newData: result,
+    });
+
+    return result;
   }
 
-  @Get('endpoint/:endpointId')
-  @ApiOperation({ summary: 'Get business basic information by endpoint ID' })
-  @ApiParam({ name: 'endpointId', description: 'The endpoint ID of the business' })
+  @SkipApprove()
+  @ApiOperation({ description: "Get business basic information by endpoint ID" })
   @ApiGlobalResponse(BusinessEndpointResponseDto)
-  @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
-  @ApiInternalServerErrorResponse({ description: 'Server error' })
+  @ApiUnauthorizedResponse({ description: "Invalid credentials" })
+  @ApiInternalServerErrorResponse({ description: "Server error" })
+  @Get("/endpoint/:endpointId")
   async getBusinessByEndpointId(
-    @Param('endpointId') endpointId: string
+    @Param("endpointId") endpointId: string
   ): Promise<BusinessEndpointResponseDto> {
-    const business = await this.serviceAccountService.getBusinessByEndpoint(endpointId);
-    console.log(business)
-    
+    const business = await this.serviceAccountService.getBusinessByEndpoint(
+      endpointId
+    );
+
     return {
       endpoint_id: business.endpoint_id,
       tin: business.tin,
@@ -261,3 +381,4 @@ export class BusinessController {
     };
   }
 }
+

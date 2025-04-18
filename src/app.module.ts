@@ -1,14 +1,14 @@
+import { CommonModule } from "@common/common.module";
 import { DatabaseModule } from "@database/database.module";
 import { AuthModule } from "@modules/auth/auth.module";
-import { Module } from "@nestjs/common";
-import { ConfigModule, ConfigService } from "@nestjs/config";
-import { MinioModule } from "./minio/minio.module";
-// import { UsersController } from "./user/user.controller";
-import { CommonModule } from "@common/common.module";
 import { CustomerModule } from "@modules/customer/customer.module";
 import { EInvoiceModule } from "@modules/e-invoice/e-invoice.module";
 import { ExchangeRateModule } from "@modules/exchange-rate/exchange-rate.module";
+import { Module } from "@nestjs/common";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import { MinioModule } from "./minio/minio.module";
 import { InvoiceModule } from './modules/accouting/invoice/invoice.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -20,7 +20,6 @@ import { InvoiceModule } from './modules/accouting/invoice/invoice.module';
     EInvoiceModule,
     ExchangeRateModule,
     CommonModule,
-    // AdminModule,
     CustomerModule,
     MinioModule,
     InvoiceModule,

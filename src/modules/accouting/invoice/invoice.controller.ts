@@ -1,22 +1,22 @@
 import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    NotFoundException,
-    Param,
-    Patch,
-    Post,
-    Put,
-    Res,
-    ValidationPipe,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  Patch,
+  Post,
+  Put,
+  Res,
+  ValidationPipe,
 } from "@nestjs/common";
 import {
-    ApiBearerAuth,
-    ApiConflictResponse,
-    ApiOperation,
-    ApiQuery,
-    ApiTags,
+  ApiBearerAuth,
+  ApiConflictResponse,
+  ApiOperation,
+  ApiQuery,
+  ApiTags,
 } from "@nestjs/swagger";
 import { Response } from "express";
 
@@ -26,10 +26,10 @@ import { ApiGlobalResponse } from "@common/decorators";
 import { ApiFields } from "@common/decorators/api-fields.decorator";
 import { SkipHttpResponse } from "@common/decorators/skip-http-response.decorator";
 import {
-    ApiPaginatedResponse,
-    PaginationParams,
-    PaginationRequest,
-    PaginationResponseDto,
+  ApiPaginatedResponse,
+  PaginationParams,
+  PaginationRequest,
+  PaginationResponseDto,
 } from "@libs/pagination";
 import { BusinessResponseDto } from "@modules/e-invoice/business/dtos";
 import { ServiceAccountService } from "@modules/e-invoice/business/service-account.service";
@@ -56,7 +56,7 @@ export class InvoiceController {
 
   constructor(
     private readonly documentService: DocumentService,
-    private readonly auditLogService: AuditLogService,
+    private readonly auditService: AuditLogService,
     private readonly serviceAccountService: ServiceAccountService,
     private readonly invoiceProcessorService: InvoiceProcessorService,
     private readonly converterService: ConverterService
@@ -103,20 +103,20 @@ export class InvoiceController {
       supplier_id: user.endpoint_id,
     });
 
-    await this.auditLogService.logAction({
+    // Log audit action asynchronously
+    this.auditService.logAction({
       actorId: user.id,
-      action: "CREATE_INVOICE",
-      resourceId: user.id,
-      resourceType: "User",
-      fields: Object.keys(dto),
+      action: "CREATE",
+      resourceId: invoice.document_id.toString(),
+      resourceType: "INVOICE",
+      fields: ["document_number", "document_type", "status"],
       oldData: null,
       newData: invoice,
+    }).catch(error => {
+      console.error('Failed to log audit:', error);
     });
 
-    invoice.supplier = await this.serviceAccountService.getBusinessProfile(
-      user
-    );
-
+    invoice.supplier = await this.serviceAccountService.getBusinessProfile(user);
     return invoice;
   }
 
@@ -131,26 +131,27 @@ export class InvoiceController {
     @Body(ValidationPipe) dto: InvoiceDto,
     @CurrentUser() user: UserResponseDto
   ): Promise<DocumentEntity> {
+    const oldInvoice = await this.documentService.findById(id);
     const invoice = await this.documentService.update(id, {
       ...dto,
       document_type: DocumentType.INVOICE,
       supplier_id: user.endpoint_id,
     });
 
-    await this.auditLogService.logAction({
+    // Log audit action asynchronously
+    this.auditService.logAction({
       actorId: user.id,
-      action: "UPDATE_INVOICE",
-      resourceId: user.id,
-      resourceType: "User",
-      fields: Object.keys(dto),
-      oldData: null,
+      action: "UPDATE",
+      resourceId: invoice.document_id.toString(),
+      resourceType: "INVOICE",
+      fields: ["document_number", "document_type", "status"],
+      oldData: oldInvoice,
       newData: invoice,
+    }).catch(error => {
+      console.error('Failed to log audit:', error);
     });
 
-    invoice.supplier = await this.serviceAccountService.getBusinessProfile(
-      user
-    );
-
+    invoice.supplier = await this.serviceAccountService.getBusinessProfile(user);
     return invoice;
   }
 
@@ -171,23 +172,20 @@ export class InvoiceController {
     }
 
     const supplier = await this.serviceAccountService.getBusinessProfile(user);
+    const einvoice = await this.documentService.submitDocument(document, supplier);
 
-    const einvoice = await this.documentService.submitDocument(
-      document,
-      supplier
-    );
-
-    await this.auditLogService.logAction({
+    // Log audit action asynchronously
+    this.auditService.logAction({
       actorId: user.id,
-      action: "SUBMIT_INVOICE",
-      resourceId: user.id,
-      resourceType: "User",
-      fields: ["*"],
+      action: "SUBMIT",
+      resourceId: document.document_id.toString(),
+      resourceType: "INVOICE",
+      fields: ["document_number", "status"],
       oldData: document,
-      newData: { document_id: "einvoice id" },
+      newData: einvoice,
+    }).catch(error => {
+      console.error('Failed to log audit:', error);
     });
-
-    // await this.documentService.remove(id);
 
     return einvoice;
   }
@@ -483,14 +481,17 @@ export class InvoiceController {
 
     await this.documentService.remove(id);
 
-    await this.auditLogService.logAction({
+    // Log audit action asynchronously
+    this.auditService.logAction({
       actorId: currentUser.id,
-      action: "DELETE_INVOICE",
-      resourceId: document.document_id,
-      resourceType: "Invoice",
-      fields: ["*"],
+      action: "DELETE",
+      resourceId: document.document_id.toString(),
+      resourceType: "INVOICE",
+      fields: ["document_number"],
       oldData: document,
       newData: null,
+    }).catch(error => {
+      console.error('Failed to log audit:', error);
     });
 
     return document;
@@ -515,7 +516,6 @@ export class InvoiceController {
     }
 
     const business = await this.serviceAccountService.getBusinessProfile(user);
-
     return { ...document, supplier: business };
   }
 }

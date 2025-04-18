@@ -1,9 +1,10 @@
 import { BaseCrudService } from "@common/services/base-crud.service";
 import { ServiceAccountService } from "@modules/e-invoice/business/service-account.service";
 import {
-  Injectable,
-  NotFoundException,
-  UnprocessableEntityException,
+    ConflictException,
+    Injectable,
+    NotFoundException,
+    UnprocessableEntityException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { handleDeleteError, handleError } from "@utils/handle-error";
@@ -11,9 +12,9 @@ import { Filter, Repository } from "typeorm";
 import { CustomerEntity } from "./customer.entity";
 import { CustomerMapper } from "./customer.mapper";
 import {
-  CreateCustomerRequestDto,
-  CustomerResponseDto,
-  UpdateCustomerRequestDto,
+    CreateCustomerRequestDto,
+    CustomerResponseDto,
+    UpdateCustomerRequestDto,
 } from "./dtos";
 
 export const CUSTOMER_FILTER_FIELDS = [
@@ -154,7 +155,15 @@ export class CustomerService extends BaseCrudService {
       entity = await this.customerRepository.save(entity);
       return CustomerMapper.toDto(entity);
     } catch (error) {
-      handleError(error, dto);
+      if (error.code === '23505') { // PostgreSQL unique violation error code
+        if (error.constraint === 'unique_entity_name_en_per_supplier') {
+          throw new ConflictException('A customer with this English name already exists for this supplier');
+        }
+        if (error.constraint === 'unique_entity_name_kh_per_supplier') {
+          throw new ConflictException('A customer with this Khmer name already exists for this supplier');
+        }
+      }
+      throw handleError(error, dto);
     }
   }
 
@@ -175,7 +184,15 @@ export class CustomerService extends BaseCrudService {
       entity = await this.customerRepository.save(entity);
       return CustomerMapper.toDto(entity);
     } catch (error) {
-      handleError(error, dto);
+      if (error.code === '23505') { // PostgreSQL unique violation error code
+        if (error.constraint === 'unique_entity_name_en_per_supplier') {
+          throw new ConflictException('A customer with this English name already exists for this supplier');
+        }
+        if (error.constraint === 'unique_entity_name_kh_per_supplier') {
+          throw new ConflictException('A customer with this Khmer name already exists for this supplier');
+        }
+      }
+      throw handleError(error, dto);
     }
   }
 
