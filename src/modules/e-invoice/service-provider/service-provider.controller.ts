@@ -62,7 +62,7 @@ export class ServiceProviderController {
     }
 
     return {
-      connected: [connectedServiceProvider],
+      connected: connectedServiceProvider? [connectedServiceProvider] : [],
       notYetConnected: allServiceProvider,
     };
   }
