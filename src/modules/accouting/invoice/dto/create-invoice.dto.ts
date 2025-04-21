@@ -289,9 +289,4 @@ export class InvoiceDto {
   @IsOptional()
   @IsDateString()
   issue_date: Date;
-
-  @ValidateIf((o) => !o.is_draft)
-  @ApiPropertyOptional()
-  @IsOptional()
-  paymentNote: string;
 }

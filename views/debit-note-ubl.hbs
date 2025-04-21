@@ -18,9 +18,9 @@
   {{>accountingCustomerParty}}
   {{>paymentMeans}}
   {{! Optional }}
-  {{#if paymentNote}}
+  {{#if payment_term}}
   <cac:PaymentTerms>
-    <cbc:Note>{{paymentNote}}</cbc:Note>
+    <cbc:Note>{{payment_term}}</cbc:Note>
   </cac:PaymentTerms>
   {{/if}}
   {{!-- Allowance Charge is additional charge --}}
