@@ -1,21 +1,21 @@
 import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    NotFoundException,
-    Param,
-    Patch,
-    Post,
-    Put,
-    ValidationPipe,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  Patch,
+  Post,
+  Put,
+  ValidationPipe,
 } from "@nestjs/common";
 import {
-    ApiBearerAuth,
-    ApiConflictResponse,
-    ApiOperation,
-    ApiQuery,
-    ApiTags,
+  ApiBearerAuth,
+  ApiConflictResponse,
+  ApiOperation,
+  ApiQuery,
+  ApiTags,
 } from "@nestjs/swagger";
 
 import { CurrentUser, TOKEN_NAME } from "@auth";
@@ -23,10 +23,10 @@ import { AuditLogService } from "@common/audit/audit.service";
 import { ApiGlobalResponse } from "@common/decorators";
 import { ApiFields } from "@common/decorators/api-fields.decorator";
 import {
-    ApiPaginatedResponse,
-    PaginationParams,
-    PaginationRequest,
-    PaginationResponseDto,
+  ApiPaginatedResponse,
+  PaginationParams,
+  PaginationRequest,
+  PaginationResponseDto,
 } from "@libs/pagination";
 import { BusinessResponseDto } from "@modules/e-invoice/business/dtos";
 import { ServiceAccountService } from "@modules/e-invoice/business/service-account.service";
@@ -266,6 +266,58 @@ export class NoteController {
 
     return creditNote;
   }
+
+  @ApiOperation({ description: "Get paginated list of received e-invoices" })
+  @ApiPaginatedResponse(DocumentEntity)
+  @ApiQuery({ name: "search", type: "string", required: false, example: "" })
+  @ApiFields([
+    "document_id",
+    "supplier_id",
+    "customer_id",
+    "currency",
+    "document_number",
+    "document_type",
+    "status",
+  ])
+  // @Permissions(
+  //   "admin.access.customer.read",
+  //   "admin.access.customer.create",
+  //   "admin.access.customer.update"
+  // )
+  @Get("/e-invoice/received")
+  public getReceivedEInvocie(
+    @PaginationParams() pagination: PaginationRequest,
+    @CurrentUser() user: UserResponseDto
+  ): Promise<PaginationResponseDto<UserResponseDto>> {
+    return this.invoiceProcessorService.list({
+      ...pagination,
+      params: {
+        ...pagination.params,
+        customer_id: user.endpoint_id,
+        document_type: [DocumentType.CREDIT_NOTE, DocumentType.DEBIT_NOTE],
+      },
+      order: pagination.order || { created_at: "DESC" },
+    });
+  }
+
+  @ApiOperation({ description: "Get received e-invoice by ID" })
+  @ApiGlobalResponse(DocumentResponseDto)
+  // @UseGuards(SuperUserGuard)
+  // @Permissions("admin.access.customer.create")
+  @Get("/e-invoice/:id/received")
+  public async getReceivedInvoices(
+    @Param("id") id: UUID,
+    @CurrentUser() user: UserResponseDto
+  ): Promise<DocumentResponseDto> {
+    const document = await this.invoiceProcessorService.findById(id);
+    if (!document || user.endpoint_id !== document.customer.endpoint_id) {
+      throw new NotFoundException();
+    }
+    // await this.documentService.remove(id);
+
+    return document;
+  }
+  
 
   @ApiOperation({ description: "Submit credit/debit note for e-invoice processing" })
   @ApiGlobalResponse(DocumentResponseDto)

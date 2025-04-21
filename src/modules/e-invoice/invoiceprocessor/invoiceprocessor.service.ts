@@ -8,11 +8,12 @@ import {
 } from "@nestjs/microservices";
 import { UUID } from "crypto";
 import { firstValueFrom, lastValueFrom } from "rxjs";
-import { SubmitDocumentRequestDto } from "./dto/submit-document-request.dto";
+import { SubmitDocumentDto } from "./dto/submit-document-request.dto";
 @Injectable()
 export class InvoiceProcessorService implements OnModuleInit {
   private client: ClientProxy;
   constructor(private readonly configService: ConfigService) {}
+  
   onModuleInit() {
     this.client = ClientProxyFactory.create({
       transport: Transport.TCP,
@@ -59,7 +60,7 @@ export class InvoiceProcessorService implements OnModuleInit {
     );
   }
 
-  submitDocument(data: SubmitDocumentRequestDto) {
+  submitDocument(data: SubmitDocumentDto) {
     return firstValueFrom(this.client.send("invoice-processor.submit", data));
   }
 
