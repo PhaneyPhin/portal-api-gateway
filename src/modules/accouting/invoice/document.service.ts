@@ -14,6 +14,7 @@ import { UBLHelperService } from "./ubl-helper.service";
 
 @Injectable()
 export class DocumentService extends BaseCrudService {
+  protected queryName: string = "document";
   protected FILTER_FIELDS: string[] = [];
   protected SEARCH_FIELDS: string[] = [];
   constructor(
@@ -44,8 +45,6 @@ export class DocumentService extends BaseCrudService {
       .createQueryBuilder("document")
       .leftJoinAndSelect("document.customer", "customer");
   }
-
-  protected queryName: string = "";
 
   async create(document: InvoiceDto | CreditNoteDto | DebitNoteDto) {
     let documentEntity;
