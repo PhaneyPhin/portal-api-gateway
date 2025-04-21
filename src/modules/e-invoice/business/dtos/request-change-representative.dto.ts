@@ -25,7 +25,7 @@ export class RequestChangeRepresentativeDto {
   })
   @IsString()
   @Length(1, 200)
-  authorizedLetter: string;
+  authorized_letter: string;
 
   @ApiProperty({
     description: "endpoint id ",
