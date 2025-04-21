@@ -174,4 +174,7 @@ export class DocumentResponseDto {
 
   @ApiProperty({ type: [InvoiceLineDto] })
   invoice_lines: InvoiceLine[];
+
+  @ApiProperty({ type: [DocumentResponseDto], })
+  notes: DocumentResponseDto[]
 }
