@@ -72,7 +72,7 @@ export abstract class BaseCrudService {
 
   protected applyQueryFilters(query, params) {
     const filters = this.getAllFilters();
-
+    console.log(params, filters)
     for (const [key, value] of Object.entries(params)) {
       if (value && filters && filters[key]) {
         if (!(Array.isArray(filters[key]) && filters[key].length == 0)) {

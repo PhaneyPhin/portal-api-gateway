@@ -17,7 +17,7 @@ export const PaginationParams = createParamDecorator(
     ctx: ExecutionContext,
   ) => {
     let {
-      query: { skip, page, limit, orderBy, orderDirection, ...params },
+      query: { skip, page, limit, orderBy, orderDirection, keyword, search, ...params },
     } = ctx.switchToHttp().getRequest();
 
     const { defaultSkip, defaultPage, defaultLimit, defaultOrder, defaultOrderDirection, maxAllowedSize } = data;
@@ -25,7 +25,8 @@ export const PaginationParams = createParamDecorator(
     const order = orderBy ? { [orderBy]: orderDirection ? orderDirection : defaultOrderDirection } : defaultOrder;
 
     limit = limit && limit > 0 ? +limit : defaultLimit;
-
+    params.search = search || keyword;
+    
     if (!skip) {
       if (page) {
         skip = (+page - 1) * +limit;

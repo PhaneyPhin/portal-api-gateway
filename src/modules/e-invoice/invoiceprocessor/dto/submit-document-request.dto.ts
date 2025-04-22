@@ -17,6 +17,8 @@ export class SubmitDocumentDto {
   @IsString()
   @IsNotEmpty()
   supplier_id: string;
+
+  created_by: 'E_INVOICE_PORTAL'
 }
 
 export class SubmitDocumentsRequestDto {

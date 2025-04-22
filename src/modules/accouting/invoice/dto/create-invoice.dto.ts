@@ -2,18 +2,18 @@ import { ContainsTooManySpecialChars } from "@common/decorators/container-too-ma
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import {
-  ArrayMinSize,
-  IsArray,
-  IsDateString,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-  Max,
-  MaxLength,
-  Min,
-  ValidateIf,
-  ValidateNested,
+    ArrayMinSize,
+    IsArray,
+    IsDateString,
+    IsNotEmpty,
+    IsNumber,
+    IsOptional,
+    IsString,
+    Max,
+    MaxLength,
+    Min,
+    ValidateIf,
+    ValidateNested,
 } from "class-validator";
 import { TaxTotal } from ".";
 import { DocumentType } from "../enums/DocumentType";

@@ -6,7 +6,7 @@ import { MinioService } from "./minio.service";
 @Module({
   imports: [],
   providers: [MinioProvider, MinioService],
-  exports: [MinioService],
+  exports: [MinioProvider, MinioService],
   controllers: [FileController],
 })
 @Global()

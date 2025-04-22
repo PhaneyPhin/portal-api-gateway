@@ -15,8 +15,15 @@ import { UBLHelperService } from "./ubl-helper.service";
 @Injectable()
 export class DocumentService extends BaseCrudService {
   protected queryName: string = "document";
-  protected FILTER_FIELDS: string[] = [];
-  protected SEARCH_FIELDS: string[] = [];
+  protected FILTER_FIELDS: string[] = ['status', ];
+
+  protected SEARCH_FIELDS: string[] = [
+    "customer.entity_name_en",
+    "customer.entity_name_kh",
+    "document.document_number",
+    "customer.tin",
+  ];
+
   constructor(
     @InjectRepository(DocumentEntity)
     private readonly documentRepository: Repository<DocumentEntity>,
@@ -29,7 +36,7 @@ export class DocumentService extends BaseCrudService {
   protected getFilters() {
     return {
       document_type: (query, value) => {
-        return query.where(`document_type IN (:...document_type)`, {
+        return query.andWhere(`document_type IN (:...document_type)`, {
           document_type: value,
         });
       },
@@ -104,7 +111,9 @@ export class DocumentService extends BaseCrudService {
     supplier: BusinessResponseDto
   ): Promise<DocumentResponseDto> {
     if (document.status !== "POSTED") {
-      throw new BadRequestException("Document must be posted before submission");
+      throw new BadRequestException(
+        "Document must be posted before submission"
+      );
     }
     const xml = this.ublHelperService.toUBL({
       ...document,
@@ -116,6 +125,7 @@ export class DocumentService extends BaseCrudService {
     console.time("submit");
     const result = await this.invoiceProcessorService.submitDocument({
       document: base64Xml,
+      created_by: 'E_INVOICE_PORTAL',
       document_type: document.document_type,
       supplier_id: supplier.endpoint_id,
     });

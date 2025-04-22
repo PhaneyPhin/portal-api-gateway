@@ -65,7 +65,7 @@ export class InvoiceController {
   @ApiOperation({ description: "Get paginated list of invoices" })
   @ApiPaginatedResponse(DocumentEntity)
   @ApiQuery({ name: "search", type: "string", required: false, example: "" })
-  @ApiFields([])
+  @ApiQuery({ name: "status", type: "string", required: false, example: "" })
   // @Permissions(
   //   "admin.access.customer.read",
   //   "admin.access.customer.create",

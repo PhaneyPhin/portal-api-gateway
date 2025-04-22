@@ -44,7 +44,7 @@ import { UserService } from "./user.service";
 })
 export class UserController {
   constructor(
-    private readonly userService: UserService,
+  private readonly userService: UserService,
     private readonly auditService: AuditLogService,
     private readonly notificaitonService: NotificationService
   ) {}
