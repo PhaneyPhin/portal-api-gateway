@@ -18,7 +18,8 @@ export type AuditAction =
   | "REGISTER"
   | "VALIDATE"
   | "CONNECT"
-  | "DISCONNECT";
+  | "DISCONNECT"
+  | 'ACCEPT';
 
 export type AuditResourceType = 
   | "BUSINESS"

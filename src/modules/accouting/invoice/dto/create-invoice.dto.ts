@@ -2,18 +2,17 @@ import { ContainsTooManySpecialChars } from "@common/decorators/container-too-ma
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import {
-    ArrayMinSize,
-    IsArray,
-    IsDateString,
-    IsNotEmpty,
-    IsNumber,
-    IsOptional,
-    IsString,
-    Max,
-    MaxLength,
-    Min,
-    ValidateIf,
-    ValidateNested,
+  ArrayMinSize,
+  IsArray,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Max,
+  MaxLength,
+  Min,
+  ValidateIf,
+  ValidateNested
 } from "class-validator";
 import { TaxTotal } from ".";
 import { DocumentType } from "../enums/DocumentType";
@@ -76,9 +75,14 @@ export class AllowanceChargeDto {
   reason: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
   amount: number;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsNumber()
+  percent: number;
 
   @ApiPropertyOptional({ type: [TaxCategoryDto] })
   @IsOptional()
@@ -287,6 +291,5 @@ export class InvoiceDto {
   @ValidateIf((o) => !o.is_draft)
   @ApiPropertyOptional()
   @IsOptional()
-  @IsDateString()
   issue_date: Date;
 }

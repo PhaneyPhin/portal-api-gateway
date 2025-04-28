@@ -76,6 +76,11 @@ export class InvoiceController {
     @PaginationParams() pagination: PaginationRequest,
     @CurrentUser() user: UserResponseDto
   ): Promise<PaginationResponseDto<UserResponseDto>> {
+    console.log({
+      ...pagination.params,
+      supplier_id: user.endpoint_id,
+      document_type: this.documentType,
+    })
     return this.documentService.list({
       ...pagination,
       params: {
@@ -116,7 +121,13 @@ export class InvoiceController {
       console.error('Failed to log audit:', error);
     });
 
-    invoice.supplier = await this.serviceAccountService.getBusinessProfile(user);
+    const supplier = await this.serviceAccountService.getBusinessProfile(user);
+    if (! dto.is_draft) {
+      const einvoice = await this.documentService.getEInvoiceDetail(invoice, supplier);
+      return { ...einvoice, supplier: supplier, customer: invoice.customer };
+    }
+
+    invoice.supplier = supplier;
     return invoice;
   }
 
@@ -166,7 +177,7 @@ export class InvoiceController {
     @CurrentUser() user: UserResponseDto
   ): Promise<DocumentResponseDto> {
     const document = await this.documentService.findById(id);
-
+    console.log(document, user);
     if (!document || user.endpoint_id !== document.supplier_id) {
       throw new NotFoundException();
     }
@@ -174,8 +185,8 @@ export class InvoiceController {
     const supplier = await this.serviceAccountService.getBusinessProfile(user);
     const einvoice = await this.documentService.submitDocument(document, supplier);
 
-    // Log audit action asynchronously
-    this.auditService.logAction({
+    // Log audit action
+    await this.auditService.logAction({
       actorId: user.id,
       action: "SUBMIT",
       resourceId: document.document_id.toString(),
@@ -183,8 +194,16 @@ export class InvoiceController {
       fields: ["document_number", "status"],
       oldData: document,
       newData: einvoice,
-    }).catch(error => {
-      console.error('Failed to log audit:', error);
+    });
+
+    // Log document action
+    await this.documentService.createDocumentLog({
+      document_id: einvoice.document_id,
+      action: "SUBMIT",
+      user_id: user.id,
+      full_name: user.first_name_en + ' ' + user.last_name_en,
+      description: `Invoice ${document.document_number} submitted for e-invoice processing`,
+      document_type: 'document'
     });
 
     return einvoice;
@@ -290,7 +309,31 @@ export class InvoiceController {
       throw new NotFoundException();
     }
 
-    return await this.invoiceProcessorService.accept(id);
+    const acceptedDocument = await this.invoiceProcessorService.accept(id);
+
+    // Log on customer side
+    await this.documentService.createDocumentLog({
+      document_id: document.document_id,
+      action: "ACCEPT",
+      user_id: user.id,
+      full_name: user.first_name_en + ' ' + user.last_name_en,
+      description: `Invoice ${document.document_number} accepted`,
+      document_type: 'received_document',
+      actor_type: 'customer'
+    });
+
+    // Log on supplier side (system generated)
+    await this.documentService.createDocumentLog({
+      document_id: document.document_id,
+      action: "ACCEPTED",
+      user_id: user.id,
+      full_name: user.first_name_en + ' ' + user.last_name_en,
+      description: `Invoice ${document.document_number} accepted by customer`,
+      document_type: 'document',
+      is_system: true
+    });
+
+    return acceptedDocument;
   }
 
   @ApiOperation({ description: "Send e-invoice" })
@@ -305,14 +348,37 @@ export class InvoiceController {
     @Param("id") id: UUID,
     @CurrentUser() user: UserResponseDto
   ): Promise<DocumentEntity> {
-    const document = await this.documentService.findById(id);
-    console.log(document);
+    const document = await this.invoiceProcessorService.findById(id);
 
     if (!document || user.endpoint_id !== document.supplier.endpoint_id) {
       throw new NotFoundException();
     }
 
-    return await this.invoiceProcessorService.send(id);
+    const sentDocument = await this.invoiceProcessorService.send(id);
+
+    // Log on supplier side
+    await this.documentService.createDocumentLog({
+      document_id: document.document_id,
+      action: "SEND",
+      user_id: user.id,
+      full_name: user.first_name_en + ' ' + user.last_name_en,
+      description: `Invoice ${document.document_number} sent to customer`,
+      document_type: 'document',
+      actor_type: 'supplier'
+    });
+
+    // Log on customer side (system generated)
+    await this.documentService.createDocumentLog({
+      document_id: document.document_id,
+      action: "DELIVERED",
+      user_id: user.id,
+      full_name: user.first_name_en + ' ' + user.last_name_en,
+      description: `Invoice ${document.document_number} delivered to customer`,
+      document_type: 'received_document',
+      is_system: true
+    });
+
+    return sentDocument;
   }
 
   @ApiOperation({ description: "Send e-invoice via email" })
@@ -341,6 +407,7 @@ export class InvoiceController {
       email: data.email,
     });
 
+
     return {
       success: true,
       message: "Document was being sent",
@@ -361,10 +428,34 @@ export class InvoiceController {
       throw new NotFoundException();
     }
 
-    return await this.invoiceProcessorService.reject({
+    const rejectedDocument = await this.invoiceProcessorService.reject({
       document_id: id,
       reason: reject.reason,
     });
+
+    // Log on customer side
+    await this.documentService.createDocumentLog({
+      document_id: document.document_id,
+      action: "REJECT",
+      user_id: user.id,
+      full_name: user.first_name_en + ' ' + user.last_name_en,
+      description: `Invoice ${document.document_number} rejected. Reason: ${reject.reason}`,
+      document_type: 'received_document',
+      actor_type: 'customer'
+    });
+
+    // Log on supplier side (system generated)
+    await this.documentService.createDocumentLog({
+      document_id: document.document_id,
+      action: "REJECTED",
+      user_id: user.id,
+      full_name: user.first_name_en + ' ' + user.last_name_en,
+      description: `Invoice ${document.document_number} rejected by customer. Reason: ${reject.reason}`,
+      document_type: 'document',
+      is_system: true
+    });
+
+    return rejectedDocument;
   }
 
   @SkipHttpResponse()
@@ -381,6 +472,7 @@ export class InvoiceController {
     @CurrentUser() user: UserResponseDto & { business: BusinessResponseDto }
   ): Promise<DocumentEntity & { supplier: BusinessResponseDto }> {
     const document = await this.invoiceProcessorService.findById(id);
+
     if (!document || user.endpoint_id !== document.supplier.endpoint_id) {
       throw new NotFoundException();
     }
@@ -415,8 +507,7 @@ export class InvoiceController {
       document: xml,
       document_id: document.document_id,
       document_type: document.document_type,
-      logoUrl:
-        "https://res.cloudinary.com/vistaprint/images/c_scale,w_448,h_448,dpr_2/f_auto,q_auto/v1705580343/ideas-and-advice-prod/en-us/adidas/adidas.png?_i=AA",
+      logoUrl: user.business.logo_url,
     });
 
     res.set({
@@ -435,15 +526,22 @@ export class InvoiceController {
   public async getEinvoiceById(
     @Param("id") id: UUID,
     @CurrentUser() user: UserResponseDto
-  ): Promise<DocumentResponseDto> {
+  ): Promise<DocumentResponseDto & { document_logs: any[] }> {
     const document = await this.invoiceProcessorService.findById(id);
-    console.log(document);
     if (!document || user.endpoint_id !== document.supplier.endpoint_id) {
       throw new NotFoundException();
     }
-    // await this.documentService.remove(id);
 
-    return document;
+    // Get document logs for this specific document
+    const documentLogs = await this.invoiceProcessorService.call('invoice-processor.document-log.findByDocumentId', {
+      documentId: document.document_id,
+      documentType: 'document'
+    });
+
+    return {
+      ...document,
+      document_logs: documentLogs
+    };
   }
 
   @ApiOperation({ description: "Get received e-invoice by ID" })
@@ -454,14 +552,22 @@ export class InvoiceController {
   public async getReceivedInvoices(
     @Param("id") id: UUID,
     @CurrentUser() user: UserResponseDto
-  ): Promise<DocumentResponseDto> {
+  ): Promise<DocumentResponseDto & { document_logs: any[] }> {
     const document = await this.invoiceProcessorService.findById(id);
     if (!document || user.endpoint_id !== document.customer.endpoint_id) {
       throw new NotFoundException();
     }
-    // await this.documentService.remove(id);
 
-    return document;
+    // Get document logs for this specific document
+    const documentLogs = await this.invoiceProcessorService.call('invoice-processor.document-log.findByDocumentId', {
+      documentId: document.document_id,
+      documentType: 'received_document'
+    });
+
+    return {
+      ...document,
+      document_logs: documentLogs
+    };
   }
 
   @ApiOperation({ description: "Delete invoice by ID" })
@@ -505,7 +611,7 @@ export class InvoiceController {
   //   "admin.access.customer.update"
   // )
   @Get("/:id")
-  public async GetById(
+  public async getById(
     @Param("id") id: UUID,
     @CurrentUser() user: UserResponseDto & { business: BusinessResponseDto }
   ): Promise<DocumentEntity & { supplier: BusinessResponseDto }> {
@@ -516,6 +622,45 @@ export class InvoiceController {
     }
 
     const business = await this.serviceAccountService.getBusinessProfile(user);
-    return { ...document, supplier: business };
+
+    if (document.status === 'POSTED') {
+      const einvoice = await this.documentService.getEInvoiceDetail(document, business);
+      return { 
+        ...einvoice, 
+        supplier: business, 
+        customer: document.customer,
+      };
+    }
+
+    return { 
+      ...document, 
+      supplier: business
+    };
+  }
+
+  @ApiOperation({ description: "Get invoice by ID" })
+  @ApiGlobalResponse(UserResponseDto)
+  // @Permissions(
+  //   "admin.access.customer.read",
+  //   "admin.access.customer.create",
+  //   "admin.access.customer.update"
+  // )
+  @Get("/:id/edit")
+  public async editInvoiceId(
+    @Param("id") id: UUID,
+    @CurrentUser() user: UserResponseDto & { business: BusinessResponseDto }
+  ): Promise<DocumentEntity & { supplier: BusinessResponseDto }> {
+    const document = await this.documentService.findById(id);
+
+    if (!document || user.endpoint_id !== document.supplier_id) {
+      throw new NotFoundException();
+    }
+
+    const business = await this.serviceAccountService.getBusinessProfile(user);
+    
+    return { 
+      ...document, 
+      supplier: business
+    };
   }
 }

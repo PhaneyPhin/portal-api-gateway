@@ -1,21 +1,21 @@
 import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    NotFoundException,
-    Param,
-    Patch,
-    Post,
-    Put,
-    ValidationPipe,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  Patch,
+  Post,
+  Put,
+  ValidationPipe,
 } from "@nestjs/common";
 import {
-    ApiBearerAuth,
-    ApiConflictResponse,
-    ApiOperation,
-    ApiQuery,
-    ApiTags,
+  ApiBearerAuth,
+  ApiConflictResponse,
+  ApiOperation,
+  ApiQuery,
+  ApiTags,
 } from "@nestjs/swagger";
 
 import { CurrentUser, TOKEN_NAME } from "@auth";
@@ -23,10 +23,10 @@ import { AuditLogService } from "@common/audit/audit.service";
 import { ApiGlobalResponse } from "@common/decorators";
 import { ApiFields } from "@common/decorators/api-fields.decorator";
 import {
-    ApiPaginatedResponse,
-    PaginationParams,
-    PaginationRequest,
-    PaginationResponseDto,
+  ApiPaginatedResponse,
+  PaginationParams,
+  PaginationRequest,
+  PaginationResponseDto,
 } from "@libs/pagination";
 import { BusinessResponseDto } from "@modules/e-invoice/business/dtos";
 import { ServiceAccountService } from "@modules/e-invoice/business/service-account.service";
@@ -163,11 +163,14 @@ export class NoteController {
       newData: creditNote,
     });
 
-    creditNote.supplier = await this.serviceAccountService.getBusinessProfile(
-      user
-    );
+    
+    const supplier = await this.serviceAccountService.getBusinessProfile(user);
+    if (! dto.is_draft) {
+      const einvoice = await this.documentService.getEInvoiceDetail(creditNote, supplier);
+      return { ...einvoice, supplier: supplier, customer: creditNote.customer };
+    }
 
-    return creditNote;
+    return { ...creditNote, supplier: supplier };
   }
 
   @ApiOperation({ description: "Create new debit note" })
@@ -176,7 +179,7 @@ export class NoteController {
     @Body(ValidationPipe) dto: CreditNoteDto,
     @CurrentUser() user: UserResponseDto
   ): Promise<DocumentEntity> {
-    const creditNote = await this.documentService.create({
+    const debitNote = await this.documentService.create({
       ...dto,
       document_type: DocumentType.CREDIT_NOTE,
       supplier_id: user.endpoint_id,
@@ -185,18 +188,20 @@ export class NoteController {
     await this.auditLogService.logAction({
       actorId: user.id,
       action: "CREATE",
-      resourceId: creditNote.document_id.toString(),
+      resourceId: debitNote.document_id.toString(),
       resourceType: "DOCUMENT",
       fields: ["note"],
       oldData: null,
-      newData: creditNote,
+      newData: debitNote,
     });
 
-    creditNote.supplier = await this.serviceAccountService.getBusinessProfile(
-      user
-    );
+    const supplier = await this.serviceAccountService.getBusinessProfile(user);
+    if (! dto.is_draft) {
+      const einvoice = await this.documentService.getEInvoiceDetail(debitNote, supplier);
+      return { ...einvoice, supplier: supplier, customer: debitNote.customer };
+    }
 
-    return creditNote;
+    return { ...debitNote, supplier: supplier };
   }
 
   @ApiOperation({ description: "Update credit note by ID" })
@@ -336,23 +341,28 @@ export class NoteController {
     }
 
     const supplier = await this.serviceAccountService.getBusinessProfile(user);
+    const einvoice = await this.documentService.submitDocument(document, supplier);
 
-    const einvoice = await this.documentService.submitDocument(
-      document,
-      supplier
-    );
-
+    // Log audit action
     await this.auditLogService.logAction({
       actorId: user.id,
       action: "SUBMIT",
       resourceId: document.document_id.toString(),
       resourceType: "DOCUMENT",
-      fields: ["note"],
+      fields: ["document_number", "status"],
       oldData: document,
-      newData: { document_id: "einvoice id" },
+      newData: einvoice,
     });
 
-    // await this.documentService.remove(id);
+    // Log document action
+    await this.documentService.createDocumentLog({
+      document_id: einvoice.document_id,
+      action: "SUBMIT",
+      user_id: user.id,
+      full_name: user.first_name_en + ' ' + user.last_name_en,
+      description: `${document.document_type} ${document.document_number} submitted for e-invoice processing`,
+      document_type: 'document'
+    });
 
     return einvoice;
   }
@@ -405,7 +415,30 @@ export class NoteController {
       throw new NotFoundException();
     }
 
-    return await this.invoiceProcessorService.accept(id);
+    const acceptedDocument = await this.invoiceProcessorService.accept(id);
+
+    // Log audit action
+    await this.auditLogService.logAction({
+      actorId: user.id,
+      action: "ACCEPT",
+      resourceId: document.document_id.toString(),
+      resourceType: "DOCUMENT",
+      fields: ["status"],
+      oldData: document,
+      newData: acceptedDocument,
+    });
+
+    // Log document action
+    await this.documentService.createDocumentLog({
+      document_id: document.document_id,
+      action: "ACCEPT",
+      user_id: user.id,
+      full_name: user.first_name_en + ' ' + user.last_name_en,
+      description: `${document.document_type} ${document.document_number} accepted by customer`,
+      document_type: 'document'
+    });
+
+    return acceptedDocument;
   }
 
   @ApiOperation({ description: "Send e-invoice note" })
@@ -420,7 +453,7 @@ export class NoteController {
     @Param("id") id: UUID,
     @CurrentUser() user: UserResponseDto
   ): Promise<DocumentResponseDto> {
-    const document = await this.documentService.findById(id);
+    const document = await this.invoiceProcessorService.findById(id);
 
     if (!document || user.endpoint_id !== document.supplier_id) {
       throw new NotFoundException();
@@ -469,7 +502,7 @@ export class NoteController {
   public async getReceivedEInvoiceById(
     @Param("id") id: UUID,
     @CurrentUser() user: UserResponseDto
-  ): Promise<DocumentResponseDto> {
+  ): Promise<DocumentResponseDto & { document_logs: any[] }> {
     const document = await this.invoiceProcessorService.findById(id);
 
     if (
@@ -479,9 +512,17 @@ export class NoteController {
     ) {
       throw new NotFoundException();
     }
-    // await this.documentService.remove(id);
 
-    return document;
+    // Get document logs for this specific document
+    const documentLogs = await this.invoiceProcessorService.call('invoice-processor.document-log.findByDocumentId', {
+      documentId: document.document_id,
+      documentType: 'received_document'
+    });
+
+    return {
+      ...document,
+      document_logs: documentLogs
+    };
   }
 
   @ApiOperation({ description: "Get e-invoice note by ID" })
@@ -492,7 +533,7 @@ export class NoteController {
   public async getEinvoiceById(
     @Param("id") id: UUID,
     @CurrentUser() user: UserResponseDto
-  ): Promise<DocumentResponseDto> {
+  ): Promise<DocumentResponseDto & { document_logs: any[] }> {
     const document = await this.invoiceProcessorService.findById(id);
 
     if (
@@ -502,9 +543,17 @@ export class NoteController {
     ) {
       throw new NotFoundException();
     }
-    // await this.documentService.remove(id);
 
-    return document;
+    // Get document logs for this specific document
+    const documentLogs = await this.invoiceProcessorService.call('invoice-processor.document-log.findByDocumentId', {
+      documentId: document.document_id,
+      documentType: user.endpoint_id === document.supplier.endpoint_id ? 'document' : 'received_document'
+    });
+
+    return {
+      ...document,
+      document_logs: documentLogs
+    };
   }
 
   @ApiOperation({ description: "Reject e-invoice note" })
@@ -521,10 +570,33 @@ export class NoteController {
       throw new NotFoundException();
     }
 
-    return await this.invoiceProcessorService.reject({
+    const rejectedDocument = await this.invoiceProcessorService.reject({
       document_id: id,
       reason: reject.reason,
     });
+
+    // Log audit action
+    await this.auditLogService.logAction({
+      actorId: user.id,
+      action: "REJECT",
+      resourceId: document.document_id.toString(),
+      resourceType: "DOCUMENT",
+      fields: ["status", "reject_reason"],
+      oldData: document,
+      newData: rejectedDocument,
+    });
+
+    // Log document action
+    await this.documentService.createDocumentLog({
+      document_id: document.document_id,
+      action: "REJECT",
+      user_id: user.id,
+      full_name: user.first_name_en + ' ' + user.last_name_en,
+      description: `${document.document_type} ${document.document_number} rejected by customer. Reason: ${reject.reason}`,
+      document_type: 'document'
+    });
+
+    return rejectedDocument;
   }
 
   @ApiOperation({ description: "Get credit/debit note by ID" })
@@ -538,6 +610,42 @@ export class NoteController {
   public async GetById(
     @Param("id") id: UUID,
     @CurrentUser() user: UserResponseDto & { business: BusinessResponseDto }
+  ): Promise<DocumentEntity & { supplier: BusinessResponseDto}> {
+    const document = await this.documentService.findById(id);
+
+    if (!document || user.endpoint_id !== document.supplier_id) {
+      throw new NotFoundException();
+    }
+
+    const business = await this.serviceAccountService.getBusinessProfile(user);
+
+
+    if (document.status === 'POSTED') {
+      const einvoice = await this.documentService.getEInvoiceDetail(document, business);
+      return { 
+        ...einvoice, 
+        supplier: business, 
+        customer: document.customer,
+      };
+    }
+
+    return { 
+      ...document, 
+      supplier: business,
+    };
+  }
+
+  @ApiOperation({ description: "Get credit/debit note by ID" })
+  @ApiGlobalResponse(UserResponseDto)
+  // @Permissions(
+  //   "admin.access.customer.read",
+  //   "admin.access.customer.create",
+  //   "admin.access.customer.update"
+  // )
+  @Get("/:id/edit")
+  public async editById(
+    @Param("id") id: UUID,
+    @CurrentUser() user: UserResponseDto & { business: BusinessResponseDto }
   ): Promise<DocumentEntity & { supplier: BusinessResponseDto }> {
     const document = await this.documentService.findById(id);
 
@@ -547,6 +655,9 @@ export class NoteController {
 
     const business = await this.serviceAccountService.getBusinessProfile(user);
 
-    return { ...document, supplier: business };
+    return { 
+      ...document, 
+      supplier: business
+    };
   }
 }

@@ -94,6 +94,7 @@ export class UBLHelperService {
         totalVatExclusiveAmount,
         allowanceChargeTotal,
         taxAmount,
+        taxSubtotals
       });
     } catch (e) {
       throw new UnprocessableEntityException("Invalid info");
@@ -180,6 +181,8 @@ export class UBLHelperService {
 
       taxCategorySubTotal[key].tax_amount += taxCategory.tax_amount;
     }
+
+    console.log('taxCategorySubTotal==>', taxCategorySubTotal)
   }
 
   private applyTaxOnItem(

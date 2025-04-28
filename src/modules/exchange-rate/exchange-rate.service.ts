@@ -76,6 +76,7 @@ export class ExchangeRateService {
       .where("date <= :date", { date: date })
       .orderBy("date", "DESC")
       .getOne();
+      
     return exchangeRate;
   }
 }

@@ -36,6 +36,7 @@ import {
   PaginationRequest,
   PaginationResponseDto,
 } from "@libs/pagination";
+import { ServiceAccountService } from "@modules/e-invoice/business/service-account.service";
 import { UserResponseDto } from "@modules/e-invoice/user/dtos";
 import { CustomerEntity } from "./customer.entity";
 
@@ -48,7 +49,8 @@ import { CustomerEntity } from "./customer.entity";
 export class CustomerController {
   constructor(
     private readonly customerService: CustomerService,
-    private readonly auditService: AuditLogService
+    private readonly auditService: AuditLogService,
+    private readonly serviceAccountService: ServiceAccountService
   ) {}
 
   @ApiOperation({ description: "Get a paginated customer list" })
@@ -84,6 +86,27 @@ export class CustomerController {
   ): Promise<CustomerResponseDto> {
     const customer = await this.customerService.getCustomerById(id, user.endpoint_id);
     return customer;
+  }
+
+  @ApiOperation({ description: "Get customer by id" })
+  @ApiGlobalResponse(CustomerResponseDto)
+  @Get("/endpoint-id/:endpoint_id")
+  public async getBusinessByEndpointId(
+    @Param("endpoint_id") endpointId: string,
+    @CurrentUser() user: UserResponseDto
+  ): Promise<{
+    entity_name_en: string;
+    entity_name_kh: string;
+    tin: string;
+    id: number;
+  }> {
+    const business = await this.serviceAccountService.getBusinessByEndpoint(endpointId);
+    return {
+      entity_name_en: business.entity_name_en,
+      entity_name_kh: business.entity_name_kh,
+      tin: business.tin,
+      id: business.id,
+    };
   }
 
   @ApiOperation({ description: "Create new customer" })

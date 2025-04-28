@@ -1,4 +1,5 @@
 import { InvalidCredentialsException } from "@common/http/exceptions";
+import { BusinessResponseDto } from "@modules/e-invoice/business/dtos";
 import { BusinessStatus } from "@modules/e-invoice/business/enums/business-status";
 import { ServiceAccountService } from "@modules/e-invoice/business/service-account.service";
 import { UserResponseDto } from "@modules/e-invoice/user/dtos";
@@ -44,6 +45,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   ): Promise<
     UserResponseDto & {
       allowBusiness: boolean;
+      business: BusinessResponseDto;
     }
   > {
     const user = await this.userService.findById(payload.id);

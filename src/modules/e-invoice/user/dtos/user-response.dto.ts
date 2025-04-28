@@ -1,7 +1,7 @@
-import { BusinessResponseDto } from "@modules/e-invoice/business/dtos";
 import { ApiProperty } from "@nestjs/swagger";
-import { UserStatus } from "../enums/UserStatus";
+import { EntityRole } from "../enums/entity-role.enum";
 import { UserApproval } from "../enums/user-approval";
+import { UserStatus } from "../enums/UserStatus";
 import { PermissionResponseDto } from "./permission";
 import { RoleResponseDto } from "./role";
 
@@ -25,6 +25,9 @@ export class UserResponseDto {
   personal_code: string;
 
   @ApiProperty()
+  entity_role: EntityRole;
+
+  @ApiProperty()
   expiredAt: Date;
 
   @ApiProperty({ type: [RoleResponseDto] })
@@ -34,7 +37,7 @@ export class UserResponseDto {
   permissions?: PermissionResponseDto[];
 
   @ApiProperty()
-  isSuperUser: boolean;
+  is_supper_user: boolean;
 
   @ApiProperty()
   status: UserStatus;
@@ -48,7 +51,28 @@ export class UserResponseDto {
   @ApiProperty()
   createdAt: Date;
 
-  password: string;
+  // Missing properties
+  @ApiProperty()
+  first_name_en: string;
 
-  business: BusinessResponseDto;
+  @ApiProperty()
+  first_name_kh: string;
+
+  @ApiProperty()
+  last_name_en: string;
+
+  @ApiProperty()
+  last_name_kh: string;
+
+  @ApiProperty()
+  date_of_birth: Date;
+
+  @ApiProperty()
+  mobile_phone: string;
+
+  @ApiProperty()
+  logo_url: string;
+
+  @ApiProperty()
+  gender: string;
 }
