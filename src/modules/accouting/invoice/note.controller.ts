@@ -130,7 +130,7 @@ export class NoteController {
       ...pagination,
       params: {
         ...pagination.params,
-        customer_id: user.endpoint_id,
+        supplier_id: user.endpoint_id,
         document_type: pagination.params?.document_type
           ? [pagination.params.document_type]
           : [DocumentType.CREDIT_NOTE, DocumentType.DEBIT_NOTE],

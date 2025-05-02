@@ -2,7 +2,11 @@ import { BaseCrudService } from "@common/services/base-crud.service";
 import { BusinessResponseDto } from "@modules/e-invoice/business/dtos";
 import { InvoiceProcessorService } from "@modules/e-invoice/invoiceprocessor/invoiceprocessor.service";
 import { ExchangeRateService } from "@modules/exchange-rate/exchange-rate.service";
-import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UUID } from "crypto";
 import { Repository } from "typeorm";
@@ -20,7 +24,7 @@ import { UBLHelperService } from "./ubl-helper.service";
 @Injectable()
 export class DocumentService extends BaseCrudService {
   protected queryName: string = "document";
-  protected FILTER_FIELDS: string[] = ['status', "supplier_id", "customer_id"];
+  protected FILTER_FIELDS: string[] = ["status", "supplier_id", "customer_id"];
 
   protected SEARCH_FIELDS: string[] = [
     "customer.entity_name_en",
@@ -28,7 +32,7 @@ export class DocumentService extends BaseCrudService {
     "document.document_number",
     "customer.tin",
   ];
-  private readonly ublExtractorService: InvoiceUBLXMLHelperService
+  private readonly ublExtractorService: InvoiceUBLXMLHelperService;
 
   constructor(
     @InjectRepository(DocumentEntity)
@@ -65,8 +69,9 @@ export class DocumentService extends BaseCrudService {
 
   async create(document: InvoiceDto | CreditNoteDto | DebitNoteDto) {
     let documentEntity;
-    
-    const exchageRateResult = await this.exchangeRateService.getExchangeRateOnDate(document.issue_date);
+
+    const exchageRateResult =
+      await this.exchangeRateService.getExchangeRateOnDate(document.issue_date);
     document.exchange_rate = exchageRateResult.rate;
     if (document.is_draft) {
       document.status = "DRAFT";
@@ -95,9 +100,10 @@ export class DocumentService extends BaseCrudService {
   ) {
     let documentEntity;
 
-    const exchageRateResult = await this.exchangeRateService.getExchangeRateOnDate(document.issue_date);
+    const exchageRateResult =
+      await this.exchangeRateService.getExchangeRateOnDate(document.issue_date);
     document.exchange_rate = exchageRateResult.rate;
-    
+
     if (document.is_draft) {
       document.status = "DRAFT";
     } else {
@@ -140,22 +146,27 @@ export class DocumentService extends BaseCrudService {
     const base64Xml = Buffer.from(xml).toString("base64");
     const result = await this.invoiceProcessorService.submitDocument({
       document: base64Xml,
-      created_by: 'E_INVOICE_PORTAL',
+      created_by: "E_INVOICE_PORTAL",
       document_type: document.document_type,
       supplier_id: supplier.endpoint_id,
     });
 
+    await this.remove(document.document_id);
+
     return result;
   }
 
-  async remove(id: UUID) {
+  async remove(id: string) {
     return await this.documentRepository.delete({ document_id: id });
   }
 
-  async getEInvoiceDetail(document: DocumentEntity, supplier: BusinessResponseDto) {
+  async getEInvoiceDetail(
+    document: DocumentEntity,
+    supplier: BusinessResponseDto
+  ) {
     const xml = this.ublHelperService.toUBL({
-        ...document,
-        supplier,
+      ...document,
+      supplier,
     });
 
     let ublExtractor = null;
@@ -170,28 +181,38 @@ export class DocumentService extends BaseCrudService {
         ublExtractor = this.debitNoteUblExtractorService.parseXML(xml);
         break;
       default:
-        throw new NotFoundException()
+        throw new NotFoundException();
     }
 
     // Check which columns should be displayed
-    const hasDiscount = ublExtractor.invoice_lines.some(line => 
-      line.allowance_charges?.some(charge => charge.charge_indicator === false)
+    const hasDiscount = ublExtractor.invoice_lines.some((line) =>
+      line.allowance_charges?.some(
+        (charge) => charge.charge_indicator === false
+      )
     );
 
-    const hasSPT = ublExtractor.invoice_lines.some(line =>
-      line.tax?.tax_subtotals?.some(tax => tax.tax_category.tax_scheme === 'SP')
+    const hasSPT = ublExtractor.invoice_lines.some((line) =>
+      line.tax?.tax_subtotals?.some(
+        (tax) => tax.tax_category.tax_scheme === "SP"
+      )
     );
 
-    const hasPLT = ublExtractor.invoice_lines.some(line =>
-      line.tax?.tax_subtotals?.some(tax => tax.tax_category.tax_scheme === 'PLT')
+    const hasPLT = ublExtractor.invoice_lines.some((line) =>
+      line.tax?.tax_subtotals?.some(
+        (tax) => tax.tax_category.tax_scheme === "PLT"
+      )
     );
 
-    const hasAT = ublExtractor.invoice_lines.some(line =>
-      line.tax?.tax_subtotals?.some(tax => tax.tax_category.tax_scheme === 'AT')
+    const hasAT = ublExtractor.invoice_lines.some((line) =>
+      line.tax?.tax_subtotals?.some(
+        (tax) => tax.tax_category.tax_scheme === "AT"
+      )
     );
 
-    const hasVAT = ublExtractor.invoice_lines.some(line =>
-      line.tax?.tax_subtotals?.some(tax => tax.tax_category.tax_scheme === 'VAT')
+    const hasVAT = ublExtractor.invoice_lines.some((line) =>
+      line.tax?.tax_subtotals?.some(
+        (tax) => tax.tax_category.tax_scheme === "VAT"
+      )
     );
 
     // Add display information
@@ -200,66 +221,76 @@ export class DocumentService extends BaseCrudService {
       has_specific_tax: hasSPT,
       has_plt_tax: hasPLT,
       has_accom_tax: hasAT,
-      has_vat: hasVAT
+      has_vat: hasVAT,
     };
 
     // Transform invoice lines with computed fields
-    ublExtractor.invoice_lines = ublExtractor.invoice_lines.map((line, index) => {
-      const discountCharge = line.allowance_charges?.find(
-        (allowanceCharge) => allowanceCharge.charge_indicator === false
-      );
+    ublExtractor.invoice_lines = ublExtractor.invoice_lines.map(
+      (line, index) => {
+        const discountCharge = line.allowance_charges?.find(
+          (allowanceCharge) => allowanceCharge.charge_indicator === false
+        );
 
-      // Find tax amounts for each type
-      const sptTax = line.tax?.tax_subtotals?.find(tax => tax.tax_category.tax_scheme === 'SP');
-      const pltTax = line.tax?.tax_subtotals?.find(tax => tax.tax_category.tax_scheme === 'PLT');
-      const atTax = line.tax?.tax_subtotals?.find(tax => tax.tax_category.tax_scheme === 'AT');
-      const vatTax = line.tax?.tax_subtotals?.find(tax => tax.tax_category.tax_scheme === 'VAT');
+        // Find tax amounts for each type
+        const sptTax = line.tax?.tax_subtotals?.find(
+          (tax) => tax.tax_category.tax_scheme === "SP"
+        );
+        const pltTax = line.tax?.tax_subtotals?.find(
+          (tax) => tax.tax_category.tax_scheme === "PLT"
+        );
+        const atTax = line.tax?.tax_subtotals?.find(
+          (tax) => tax.tax_category.tax_scheme === "AT"
+        );
+        const vatTax = line.tax?.tax_subtotals?.find(
+          (tax) => tax.tax_category.tax_scheme === "VAT"
+        );
 
-      // Calculate display fields
-      const display = {
-        no: (index + 1).toString(),
-        description: line.item.description || line.item.name,
-        qty: line.quantity,
-        unit_price: line.price,
-        amount_excl: line.line_extension_amount,
-        amount_incl: line.line_extension_amount + (line.tax?.tax_amount || 0)
-      } as any;
+        // Calculate display fields
+        const display = {
+          no: (index + 1).toString(),
+          description: line.item.description || line.item.name,
+          qty: line.quantity,
+          unit_price: line.price,
+          amount_excl: line.line_extension_amount,
+          amount_incl: line.line_extension_amount + (line.tax?.tax_amount || 0),
+        } as any;
 
-      // Only add fields that exist
-      if (hasDiscount) {
-        display.discount = discountCharge?.amount || 0;
-      }
-      if (hasSPT) {
-        display.specific_tax = sptTax?.tax_amount || 0;
-      }
-      if (hasPLT) {
-        display.plt_tax = pltTax?.tax_amount || 0;
-      }
-      if (hasAT) {
-        display.accom_tax = atTax?.tax_amount || 0;
-      }
-      if (hasVAT) {
-        display.vat = vatTax?.tax_amount || 0;
-      }
+        // Only add fields that exist
+        if (hasDiscount) {
+          display.discount = discountCharge?.amount || 0;
+        }
+        if (hasSPT) {
+          display.specific_tax = sptTax?.tax_amount || 0;
+        }
+        if (hasPLT) {
+          display.plt_tax = pltTax?.tax_amount || 0;
+        }
+        if (hasAT) {
+          display.accom_tax = atTax?.tax_amount || 0;
+        }
+        if (hasVAT) {
+          display.vat = vatTax?.tax_amount || 0;
+        }
 
-      return {
-        ...line,
-        display
-      };
-    });
+        return {
+          ...line,
+          display,
+        };
+      }
+    );
 
-    return { 
+    return {
       ...ublExtractor,
       document_id: document.document_id,
       payment_term: document.payment_term,
       sub_total: document.sub_total,
-      note:document.note,
+      note: document.note,
       exchange_rate: document.exchange_rate,
       status: document.status,
       document_type: document.document_type,
       invoice_type_code: document.invoice_type_code,
       tax_total: document.tax_total,
-    }
+    };
   }
 
   async createDocumentLog(data: {
@@ -268,26 +299,29 @@ export class DocumentService extends BaseCrudService {
     user_id: string;
     full_name: string;
     description: string;
-    document_type: 'document' | 'received_document';
+    document_type: "document" | "received_document";
     is_system?: boolean;
-    actor_type?: 'supplier' | 'customer';
+    actor_type?: "supplier" | "customer";
   }): Promise<void> {
     // If it's a system action, use system as the actor
     if (data.is_system) {
-      data.user_id = 'SYSTEM';
-      data.full_name = 'System';
+      data.user_id = "SYSTEM";
+      data.full_name = "System";
     }
 
     // If it's a customer action, mask the supplier name
-    if (data.actor_type === 'customer') {
-      data.full_name = 'Customer';
+    if (data.actor_type === "customer") {
+      data.full_name = "Customer";
     }
 
     // If it's a supplier action, mask the customer name
-    if (data.actor_type === 'supplier') {
-      data.full_name = 'Supplier';
+    if (data.actor_type === "supplier") {
+      data.full_name = "Supplier";
     }
 
-    await this.invoiceProcessorService.emit('invoice-processor.document-log.create', data);
+    await this.invoiceProcessorService.emit(
+      "invoice-processor.document-log.create",
+      data
+    );
   }
 }
