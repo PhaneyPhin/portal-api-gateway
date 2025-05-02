@@ -42,7 +42,7 @@ export class UserService implements OnModuleInit {
   list(
     pagination: PaginationRequest
   ): Promise<PaginationResponseDto<UserResponseDto>> {
-    return this.client.send("user.list", pagination).toPromise();
+    return this.client.send("user.entity.list", pagination).toPromise();
   }
 
   getAllUsers(endpointId: string): Promise<UserResponseDto[]> {
