@@ -1,4 +1,8 @@
-import { AuditAction, AuditLogService, AuditResourceType } from "@common/audit/audit.service";
+import {
+  AuditAction,
+  AuditLogService,
+  AuditResourceType,
+} from "@common/audit/audit.service";
 import { ApiGlobalResponse } from "@common/decorators";
 import { CurrentUser, TOKEN_NAME } from "@modules/auth";
 import { SkipApprove } from "@modules/auth/decorators/skip-approve";
@@ -22,7 +26,7 @@ import {
   ApiInternalServerErrorResponse,
   ApiOperation,
   ApiTags,
-  ApiUnauthorizedResponse
+  ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
 import { Multer } from "multer";
 import { MinioService } from "src/minio/minio.service";
@@ -100,7 +104,9 @@ export class BusinessController {
   }
 
   @SkipApprove()
-  @ApiOperation({ description: "Request to change the business representative" })
+  @ApiOperation({
+    description: "Request to change the business representative",
+  })
   @ApiGlobalResponse(RepresentativeResponseDto)
   @ApiUnauthorizedResponse({ description: "Invalid credentials" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
@@ -185,11 +191,14 @@ export class BusinessController {
       file.buffer
     );
 
-    const result = await this.serviceAccountService.updateBusiness(Number(business.id), {
-      ...business,
-      logo_file_name: file.originalname,
-      by: user.id,
-    });
+    const result = await this.serviceAccountService.updateBusiness(
+      Number(business.id),
+      {
+        ...business,
+        logo_file_name: file.originalname,
+        by: user.id,
+      }
+    );
 
     await this.auditLogService.logAction({
       actorId: user.id,
@@ -205,7 +214,9 @@ export class BusinessController {
   }
 
   @SkipApprove()
-  @ApiOperation({ description: "Check if there is a pending representative change request" })
+  @ApiOperation({
+    description: "Check if there is a pending representative change request",
+  })
   @ApiGlobalResponse(RepresentativeResponseDto)
   @ApiUnauthorizedResponse({ description: "Invalid credentials" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
@@ -213,7 +224,9 @@ export class BusinessController {
   async getRepresentative(
     @CurrentUser() user: UserResponseDto
   ): Promise<RepresentativeResponseDto> {
-    return this.serviceAccountService.getRequestedRepresentative(user.endpoint_id);
+    return this.serviceAccountService.getRequestedRepresentative(
+      user.endpoint_id
+    );
   }
 
   @SkipApprove()
@@ -230,12 +243,15 @@ export class BusinessController {
       user.endpoint_id
     );
 
-    const result = await this.serviceAccountService.updateBusiness(business.id, {
-      ...business,
-      ...contact,
-      national_id: user.personal_code,
-      by: user.id,
-    });
+    const result = await this.serviceAccountService.updateBusiness(
+      business.id,
+      {
+        ...business,
+        ...contact,
+        national_id: user.personal_code,
+        by: user.id,
+      }
+    );
 
     await this.auditLogService.logAction({
       actorId: user.id,
@@ -259,27 +275,20 @@ export class BusinessController {
   async getNotificationSetting(
     @CurrentUser() user: UserResponseDto
   ): Promise<NotificationSettingDto> {
-    const business = await this.serviceAccountService.getBusinessByEndpoint(
-      user.endpoint_id
+    const business = await this.serviceAccountService.getBusinessProfile(user);
+
+    const result = await this.serviceAccountService.getNotification(
+      business.id
     );
-
-    const result = await this.serviceAccountService.getNotification(business.id);
-
-    await this.auditLogService.logAction({
-      actorId: user.id,
-      action: "GET" as AuditAction,
-      resourceId: business.id.toString(),
-      resourceType: "NOTIFICATION" as AuditResourceType,
-      fields: ["notification_setting"],
-      oldData: null,
-      newData: result
-    });
 
     return result;
   }
 
   @SkipApprove()
-  @ApiOperation({ description: "Validate business information with GDT (General Department of Taxation)" })
+  @ApiOperation({
+    description:
+      "Validate business information with GDT (General Department of Taxation)",
+  })
   @ApiGlobalResponse(EKYBReponseDto)
   @ApiUnauthorizedResponse({ description: "Invalid credentials" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
@@ -304,7 +313,10 @@ export class BusinessController {
   }
 
   @SkipApprove()
-  @ApiOperation({ description: "Validate business information with MOC (Ministry of Commerce)" })
+  @ApiOperation({
+    description:
+      "Validate business information with MOC (Ministry of Commerce)",
+  })
   @ApiGlobalResponse(EKYBReponseDto)
   @ApiUnauthorizedResponse({ description: "Invalid credentials" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
@@ -343,7 +355,7 @@ export class BusinessController {
     );
     const result = await this.serviceAccountService.setNotification({
       ...setting,
-      business_id: Number(business.id),
+      business_id: business.id,
     });
 
     await this.auditLogService.logAction({
@@ -360,7 +372,9 @@ export class BusinessController {
   }
 
   @SkipApprove()
-  @ApiOperation({ description: "Get business basic information by endpoint ID" })
+  @ApiOperation({
+    description: "Get business basic information by endpoint ID",
+  })
   @ApiGlobalResponse(BusinessEndpointResponseDto)
   @ApiUnauthorizedResponse({ description: "Invalid credentials" })
   @ApiInternalServerErrorResponse({ description: "Server error" })
@@ -381,4 +395,3 @@ export class BusinessController {
     };
   }
 }
-

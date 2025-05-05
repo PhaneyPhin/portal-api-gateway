@@ -138,7 +138,7 @@ export class ServiceAccountService implements OnModuleInit {
   // 10. Get Notification
   async getNotification(payload: number) {
     try {
-      return firstValueFrom(
+      return await firstValueFrom(
         this.businessClient.send("business.getNotification", payload)
       );
     } catch (e) {

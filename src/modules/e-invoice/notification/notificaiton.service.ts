@@ -24,10 +24,14 @@ export class NotificationService implements OnModuleInit {
   }
 
   async call(pattern: string, payload: any) {
-    const value = await firstValueFrom(
-      this.businessClient.send(pattern, payload)
-    );
+    try {
+      const value = await firstValueFrom(
+        this.businessClient.send(pattern, payload)
+      );
 
-    return value;
+      return value;
+    } catch (error) {
+      console.log("Notification service error", error);
+    }
   }
 }

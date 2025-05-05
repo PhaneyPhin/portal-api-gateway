@@ -1,5 +1,6 @@
 import {
   Controller,
+  Delete,
   ForbiddenException,
   Get,
   Param,
@@ -62,7 +63,7 @@ export class ServiceProviderController {
     }
 
     return {
-      connected: connectedServiceProvider? [connectedServiceProvider] : [],
+      connected: connectedServiceProvider ? [connectedServiceProvider] : [],
       notYetConnected: allServiceProvider,
     };
   }
@@ -83,6 +84,7 @@ export class ServiceProviderController {
       await this.serviceAccountService.getConnectedServiceProvider(
         user.endpoint_id
       );
+
     if (connected) {
       throw new ForbiddenException(
         `You already connected to a access point: ${connected.name_en} / ${connected.name_kh}`
@@ -91,6 +93,21 @@ export class ServiceProviderController {
     return await this.serviceAccountService.getServiceProviderByClientId(
       clientId
     );
+  }
+
+  @ApiOperation({ description: "Get customer by id" })
+  @ApiGlobalResponse(UserResponseDto)
+  // @Permissions(
+  //   "admin.access.customer.read",
+  //   "admin.access.customer.create",
+  //   "admin.access.customer.update"
+  // )
+  @Get("/:id/connect-link")
+  public async getConnectLink(
+    @Param("id") id: number,
+    @CurrentUser() user: UserResponseDto
+  ): Promise<any> {
+    return this.serviceAccountService.call("connection.getConnectionLink", id);
   }
 
   @ApiOperation({ description: "Get customer by id" })
@@ -105,21 +122,27 @@ export class ServiceProviderController {
     @Param("id") id: number,
     @CurrentUser() user: UserResponseDto
   ): Promise<AuthTokenResponseDto> {
-    const connected =
-      await this.serviceAccountService.getConnectedServiceProvider(
-        user.endpoint_id
-      );
-    if (connected) {
-      throw new ForbiddenException(
-        `You already connected to a access point: ${connected.name_en} / ${connected.name_kh}`
-      );
-    }
+    return await this.serviceAccountService.call(
+      "connection.getConnectionLink",
+      id
+    );
+  }
 
-    const business = await this.serviceAccountService.getBusinessProfile(user);
-
-    return await this.serviceAccountService.getAuthToken({
+  @ApiOperation({ description: "Get customer by id" })
+  @ApiGlobalResponse(AuthTokenResponseDto)
+  // @Permissions(
+  //   "admin.access.customer.read",
+  //   "admin.access.customer.create",
+  //   "admin.access.customer.update"
+  // )
+  @Delete("/:id/revoke")
+  public async revokeServiceProvider(
+    @Param("id") id: number,
+    @CurrentUser() user: UserResponseDto
+  ): Promise<AuthTokenResponseDto> {
+    return await this.serviceAccountService.call("connection.revoke", {
       service_provider_id: id,
-      endpoint_id: business.endpoint_id,
+      endpoint_id: user.endpoint_id,
     });
   }
 }

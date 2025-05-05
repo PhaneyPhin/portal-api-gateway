@@ -13,6 +13,7 @@ import { NestFactory, Reflector } from "@nestjs/core";
 import { ValidationError } from "class-validator";
 import * as compression from "compression";
 import * as cookieParser from "cookie-parser";
+import * as express from "express";
 import helmet from "helmet";
 import { AppModule } from "./app.module";
 
@@ -38,6 +39,10 @@ const bootstrap = async () => {
   app.use(helmet());
   app.use(compression());
   const configService = app.get(ConfigService);
+
+  // Increase payload size limit to 15MB
+  app.use(express.json({ limit: "15mb" }));
+  app.use(express.urlencoded({ limit: "15mb", extended: true }));
 
   const allowedOrigins = (configService.get<string>("ALLOWED_ORIGINS") || "")
     .split(",")

@@ -5,9 +5,11 @@ import { InvoiceType } from "./enums/InvoiceType";
 @Injectable()
 export class InvoiceUBLXMLHelperService {
   private parser: XMLParser;
+  protected DOCUMENT_TYPE = "INVOICE";
   protected DOCUMENT_KEY = "Invoice";
   protected DOCUMENT_TYPE_CODE = "InvoiceTypeCode";
   protected DOCUMENT_LINE = "InvoiceLine";
+  protected QUANTITY_FIELD = "InvoicedQuantity";
 
   protected MAP_TYPE_CODE = {
     388: InvoiceType.TAX_INVOICE,
@@ -48,15 +50,11 @@ export class InvoiceUBLXMLHelperService {
     const result = {
       ubl_version: invoice["cbc:UBLVersionID"] || null,
       document_number: invoice["cbc:ID"] || null,
-      document_type: "INVOICE",
+      document_type: this.DOCUMENT_TYPE,
       issue_date: invoice["cbc:IssueDate"] || null,
       due_date: invoice["cbc:DueDate"] || null,
       currency: invoice["cbc:DocumentCurrencyCode"] || null,
-      exchange_rate: {
-        source_currency: taxExchangeRate["cbc:SourceCurrencyCode"] || null,
-        target_currency: taxExchangeRate["cbc:TargetCurrencyCode"] || null,
-        rate: getNumericValue(taxExchangeRate["cbc:CalculationRate"]),
-      },
+      exchange_rate: getNumericValue(taxExchangeRate["cbc:CalculationRate"]),
       reference_document_id: nsSafe(
         invoice["cac:BillingReference"]?.["cac:InvoiceDocumentReference"]?.[
           "cbc:UUID"
@@ -271,7 +269,7 @@ export class InvoiceUBLXMLHelperService {
         ),
       },
       invoice_lines: (Array.isArray(invoice[`cac:${this.DOCUMENT_LINE}`])
-        ? invoice["cac:InvoiceLine"]
+        ? invoice[`cac:${this.DOCUMENT_LINE}`]
         : [invoice[`cac:${this.DOCUMENT_LINE}`]]
       ).map((line: any) => {
         const lineAllowance = line["cac:AllowanceCharge"] || {};
@@ -282,9 +280,9 @@ export class InvoiceUBLXMLHelperService {
           : [lineTaxSubtotals];
         return {
           id: line["cbc:ID"] || null,
-          quantity: getNumericValue(line["cbc:InvoicedQuantity"]),
+          quantity: getNumericValue(line[`cbc:${this.QUANTITY_FIELD}`]),
           quantity_unit_code:
-            line["cbc:InvoicedQuantity"]?.["@_unitCode"] || null,
+            line[`cbc:${this.QUANTITY_FIELD}`]?.["@_unitCode"] || null,
           line_extension_amount: getNumericValue(
             line["cbc:LineExtensionAmount"]
           ),

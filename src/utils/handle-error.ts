@@ -37,9 +37,9 @@ export const handleError = (error, dto) => {
     }' is already in use.`;
     throw new UnprocessableEntityException({
       statusCode: 422,
-      message: [
+      errors: [
         {
-          property: toCamelCase(conflictKey || "field"),
+          path: toCamelCase(conflictKey || "field"),
           constraints: {
             unique: message,
           },

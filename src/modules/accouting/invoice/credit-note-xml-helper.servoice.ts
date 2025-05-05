@@ -6,4 +6,5 @@ export class CreditNoteXmlHelperService extends InvoiceUBLXMLHelperService {
   protected DOCUMENT_KEY = "CreditNote";
   protected DOCUMENT_TYPE_CODE = "CreditNoteTypeCode";
   protected DOCUMENT_LINE = "CreditNoteLine";
+  protected QUANTITY_FIELD = "CreditedQuantity";
 }

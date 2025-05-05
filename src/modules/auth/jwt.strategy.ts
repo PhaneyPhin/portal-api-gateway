@@ -49,7 +49,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
   > {
     const user = await this.userService.findById(payload.id);
-
     const handler = req.route?.stack?.[0]?.handle;
 
     const skipApprove = this.reflector.getAllAndOverride<boolean>(

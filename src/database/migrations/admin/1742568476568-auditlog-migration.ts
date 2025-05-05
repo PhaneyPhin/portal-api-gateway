@@ -21,6 +21,11 @@ export class AuditLog1742568476568 implements MigrationInterface {
             isNullable: true,
           },
           {
+            name: "description",
+            type: "text",
+            isNullable: true,
+          },
+          {
             name: "resource_type",
             type: "varchar",
             isNullable: true,

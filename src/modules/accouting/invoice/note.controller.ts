@@ -421,7 +421,7 @@ export class NoteController {
     @Param("id") id: UUID,
     @CurrentUser() user: UserResponseDto
   ): Promise<DocumentResponseDto> {
-    const document = await this.documentService.findById(id);
+    const document = await this.invoiceProcessorService.findById(id);
 
     if (!document || user.endpoint_id !== document.customer.endpoint_id) {
       throw new NotFoundException();
@@ -529,8 +529,8 @@ export class NoteController {
     const documentLogs = await this.invoiceProcessorService.call(
       "invoice-processor.document-log.findByDocumentId",
       {
-        documentId: document.document_id,
-        documentType: "received_document",
+        document_id: document.document_id,
+        document_type: "received_document",
       }
     );
 
@@ -563,8 +563,8 @@ export class NoteController {
     const documentLogs = await this.invoiceProcessorService.call(
       "invoice-processor.document-log.findByDocumentId",
       {
-        documentId: document.document_id,
-        documentType:
+        document_id: document.document_id,
+        document_type:
           user.endpoint_id === document.supplier.endpoint_id
             ? "document"
             : "received_document",

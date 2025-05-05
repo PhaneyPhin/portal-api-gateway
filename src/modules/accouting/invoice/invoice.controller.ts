@@ -80,7 +80,7 @@ export class InvoiceController {
       ...pagination.params,
       supplier_id: user.endpoint_id,
       document_type: this.documentType,
-    })
+    });
     return this.documentService.list({
       ...pagination,
       params: {
@@ -109,21 +109,26 @@ export class InvoiceController {
     });
 
     // Log audit action asynchronously
-    this.auditService.logAction({
-      actorId: user.id,
-      action: "CREATE",
-      resourceId: invoice.document_id.toString(),
-      resourceType: "INVOICE",
-      fields: ["document_number", "document_type", "status"],
-      oldData: null,
-      newData: invoice,
-    }).catch(error => {
-      console.error('Failed to log audit:', error);
-    });
+    this.auditService
+      .logAction({
+        actorId: user.id,
+        action: "CREATE",
+        resourceId: invoice.document_id.toString(),
+        resourceType: "INVOICE",
+        fields: ["document_number", "document_type", "status"],
+        oldData: null,
+        newData: invoice,
+      })
+      .catch((error) => {
+        console.error("Failed to log audit:", error);
+      });
 
     const supplier = await this.serviceAccountService.getBusinessProfile(user);
-    if (! dto.is_draft) {
-      const einvoice = await this.documentService.getEInvoiceDetail(invoice, supplier);
+    if (!dto.is_draft) {
+      const einvoice = await this.documentService.getEInvoiceDetail(
+        invoice,
+        supplier
+      );
       return { ...einvoice, supplier: supplier, customer: invoice.customer };
     }
 
@@ -150,19 +155,23 @@ export class InvoiceController {
     });
 
     // Log audit action asynchronously
-    this.auditService.logAction({
-      actorId: user.id,
-      action: "UPDATE",
-      resourceId: invoice.document_id.toString(),
-      resourceType: "INVOICE",
-      fields: ["document_number", "document_type", "status"],
-      oldData: oldInvoice,
-      newData: invoice,
-    }).catch(error => {
-      console.error('Failed to log audit:', error);
-    });
+    this.auditService
+      .logAction({
+        actorId: user.id,
+        action: "UPDATE",
+        resourceId: invoice.document_id.toString(),
+        resourceType: "INVOICE",
+        fields: ["document_number", "document_type", "status"],
+        oldData: oldInvoice,
+        newData: invoice,
+      })
+      .catch((error) => {
+        console.error("Failed to log audit:", error);
+      });
 
-    invoice.supplier = await this.serviceAccountService.getBusinessProfile(user);
+    invoice.supplier = await this.serviceAccountService.getBusinessProfile(
+      user
+    );
     return invoice;
   }
 
@@ -183,7 +192,10 @@ export class InvoiceController {
     }
 
     const supplier = await this.serviceAccountService.getBusinessProfile(user);
-    const einvoice = await this.documentService.submitDocument(document, supplier);
+    const einvoice = await this.documentService.submitDocument(
+      document,
+      supplier
+    );
 
     // Log audit action
     await this.auditService.logAction({
@@ -201,9 +213,9 @@ export class InvoiceController {
       document_id: einvoice.document_id,
       action: "SUBMIT",
       user_id: user.id,
-      full_name: user.first_name_en + ' ' + user.last_name_en,
+      full_name: user.first_name_en + " " + user.last_name_en,
       description: `Invoice ${document.document_number} submitted for e-invoice processing`,
-      document_type: 'document'
+      document_type: "document",
     });
 
     return einvoice;
@@ -303,8 +315,8 @@ export class InvoiceController {
     @Param("id") id: UUID,
     @CurrentUser() user: UserResponseDto
   ): Promise<DocumentEntity> {
-    const document = await this.documentService.findById(id);
-
+    const document = await this.invoiceProcessorService.findById(id);
+    console.log(document.customer, user);
     if (!document || user.endpoint_id !== document.customer.endpoint_id) {
       throw new NotFoundException();
     }
@@ -316,10 +328,10 @@ export class InvoiceController {
       document_id: document.document_id,
       action: "ACCEPT",
       user_id: user.id,
-      full_name: user.first_name_en + ' ' + user.last_name_en,
+      full_name: user.first_name_en + " " + user.last_name_en,
       description: `Invoice ${document.document_number} accepted`,
-      document_type: 'received_document',
-      actor_type: 'customer'
+      document_type: "received_document",
+      actor_type: "customer",
     });
 
     // Log on supplier side (system generated)
@@ -327,10 +339,10 @@ export class InvoiceController {
       document_id: document.document_id,
       action: "ACCEPTED",
       user_id: user.id,
-      full_name: user.first_name_en + ' ' + user.last_name_en,
+      full_name: user.first_name_en + " " + user.last_name_en,
       description: `Invoice ${document.document_number} accepted by customer`,
-      document_type: 'document',
-      is_system: true
+      document_type: "document",
+      is_system: true,
     });
 
     return acceptedDocument;
@@ -361,10 +373,10 @@ export class InvoiceController {
       document_id: document.document_id,
       action: "SEND",
       user_id: user.id,
-      full_name: user.first_name_en + ' ' + user.last_name_en,
+      full_name: user.first_name_en + " " + user.last_name_en,
       description: `Invoice ${document.document_number} sent to customer`,
-      document_type: 'document',
-      actor_type: 'supplier'
+      document_type: "document",
+      actor_type: "supplier",
     });
 
     // Log on customer side (system generated)
@@ -372,10 +384,10 @@ export class InvoiceController {
       document_id: document.document_id,
       action: "DELIVERED",
       user_id: user.id,
-      full_name: user.first_name_en + ' ' + user.last_name_en,
+      full_name: user.first_name_en + " " + user.last_name_en,
       description: `Invoice ${document.document_number} delivered to customer`,
-      document_type: 'received_document',
-      is_system: true
+      document_type: "received_document",
+      is_system: true,
     });
 
     return sentDocument;
@@ -407,7 +419,6 @@ export class InvoiceController {
       email: data.email,
     });
 
-
     return {
       success: true,
       message: "Document was being sent",
@@ -422,7 +433,7 @@ export class InvoiceController {
     @Body() reject: RejectDocumentRequest,
     @CurrentUser() user: UserResponseDto
   ): Promise<DocumentEntity> {
-    const document = await this.documentService.findById(id);
+    const document = await this.invoiceProcessorService.findById(id);
 
     if (!document || user.endpoint_id !== document.customer.endpoint_id) {
       throw new NotFoundException();
@@ -438,10 +449,10 @@ export class InvoiceController {
       document_id: document.document_id,
       action: "REJECT",
       user_id: user.id,
-      full_name: user.first_name_en + ' ' + user.last_name_en,
+      full_name: user.first_name_en + " " + user.last_name_en,
       description: `Invoice ${document.document_number} rejected. Reason: ${reject.reason}`,
-      document_type: 'received_document',
-      actor_type: 'customer'
+      document_type: "received_document",
+      actor_type: "customer",
     });
 
     // Log on supplier side (system generated)
@@ -449,10 +460,10 @@ export class InvoiceController {
       document_id: document.document_id,
       action: "REJECTED",
       user_id: user.id,
-      full_name: user.first_name_en + ' ' + user.last_name_en,
+      full_name: user.first_name_en + " " + user.last_name_en,
       description: `Invoice ${document.document_number} rejected by customer. Reason: ${reject.reason}`,
-      document_type: 'document',
-      is_system: true
+      document_type: "document",
+      is_system: true,
     });
 
     return rejectedDocument;
@@ -533,14 +544,17 @@ export class InvoiceController {
     }
 
     // Get document logs for this specific document
-    const documentLogs = await this.invoiceProcessorService.call('invoice-processor.document-log.findByDocumentId', {
-      documentId: document.document_id,
-      documentType: 'document'
-    });
+    const documentLogs = await this.invoiceProcessorService.call(
+      "invoice-processor.document-log.findByDocumentId",
+      {
+        document_id: document.document_id,
+        document_type: "document",
+      }
+    );
 
     return {
       ...document,
-      document_logs: documentLogs
+      document_logs: documentLogs,
     };
   }
 
@@ -559,14 +573,17 @@ export class InvoiceController {
     }
 
     // Get document logs for this specific document
-    const documentLogs = await this.invoiceProcessorService.call('invoice-processor.document-log.findByDocumentId', {
-      documentId: document.document_id,
-      documentType: 'received_document'
-    });
+    const documentLogs = await this.invoiceProcessorService.call(
+      "invoice-processor.document-log.findByDocumentId",
+      {
+        document_id: document.document_id,
+        document_type: "received_document",
+      }
+    );
 
     return {
       ...document,
-      document_logs: documentLogs
+      document_logs: documentLogs,
     };
   }
 
@@ -588,17 +605,19 @@ export class InvoiceController {
     await this.documentService.remove(id);
 
     // Log audit action asynchronously
-    this.auditService.logAction({
-      actorId: currentUser.id,
-      action: "DELETE",
-      resourceId: document.document_id.toString(),
-      resourceType: "INVOICE",
-      fields: ["document_number"],
-      oldData: document,
-      newData: null,
-    }).catch(error => {
-      console.error('Failed to log audit:', error);
-    });
+    this.auditService
+      .logAction({
+        actorId: currentUser.id,
+        action: "DELETE",
+        resourceId: document.document_id.toString(),
+        resourceType: "INVOICE",
+        fields: ["document_number"],
+        oldData: document,
+        newData: null,
+      })
+      .catch((error) => {
+        console.error("Failed to log audit:", error);
+      });
 
     return document;
   }
@@ -623,18 +642,21 @@ export class InvoiceController {
 
     const business = await this.serviceAccountService.getBusinessProfile(user);
 
-    if (document.status === 'POSTED') {
-      const einvoice = await this.documentService.getEInvoiceDetail(document, business);
-      return { 
-        ...einvoice, 
-        supplier: business, 
+    if (document.status === "POSTED") {
+      const einvoice = await this.documentService.getEInvoiceDetail(
+        document,
+        business
+      );
+      return {
+        ...einvoice,
+        supplier: business,
         customer: document.customer,
       };
     }
 
-    return { 
-      ...document, 
-      supplier: business
+    return {
+      ...document,
+      supplier: business,
     };
   }
 
@@ -657,10 +679,10 @@ export class InvoiceController {
     }
 
     const business = await this.serviceAccountService.getBusinessProfile(user);
-    
-    return { 
-      ...document, 
-      supplier: business
+
+    return {
+      ...document,
+      supplier: business,
     };
   }
 }

@@ -6,4 +6,5 @@ export class DebitNoteUBMLXMLHelper extends InvoiceUBLXMLHelperService {
   protected DOCUMENT_KEY = "DebitNote";
   protected DOCUMENT_TYPE_CODE = "DebitNoteTypeCode";
   protected DOCUMENT_LINE = "CreditNoteLine";
+  protected QUANTITY_FIELD = "DebitedQuantity";
 }
