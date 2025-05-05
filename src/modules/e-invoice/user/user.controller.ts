@@ -5,6 +5,7 @@ import {
   Get,
   NotFoundException,
   Param,
+  Patch,
   Post,
   Put,
   ValidationPipe,
@@ -20,7 +21,11 @@ import {
 } from "@nestjs/swagger";
 
 import { CurrentUser, SkipAuth, TOKEN_NAME } from "@auth";
-import { AuditLogService } from "@common/audit/audit.service";
+import {
+  AuditAction,
+  AuditLogService,
+  AuditResourceType,
+} from "@common/audit/audit.service";
 import { ApiGlobalResponse } from "@common/decorators";
 import { ApiFields } from "@common/decorators/api-fields.decorator";
 import {
@@ -29,9 +34,13 @@ import {
   PaginationRequest,
   PaginationResponseDto,
 } from "@libs/pagination";
+import { SkipApprove } from "@modules/auth/decorators/skip-approve";
 import { LoginUrlResponseDto } from "@modules/auth/dtos/login-url.dto";
 import { ServiceAccountTest } from "@modules/auth/dtos/service-test.dto";
 import { UUID } from "crypto";
+import { RepresentativeResponseDto } from "../business/dtos/representative-response.dto";
+import { RequestChangeRepresentativeDto } from "../business/dtos/request-change-representative.dto";
+import { ServiceAccountService } from "../business/service-account.service";
 import { NotificationService } from "../notification/notificaiton.service";
 import { CreateUserRequestDto, UserResponseDto } from "./dtos";
 import { UserService } from "./user.service";
@@ -44,9 +53,10 @@ import { UserService } from "./user.service";
 })
 export class UserController {
   constructor(
-  private readonly userService: UserService,
-    private readonly auditService: AuditLogService,
-    private readonly notificaitonService: NotificationService
+    private readonly userService: UserService,
+    private readonly auditLogService: AuditLogService,
+    private readonly notificationService: NotificationService,
+    private readonly serviceAccountService: ServiceAccountService
   ) {}
 
   @SkipAuth()
@@ -56,7 +66,7 @@ export class UserController {
   @ApiInternalServerErrorResponse({ description: "Server error" })
   @Post("/test")
   test(@Body() data: ServiceAccountTest): Promise<any> {
-    return this.notificaitonService.call(data.pattern, data.payload);
+    return this.notificationService.call(data.pattern, data.payload);
   }
 
   @ApiOperation({ description: "Get paginated list of users" })
@@ -111,6 +121,62 @@ export class UserController {
     return foundUser;
   }
 
+  @SkipApprove()
+  @ApiOperation({
+    description: "Request to change the business representative",
+  })
+  @ApiGlobalResponse(RepresentativeResponseDto)
+  @ApiUnauthorizedResponse({ description: "Invalid credentials" })
+  @ApiInternalServerErrorResponse({ description: "Server error" })
+  @Patch("/representative")
+  async requestChangeRepresentative(
+    @Body() request: RequestChangeRepresentativeDto,
+    @CurrentUser() user: UserResponseDto
+  ): Promise<RepresentativeResponseDto> {
+    const result = await this.serviceAccountService.changeRepresentative({
+      ...request,
+      endpoint_id: user.endpoint_id,
+    });
+
+    await this.auditLogService.logAction({
+      actorId: user.id,
+      action: "UPDATE" as AuditAction,
+      resourceId: result.id.toString(),
+      resourceType: "BUSINESS" as AuditResourceType,
+      fields: Object.keys(request),
+      oldData: null,
+      newData: result,
+    });
+
+    return result;
+  }
+
+  @SkipApprove()
+  @ApiOperation({ description: "Cancel the representative change request" })
+  @ApiGlobalResponse(RepresentativeResponseDto)
+  @ApiUnauthorizedResponse({ description: "Invalid credentials" })
+  @ApiInternalServerErrorResponse({ description: "Server error" })
+  @Delete("/representative")
+  async cancelChangeRepresentative(
+    @CurrentUser() user: UserResponseDto
+  ): Promise<RepresentativeResponseDto> {
+    const result = await this.serviceAccountService.cancelChangeRepresentative(
+      user.endpoint_id
+    );
+
+    await this.auditLogService.logAction({
+      actorId: user.id,
+      action: "CANCEL" as AuditAction,
+      resourceId: result.id.toString(),
+      resourceType: "BUSINESS" as AuditResourceType,
+      fields: [],
+      oldData: null,
+      newData: result,
+    });
+
+    return result;
+  }
+
   @ApiOperation({ description: "Create new user" })
   @ApiGlobalResponse(UserResponseDto)
   @ApiConflictResponse({ description: "User already exists" })
@@ -127,17 +193,19 @@ export class UserController {
     });
 
     // Log audit action asynchronously
-    this.auditService.logAction({
-      actorId: user.id,
-      action: "CREATE",
-      resourceId: createdUser.id.toString(),
-      resourceType: "USER",
-      fields: ["identity_number", "email", "role"],
-      oldData: null,
-      newData: createdUser,
-    }).catch(error => {
-      console.error('Failed to log audit:', error);
-    });
+    this.auditLogService
+      .logAction({
+        actorId: user.id,
+        action: "CREATE",
+        resourceId: createdUser.id.toString(),
+        resourceType: "USER",
+        fields: ["identity_number", "email", "role"],
+        oldData: null,
+        newData: createdUser,
+      })
+      .catch((error) => {
+        console.error("Failed to log audit:", error);
+      });
 
     return createdUser;
   }
@@ -162,17 +230,19 @@ export class UserController {
     const updatedUser = await this.userService.patch({ id }, dto);
 
     // Log audit action asynchronously
-    this.auditService.logAction({
-      actorId: currentUser.id,
-      action: "UPDATE",
-      resourceId: updatedUser.id.toString(),
-      resourceType: "USER",
-      fields: ["identity_number", "email", "role"],
-      oldData: existingUser,
-      newData: updatedUser,
-    }).catch(error => {
-      console.error('Failed to log audit:', error);
-    });
+    this.auditLogService
+      .logAction({
+        actorId: currentUser.id,
+        action: "UPDATE",
+        resourceId: updatedUser.id.toString(),
+        resourceType: "USER",
+        fields: ["identity_number", "email", "role"],
+        oldData: existingUser,
+        newData: updatedUser,
+      })
+      .catch((error) => {
+      console.error("Failed to log audit:", error);
+      });
 
     return updatedUser;
   }
@@ -195,17 +265,19 @@ export class UserController {
     await this.userService.deleteUser(id);
 
     // Log audit action asynchronously
-    this.auditService.logAction({
-      actorId: currentUser.id,
-      action: "DELETE",
-      resourceId: existingUser.id.toString(),
-      resourceType: "USER",
-      fields: ["identity_number", "email", "role"],
-      oldData: existingUser,
-      newData: null,
-    }).catch(error => {
-      console.error('Failed to log audit:', error);
-    });
+    this.auditLogService
+      .logAction({
+        actorId: currentUser.id,
+        action: "DELETE",
+        resourceId: existingUser.id.toString(),
+        resourceType: "USER",
+        fields: ["identity_number", "email", "role"],
+        oldData: existingUser,
+        newData: null,
+      })
+      .catch((error) => {
+        console.error("Failed to log audit:", error);
+      });
 
     return existingUser;
   }
