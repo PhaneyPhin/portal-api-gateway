@@ -102,6 +102,22 @@ export class UserController {
     return this.userService.getAllUsers(user.endpoint_id);
   }
 
+  @SkipApprove()
+  @ApiOperation({
+    description: "Check if there is a pending representative change request",
+  })
+  @ApiGlobalResponse(RepresentativeResponseDto)
+  @ApiUnauthorizedResponse({ description: "Invalid credentials" })
+  @ApiInternalServerErrorResponse({ description: "Server error" })
+  @Get("/representative")
+  async getRepresentative(
+    @CurrentUser() user: UserResponseDto
+  ): Promise<RepresentativeResponseDto> {
+    return this.serviceAccountService.getRequestedRepresentative(
+      user.endpoint_id
+    );
+  }
+
   @ApiOperation({ description: "Get user details by ID" })
   @ApiGlobalResponse(UserResponseDto)
   // @Permissions(
@@ -241,7 +257,7 @@ export class UserController {
         newData: updatedUser,
       })
       .catch((error) => {
-      console.error("Failed to log audit:", error);
+        console.error("Failed to log audit:", error);
       });
 
     return updatedUser;
